@@ -1,0 +1,1 @@
+ALTER TABLE "workspace_widget_settings" ADD COLUMN "origin_overrides" jsonb DEFAULT '[]'::jsonb NOT NULL;

@@ -1,0 +1,14 @@
+/*
+ * Screenshot-only stylesheet. Arial and Liberation Sans share metrics, so the
+ * same baseline is legible on a Windows developer machine and on the Linux CI
+ * runner. It is applied by Playwright, never by the application.
+ */
+*,
+*::before,
+*::after {
+  font-family: Arial, "Liberation Sans", "Nimbus Sans", sans-serif !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}

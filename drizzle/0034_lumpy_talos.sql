@@ -1,0 +1,1 @@
+ALTER TYPE "public"."job_type" ADD VALUE 'send_billing_email';

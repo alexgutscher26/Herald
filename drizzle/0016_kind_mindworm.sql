@@ -1,0 +1,1 @@
+ALTER TYPE "public"."release_revision_action" ADD VALUE 'update' BEFORE 'schedule';

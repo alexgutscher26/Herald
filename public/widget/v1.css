@@ -1,0 +1,460 @@
+/*
+ * Herald widget v1 launcher styles.
+ *
+ * Loaded with <link> inside the shadow root. No inline style attribute or
+ * <style> element is required, so a host CSP may allow this stylesheet by
+ * origin without opening style-src to 'unsafe-inline'.
+ */
+
+:host {
+  all: initial;
+}
+
+:host(.herald-inline-host) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+}
+
+.herald-root {
+  --herald-accent: #4f46e5;
+  --herald-accent-fg: #ffffff;
+  --herald-surface: #ffffff;
+  --herald-surface-muted: #f4f4f5;
+  --herald-border: #e4e4e7;
+  --herald-text: #18181b;
+  --herald-muted: #71717a;
+  position: fixed;
+  z-index: 2147483000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--herald-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.herald-position-bottom-right {
+  right: 20px;
+  bottom: 20px;
+}
+
+.herald-position-bottom-left {
+  left: 20px;
+  bottom: 20px;
+  align-items: flex-start;
+}
+
+.herald-position-top-right {
+  right: 20px;
+  top: 20px;
+}
+
+.herald-position-top-left {
+  left: 20px;
+  top: 20px;
+  align-items: flex-start;
+}
+
+/* Inline mode: the host container owns placement and size. */
+.herald-root.herald-embedded {
+  position: static;
+  z-index: auto;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  align-items: stretch;
+  gap: 0;
+  background: var(--herald-surface);
+}
+
+.herald-theme-dark {
+  --herald-surface: #18181b;
+  --herald-surface-muted: #27272a;
+  --herald-border: #3f3f46;
+  --herald-text: #fafafa;
+  --herald-muted: #a1a1aa;
+}
+
+.herald-theme-auto {
+  color-scheme: light dark;
+}
+
+.herald-experiences {
+  position: fixed;
+  right: 20px;
+  bottom: 82px;
+  z-index: 1;
+  width: min(340px, calc(100vw - 40px));
+}
+
+.herald-position-bottom-left .herald-experiences,
+.herald-position-top-left .herald-experiences {
+  left: 20px;
+  right: auto;
+}
+
+.herald-position-top-right .herald-experiences,
+.herald-position-top-left .herald-experiences {
+  top: 20px;
+  bottom: auto;
+}
+
+.herald-experience {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--herald-border);
+  border-radius: 12px;
+  background: var(--herald-surface);
+  box-shadow: 0 16px 40px -16px rgb(0 0 0 / 0.4);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.herald-experience strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.herald-experience p {
+  margin: 0;
+  color: var(--herald-muted);
+}
+
+.herald-experience-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.herald-experience-cta,
+.herald-experience-dismiss {
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.herald-experience-cta {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--herald-accent);
+  background: var(--herald-accent);
+  color: var(--herald-accent-fg);
+  text-decoration: none;
+}
+
+.herald-experience-dismiss {
+  border: 1px solid var(--herald-border);
+  background: transparent;
+  color: var(--herald-muted);
+}
+
+.herald-experience-count {
+  color: var(--herald-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.herald-tour-target {
+  outline: 3px solid var(--herald-accent) !important;
+  outline-offset: 3px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .herald-theme-auto {
+    --herald-surface: #18181b;
+    --herald-surface-muted: #27272a;
+    --herald-border: #3f3f46;
+    --herald-text: #fafafa;
+    --herald-muted: #a1a1aa;
+  }
+}
+
+.herald-launcher {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  max-width: min(280px, calc(100vw - 24px));
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--herald-accent);
+  color: var(--herald-accent-fg);
+  box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.45);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.herald-launcher:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px -10px rgb(0 0 0 / 0.5);
+}
+
+.herald-launcher:active {
+  transform: translateY(0);
+}
+
+.herald-launcher:focus-visible {
+  outline: 3px solid var(--herald-accent);
+  outline-offset: 3px;
+}
+
+.herald-launcher svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.herald-launcher-label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.herald-launcher-dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.72;
+}
+
+.herald-panel {
+  position: absolute;
+  right: 0;
+  bottom: 72px;
+  width: min(380px, calc(100vw - 24px));
+  height: min(620px, calc(100vh - 112px));
+  height: min(620px, calc(100dvh - 112px));
+  overflow: hidden;
+  border: 1px solid var(--herald-border);
+  border-radius: 14px;
+  background: var(--herald-surface);
+  box-shadow: 0 24px 70px -20px rgb(0 0 0 / 0.45);
+  transform-origin: bottom right;
+  animation: herald-panel-in 140ms ease-out;
+}
+
+.herald-position-bottom-left .herald-panel {
+  left: 0;
+  right: auto;
+  transform-origin: bottom left;
+}
+
+.herald-position-top-right .herald-panel {
+  top: 72px;
+  bottom: auto;
+  transform-origin: top right;
+}
+
+.herald-position-top-left .herald-panel {
+  left: 0;
+  right: auto;
+  top: 72px;
+  bottom: auto;
+  transform-origin: top left;
+}
+
+/* A live region inside the shadow root: visual badge changes are also
+ * announced as text, because screen readers do not reliably follow state in
+ * a shadow tree. */
+.herald-live {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.herald-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--herald-surface);
+  color-scheme: light;
+}
+
+.herald-frame[hidden] {
+  display: none !important;
+}
+
+/* Graceful degradation for an offline host, an unreachable embed or a
+ * browser that blocks the third-party session cookie. */
+.herald-fallback {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+  padding: 18px;
+  border: 1px solid var(--herald-border);
+  border-radius: 14px;
+  background: var(--herald-surface);
+  box-shadow: 0 24px 70px -20px rgb(0 0 0 / 0.45);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.herald-fallback[hidden] {
+  display: none !important;
+}
+
+.herald-panel .herald-fallback {
+  margin: 12px;
+  box-shadow: none;
+}
+
+.herald-embedded .herald-fallback {
+  margin: 16px;
+  border-radius: 12px;
+}
+
+.herald-fallback strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.herald-fallback p {
+  margin: 0;
+  color: var(--herald-muted);
+}
+
+.herald-fallback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.herald-fallback-retry,
+.herald-fallback-link {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--herald-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--herald-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.herald-fallback-retry {
+  border-color: var(--herald-accent);
+  background: var(--herald-accent);
+  color: var(--herald-accent-fg);
+}
+
+.herald-embedded .herald-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.herald-theme-dark .herald-frame {
+  color-scheme: dark;
+}
+
+.herald-panel[hidden] {
+  display: none !important;
+}
+
+@keyframes herald-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  :host(.herald-inline-host) {
+    min-height: 480px;
+  }
+
+  .herald-position-bottom-right,
+  .herald-position-bottom-left {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .herald-position-bottom-left {
+    left: 12px;
+    right: auto;
+  }
+
+  .herald-position-top-right,
+  .herald-position-top-left {
+    right: 12px;
+    top: 12px;
+  }
+
+  .herald-position-top-left {
+    left: 12px;
+    right: auto;
+  }
+
+  .herald-panel {
+    height: min(640px, calc(100dvh - 92px));
+  }
+
+  .herald-experiences {
+    right: 12px;
+    bottom: 72px;
+    width: calc(100vw - 24px);
+  }
+
+  .herald-launcher {
+    min-height: 44px;
+    gap: 8px;
+    padding: 0 15px;
+    font-size: 13.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .herald-launcher,
+  .herald-panel {
+    animation: none;
+    transition: none;
+  }
+}

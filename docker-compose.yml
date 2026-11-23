@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: herald
+      POSTGRES_PASSWORD: herald
+      POSTGRES_DB: herald
+    ports:
+      - "5432:5432"
+    volumes:
+      - herald-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U herald -d herald"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  herald-postgres:

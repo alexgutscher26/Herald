@@ -1,0 +1,1 @@
+ALTER TABLE "release_revisions" ADD COLUMN "sequence" bigserial NOT NULL;

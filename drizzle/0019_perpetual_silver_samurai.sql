@@ -1,0 +1,2 @@
+ALTER TABLE "workspace_identity_settings" ADD COLUMN "sso_secret_previous_encrypted" text;--> statement-breakpoint
+ALTER TABLE "workspace_identity_settings" ADD COLUMN "sso_secret_previous_expires_at" timestamp with time zone;

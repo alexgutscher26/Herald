@@ -1,0 +1,562 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      preview_base_url:
+        description: "Seeded preview deployment to run the e2e suite against (https://…)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BETTER_AUTH_SECRET: ci-only-secret-value-at-least-32-characters
+  BETTER_AUTH_URL: http://localhost:3000
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  checks:
+    name: Typecheck, lint, tests and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: herald
+          POSTGRES_PASSWORD: herald
+          POSTGRES_DB: herald_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U herald -d herald_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://herald:herald@localhost:5432/herald_test
+      # The integration harness creates and drops a unique herald_test_*
+      # database on this server; the role needs CREATEDB (it owns the service).
+      TEST_DATABASE_URL: postgres://herald:herald@localhost:5432/herald_test
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Unit tests
+        run: bun run test:unit
+
+      - name: Integration tests
+        run: bun run test:integration
+
+      - name: No mocks in tests
+        run: bun run check:no-mocks
+
+      - name: Build
+        run: bun run build
+
+  build-matrix:
+    name: Build (${{ matrix.runtime }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime: [bun, node]
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # The deployment runtime is unresolved. Both commands must produce a
+      # working build from the same source and lockfile.
+      - name: Build with Bun
+        if: matrix.runtime == 'bun'
+        run: bun run build
+
+      - name: Build with Node
+        if: matrix.runtime == 'node'
+        run: npx next build
+
+  browser:
+    name: Widget browser matrix (Chromium, Firefox, WebKit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium firefox webkit
+
+      - name: Widget matrix
+        run: bun run test:browser
+
+  e2e:
+    name: Seeded end-to-end (production preview)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: herald
+          POSTGRES_PASSWORD: herald
+          POSTGRES_DB: herald_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U herald -d herald_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      E2E_DATABASE_URL: postgres://herald:herald@localhost:5432/herald_e2e
+      DATABASE_URL: postgres://herald:herald@localhost:5432/herald_e2e
+      BETTER_AUTH_URL: http://127.0.0.1:3100
+      BETTER_AUTH_SECRET: ci-e2e-secret-value-at-least-32-characters
+      FLAG_PUBLIC_FEEDBACK: "on"
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+
+      # A production build in its own dist directory, then Playwright starts
+      # `e2e:serve` (fresh database, deterministic seed, next start).
+      - name: Build the preview
+        run: bun run e2e:build
+
+      - name: Run the seeded suite
+        run: bun run e2e
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: |
+            test-results/e2e-results.json
+            test-results/e2e-report
+          if-no-files-found: ignore
+          retention-days: 14
+
+  e2e-preview:
+    name: Seeded end-to-end (hosted preview)
+    if: github.event_name == 'workflow_dispatch' && inputs.preview_base_url != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+
+      # The preview must have been seeded with scripts/e2e/seed.ts against its
+      # own database; this job only writes what the flows create (a request).
+      - name: Run against the preview deployment
+        env:
+          E2E_BASE_URL: ${{ inputs.preview_base_url }}
+        run: bun run e2e
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-preview-results
+          path: test-results/e2e-report
+          if-no-files-found: ignore
+
+  visual:
+    name: Visual regression (dashboard, public board, widget)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # Snapshots are generated on the platform that runs them. Until the Linux
+    # baselines are committed (see docs/testing-strategy.md), this job produces
+    # the comparison and the diff artifact without blocking the merge.
+    continue-on-error: true
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: herald
+          POSTGRES_PASSWORD: herald
+          POSTGRES_DB: herald_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U herald -d herald_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      E2E_DATABASE_URL: postgres://herald:herald@localhost:5432/herald_e2e
+      DATABASE_URL: postgres://herald:herald@localhost:5432/herald_e2e
+      BETTER_AUTH_URL: http://127.0.0.1:3100
+      BETTER_AUTH_SECRET: ci-e2e-secret-value-at-least-32-characters
+      FLAG_PUBLIC_FEEDBACK: "on"
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Build the preview
+        run: bun run e2e:build
+
+      - name: Compare snapshots
+        run: bun run e2e:visual
+
+      - name: Upload visual diff
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff
+          path: |
+            test-results
+            tests/e2e/__screenshots__
+          if-no-files-found: ignore
+          retention-days: 14
+
+  coverage:
+    name: P0 coverage floor
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: herald
+          POSTGRES_PASSWORD: herald
+          POSTGRES_DB: herald_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U herald -d herald_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://herald:herald@localhost:5432/herald_test
+      TEST_DATABASE_URL: postgres://herald:herald@localhost:5432/herald_test
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Coverage on auth, tenancy, billing and api-v1
+        run: bun run test:coverage
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          if-no-files-found: ignore
+          retention-days: 14
+
+  migration-drift:
+    name: Migration drift (zero build vs previous tag)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: herald
+          POSTGRES_PASSWORD: herald
+          POSTGRES_DB: herald_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U herald -d herald_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://herald:herald@localhost:5432/herald_test
+      TEST_DATABASE_URL: postgres://herald:herald@localhost:5432/herald_test
+      MIGRATION_REQUIRE_BASELINE: "1"
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Compare a fresh install with an upgrade from the previous release
+        run: bun run migration:drift
+
+  performance:
+    name: Performance budgets (seeded database)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: herald
+          POSTGRES_PASSWORD: herald
+          POSTGRES_DB: herald_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U herald -d herald_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://herald:herald@localhost:5432/herald_test
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # 10,000 visible requests, 10,000 comments, 20,000 customer votes, 2,000
+      # conversations and 30 days of analytics rollups. The printed JSON is the
+      # input for every URL and the API bearer token below.
+      - name: Migrate and seed a realistic dataset
+        run: |
+          bun run db:migrate
+          bun scripts/perf-seed.ts 10000 > /tmp/perf.json
+
+      # docs/performance.md requires a plan check for any query that gains a new
+      # filter or sort; an unexpected Seq Scan fails the job.
+      - name: Query plan checks
+        run: PERF_PLAN_CHECK=1 bun run perf:plan
+
+      # postbuild enforces the dashboard and widget bundle budgets.
+      - name: Build
+        run: bun run build
+
+      # No health poll here: the cold-start probe below must see the first
+      # request itself, including process boot.
+      - name: Start the production server
+        run: bun run start > /tmp/perf-server.log 2>&1 &
+
+      - name: Cold start budgets
+        run: |
+          WS=$(jq -r .workspaceSlug /tmp/perf.json)
+          PERF_ORIGIN=http://localhost:3000 \
+            PERF_COLD_PATHS="/p/$WS/feedback/feedback,/api/health?scope=readiness" \
+            PERF_COLD_MS=5000 \
+            bun run perf:cold
+
+      - name: Warm the server
+        run: |
+          WS=$(jq -r .workspaceSlug /tmp/perf.json)
+          # The documented targets are for a warm instance; keep the warm-up out
+          # of the measurement instead of treating the first request as a miss.
+          curl -sf http://localhost:3000/api/health > /dev/null
+          for i in 1 2 3; do curl -s -o /dev/null "http://localhost:3000/p/$WS/feedback/feedback"; done
+
+      - name: Public board budget
+        run: |
+          WS=$(jq -r .workspaceSlug /tmp/perf.json)
+          PERF_URL="http://localhost:3000/p/$WS/feedback/feedback" \
+            PERF_REQUESTS=100 PERF_CONCURRENCY=10 PERF_P95_MS=350 \
+            bun run perf:load
+
+      - name: Request detail budget
+        run: |
+          WS=$(jq -r .workspaceSlug /tmp/perf.json)
+          REQUEST=$(jq -r .requestId /tmp/perf.json)
+          PERF_URL="http://localhost:3000/p/$WS/feedback/feedback/$REQUEST" \
+            PERF_REQUESTS=100 PERF_CONCURRENCY=10 PERF_P95_MS=400 \
+            bun run perf:load
+
+      - name: Public search budget
+        run: |
+          WS=$(jq -r .workspaceSlug /tmp/perf.json)
+          PRODUCT=$(jq -r .productSlug /tmp/perf.json)
+          PERF_URL="http://localhost:3000/p/$WS/$PRODUCT/search?q=export" \
+            PERF_REQUESTS=50 PERF_CONCURRENCY=5 PERF_P95_MS=500 \
+            bun run perf:load
+
+      - name: API list endpoint budget
+        run: |
+          TOKEN=$(jq -r .apiToken /tmp/perf.json)
+          PERF_URL="http://localhost:3000/api/v1/requests?limit=25" \
+            PERF_AUTHORIZATION="Bearer $TOKEN" \
+            PERF_REQUESTS=50 PERF_CONCURRENCY=5 PERF_P95_MS=400 \
+            bun run perf:load
+
+      # The inbox sits behind a session, so its real query path is measured
+      # directly; the API list above is the HTTP-write-adjacent surface.
+      - name: Inbox load budget
+        run: PERF_SURFACES=inbox PERF_REQUESTS=40 PERF_CONCURRENCY=2 bun run perf:surfaces
+
+      - name: Dashboard and analytics data-path budgets
+        run: PERF_REQUESTS=40 PERF_CONCURRENCY=1 bun run perf:surfaces
+
+      - name: Server log
+        if: failure()
+        run: tail -100 /tmp/perf-server.log
+
+  flaky:
+    name: Flaky-test dashboard
+    if: always() && needs.e2e.result != 'skipped'
+    needs: [e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Download e2e results
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-results
+          path: test-results
+
+      - name: Build the dashboard
+        run: bun run flaky:report
+
+      - name: Upload the dashboard
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flaky-dashboard
+          path: test-results/flaky-dashboard.md
+          if-no-files-found: ignore
+
+  audit:
+    name: Dependency audit (high and critical)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.0"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # --audit-level=high only fails on high or critical advisories. Moderates
+      # are recorded in docs/security-review.md and re-checked on upgrades.
+      - name: Audit
+        run: bun audit --audit-level=high

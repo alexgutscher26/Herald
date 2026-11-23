@@ -1,0 +1,1 @@
+ALTER TYPE "public"."notification_template" ADD VALUE 'conversation_transcript' BEFORE 'weekly_digest';

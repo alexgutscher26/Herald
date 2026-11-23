@@ -1,0 +1,2 @@
+ALTER TABLE "release_revisions" ADD COLUMN "translations" jsonb DEFAULT '{}'::jsonb NOT NULL;--> statement-breakpoint
+ALTER TABLE "releases" ADD COLUMN "translations" jsonb DEFAULT '{}'::jsonb NOT NULL;

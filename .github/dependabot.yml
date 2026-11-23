@@ -1,0 +1,40 @@
+version: 2
+
+updates:
+  # Bun installs from package.json and bun.lock; Dependabot reads both through
+  # the npm ecosystem and opens the lockfile change for review.
+  #
+  # Patch and minor are separate groups on purpose: a grouped PR takes the
+  # highest update type in it, so grouping patches with minors would stop the
+  # patch-only auto-merge workflow from ever firing.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "05:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 5
+    labels: ["dependencies"]
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      patch:
+        applies-to: version-updates
+        update-types: ["patch"]
+      minor:
+        applies-to: version-updates
+        update-types: ["minor"]
+      security:
+        applies-to: security-updates
+        update-types: ["patch", "minor"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels: ["dependencies", "ci"]
+    groups:
+      actions:
+        patterns: ["*"]

@@ -1,0 +1,6 @@
+ALTER TABLE "user" ADD CONSTRAINT "user_image_not_inline_ck" CHECK ("user"."image" is null or ("user"."image" not like 'data:%' and "user"."image" not like 'blob:%'));--> statement-breakpoint
+ALTER TABLE "workspace_branding" ADD CONSTRAINT "workspace_branding_logo_inline_ck" CHECK ("workspace_branding"."logo_key" is null or ("workspace_branding"."logo_key" not like 'data:%' and "workspace_branding"."logo_key" not like 'blob:%'));--> statement-breakpoint
+ALTER TABLE "release_revisions" ADD CONSTRAINT "release_revisions_cover_inline_ck" CHECK ("release_revisions"."cover"::text not like '%"data:%' and "release_revisions"."cover"::text not like '%"blob:%');--> statement-breakpoint
+ALTER TABLE "releases" ADD CONSTRAINT "releases_cover_inline_ck" CHECK ("releases"."cover"::text not like '%"data:%' and "releases"."cover"::text not like '%"blob:%');--> statement-breakpoint
+ALTER TABLE "feedback_attachments" ADD CONSTRAINT "feedback_attachments_storage_key_ck" CHECK ("feedback_attachments"."storage_key" not like 'data:%' and "feedback_attachments"."storage_key" not like 'blob:%');--> statement-breakpoint
+ALTER TABLE "conversation_attachments" ADD CONSTRAINT "conversation_attachments_storage_key_ck" CHECK ("conversation_attachments"."storage_key" not like 'data:%' and "conversation_attachments"."storage_key" not like 'blob:%');

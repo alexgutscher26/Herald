@@ -1,0 +1,39 @@
+name: Dependabot auto-merge
+
+# Enables GitHub's auto-merge for patch updates only. Nothing merges here: the
+# pull request merges when the status checks required by the `main` branch
+# protection rule pass, which is why `checks` and `audit` must be required on
+# `main` (see docs/operations.md → Dependency upgrades). Minor, major and
+# security updates are reviewed by hand.
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependabot-automerge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  auto-merge:
+    # The author, not `github.actor`: a maintainer pushing to the branch must
+    # not turn their own commit into an auto-merge candidate.
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Read Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Enable auto-merge for patch updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --squash --delete-branch "$PR_URL"

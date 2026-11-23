@@ -1,0 +1,3 @@
+ALTER TABLE "feedback_posts" ADD COLUMN "assignee_id" text;--> statement-breakpoint
+ALTER TABLE "feedback_posts" ADD CONSTRAINT "feedback_posts_assignee_id_user_id_fk" FOREIGN KEY ("assignee_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "feedback_posts_product_assignee_idx" ON "feedback_posts" USING btree ("product_id","assignee_id");

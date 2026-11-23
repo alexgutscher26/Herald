@@ -1,0 +1,1 @@
+ALTER TABLE "workspace_widget_settings" ADD COLUMN "sections" jsonb DEFAULT '["feedback","roadmap"]'::jsonb NOT NULL;

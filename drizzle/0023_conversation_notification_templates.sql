@@ -1,0 +1,2 @@
+ALTER TYPE "public"."notification_template" ADD VALUE 'conversation_notification' BEFORE 'weekly_digest';--> statement-breakpoint
+ALTER TYPE "public"."notification_template" ADD VALUE 'conversation_away_reply' BEFORE 'weekly_digest';

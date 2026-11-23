@@ -1,0 +1,7 @@
+-- Schema snapshot reconciliation.
+--
+-- The SLA columns and macro/tag tables were applied by the hand-written
+-- 0069_support_sla.sql and 0070_conversation_macros.sql migrations. This
+-- generated migration is intentionally empty: keeping its snapshot makes
+-- the next drizzle-kit generate compare against the final schema instead
+-- of trying to add the same columns and tables again.
