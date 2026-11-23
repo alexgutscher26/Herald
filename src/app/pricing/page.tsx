@@ -126,11 +126,7 @@ export default async function PricingPage() {
           <div className="overflow-hidden rounded-lg border border-[#d8d5ce] bg-white">
             <div className="border-b border-[#e6e3da] px-5 py-5 sm:px-7">
               <h2 className={`${DISPLAY} text-[1.6rem] font-semibold`}>Every allowance in one table</h2>
-              <p className="mt-1 text-[13px] text-[#6b6862]">
-                Generated from <code className="rounded bg-[#f4f3ee] px-1 py-0.5">PLANS</code> and{" "}
-                <code className="rounded bg-[#f4f3ee] px-1 py-0.5">PLAN_PRICING</code>, so a limit
-                cannot drift from the plan card.
-              </p>
+
             </div>
 
             <div className="overflow-x-auto">
