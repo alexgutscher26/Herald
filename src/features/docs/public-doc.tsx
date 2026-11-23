@@ -12,10 +12,13 @@ import { MarketingPage } from "@/features/marketing/marketing-chrome";
  * as static HTML with no runtime filesystem access.
  */
 export function readGuide(relativePath: string): string {
-  return readFileSync(path.join(process.cwd(), relativePath), "utf8").replace(
-    /^#\s+.*\r?\n+/,
-    "",
-  );
+  // The `docs` segment must be a literal in `path.join`: Turbopack traces a
+  // dynamic prefix as the whole project, which copies every source file and
+  // asset into the server output.
+  return readFileSync(
+    path.join(process.cwd(), "docs", relativePath.replace(/^docs\//, "")),
+    "utf8",
+  ).replace(/^#\s+.*\r?\n+/, "");
 }
 
 export function PublicDoc({

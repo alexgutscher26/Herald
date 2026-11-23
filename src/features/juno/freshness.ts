@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, inArray, isNull, lt, or, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
@@ -70,7 +70,17 @@ export async function scheduleKnowledgeRecrawls(
         eq(knowledgeSources.kind, "url"),
         eq(knowledgeSources.status, "live"),
         sql`${knowledgeSources.recrawlIntervalHours} > 0`,
-        sql`${knowledgeSources.lastCheckedAt} is null or ${knowledgeSources.lastCheckedAt} < ${now} - (${knowledgeSources.recrawlIntervalHours} * interval '1 hour')`,
+        // `or` is a real group here: a raw fragment without parentheses binds
+        // to the whole AND chain and would match every live source. The
+        // parameter needs an explicit cast because Postgres cannot infer a
+        // type for it inside `param - interval`.
+        or(
+          isNull(knowledgeSources.lastCheckedAt),
+          lt(
+            knowledgeSources.lastCheckedAt,
+            sql`${now}::timestamptz - (${knowledgeSources.recrawlIntervalHours} * interval '1 hour')`,
+          ),
+        ),
       ),
     )
     .limit(Math.min(Math.max(limit, 1), 25));

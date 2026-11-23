@@ -198,6 +198,11 @@ type Surface = {
   session?: boolean;
   /** A string the rendered document must contain, proving it is not a 404. */
   contains?: string;
+  /**
+   * A frame origin the report-only policy must allow even when the document
+   * does not request it yet (a consent-gated embed).
+   */
+  frameSrcMustAllow?: string;
 };
 
 async function freePort(): Promise<number> {
@@ -372,7 +377,11 @@ beforeAll(async () => {
       frameAncestors: "'none'",
       xFrameOptions: "SAMEORIGIN",
       displayCapture: false,
-      contains: "youtube-nocookie.com/embed/dQw4w9WgXcQ",
+      // The player itself is consent-gated and is rendered after hydration, so
+      // the served document carries the placeholder. The policy must already
+      // allow the embed origin for when the visitor allows embeds.
+      contains: "YouTube video",
+      frameSrcMustAllow: "https://www.youtube-nocookie.com",
     },
     {
       name: "public submission form",
@@ -508,6 +517,17 @@ describe("served content security policy", () => {
         if (!enforced) failures.push(`${surface.name} — no enforcing policy`);
         if (!reportOnly) failures.push(`${surface.name} — no report-only policy`);
         if (!enforced || !reportOnly) continue;
+
+        if (surface.frameSrcMustAllow) {
+          const directives = parseCsp(reportOnly);
+          const frameSources =
+            directives.get("frame-src") ?? directives.get("default-src") ?? [];
+          if (!frameSources.includes(surface.frameSrcMustAllow)) {
+            failures.push(
+              `${surface.name} — frame-src does not allow ${surface.frameSrcMustAllow}`,
+            );
+          }
+        }
 
         const expectedAncestors = `frame-ancestors ${surface.frameAncestors}`;
         if (!enforced.includes(expectedAncestors)) {

@@ -1,9 +1,10 @@
 import { afterAll, beforeAll, describe, expect } from "bun:test";
 
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 
 import { db } from "@/db";
 import { knowledgeSources, knowledgeVersions } from "@/db/schema/knowledge";
+import { scheduleKnowledgeRecrawls } from "@/features/juno/freshness";
 import { retrieveKnowledge } from "@/features/juno/retrieval";
 import {
   createUploadSource,
@@ -252,6 +253,99 @@ describe("knowledge sources", () => {
     }
 
     expect(await listKnowledgeSources(context.product.id)).toEqual([]);
+  });
+
+  isolatedTest("the recrawl sweep queues only due live sources and skips an in-flight build", async () => {
+    const context = await tenant();
+    const now = new Date("2026-03-01T12:00:00.000Z");
+    const base = {
+      workspaceId: context.workspace.id,
+      productId: context.product.id,
+      kind: "url" as const,
+      pathPrefix: "/docs/",
+      status: "live" as const,
+      recrawlIntervalHours: 6,
+      createdBy: context.user.id,
+    };
+
+    const sources = await db
+      .insert(knowledgeSources)
+      .values([
+        {
+          ...base,
+          name: "Due",
+          url: "https://example.com/docs/due",
+          lastCheckedAt: new Date("2026-03-01T05:00:00.000Z"),
+        },
+        {
+          ...base,
+          name: "Never checked",
+          url: "https://example.com/docs/new",
+          lastCheckedAt: null,
+        },
+        {
+          ...base,
+          name: "Fresh",
+          url: "https://example.com/docs/fresh",
+          lastCheckedAt: new Date("2026-03-01T11:30:00.000Z"),
+        },
+        {
+          ...base,
+          name: "Manual only",
+          url: "https://example.com/docs/manual",
+          recrawlIntervalHours: 0,
+          lastCheckedAt: null,
+        },
+        {
+          ...base,
+          name: "Paused",
+          url: "https://example.com/docs/paused",
+          status: "paused" as const,
+          lastCheckedAt: null,
+        },
+        {
+          ...base,
+          name: "In flight",
+          url: "https://example.com/docs/in-flight",
+          lastCheckedAt: null,
+        },
+      ])
+      .returning({ id: knowledgeSources.id, name: knowledgeSources.name });
+    const byName = new Map(sources.map((source) => [source.name, source.id]));
+    const inFlight = byName.get("In flight");
+    if (!inFlight) throw new Error("In-flight source insert returned no row.");
+
+    const [existing] = await db
+      .insert(knowledgeVersions)
+      .values({ sourceId: inFlight, productId: context.product.id, status: "building" })
+      .returning({ id: knowledgeVersions.id });
+    if (!existing) throw new Error("In-flight version insert returned no row.");
+
+    const result = await scheduleKnowledgeRecrawls(now, 10);
+    expect(result).toEqual({ queued: 2, checked: 3 });
+
+    const versions = await db
+      .select({
+        id: knowledgeVersions.id,
+        sourceId: knowledgeVersions.sourceId,
+        status: knowledgeVersions.status,
+      })
+      .from(knowledgeVersions)
+      .where(inArray(knowledgeVersions.sourceId, sources.map((source) => source.id)));
+    const forSource = (name: string) =>
+      versions.filter((version) => version.sourceId === byName.get(name));
+
+    expect(forSource("Due")).toHaveLength(1);
+    expect(forSource("Due")[0]?.status).toBe("building");
+    expect(forSource("Never checked")).toHaveLength(1);
+    expect(forSource("Never checked")[0]?.status).toBe("building");
+    // Only the build that was already running; the sweep never stacks one.
+    expect(forSource("In flight")).toEqual([
+      { id: existing.id, sourceId: inFlight, status: "building" },
+    ]);
+    expect(forSource("Fresh")).toEqual([]);
+    expect(forSource("Manual only")).toEqual([]);
+    expect(forSource("Paused")).toEqual([]);
   });
 
   isolatedTest("a failed crawl records the failure and invents no knowledge", async () => {

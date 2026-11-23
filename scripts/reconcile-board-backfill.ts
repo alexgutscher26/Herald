@@ -24,8 +24,6 @@ import { getDatabaseUrl } from "@/lib/env";
 
 import { assertScriptEnvironment } from "./lib/guard";
 
-assertScriptEnvironment("reconcile-board-backfill");
-
 export type BoardBackfillReport = {
   products: number;
   boards: number;
@@ -195,6 +193,11 @@ function printReport(report: BoardBackfillReport, mode: string): void {
 }
 
 async function main(): Promise<void> {
+  // Inside `main`, not at module scope: the integration suite imports the two
+  // query helpers above, and a guard that runs on import would abort the test
+  // run with the developer's application database settings.
+  assertScriptEnvironment("reconcile-board-backfill");
+
   const args = process.argv.slice(2);
   const unknown = args.filter((arg) => arg !== "--apply");
   if (unknown.length > 0) {

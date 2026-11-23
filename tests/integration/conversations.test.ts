@@ -520,7 +520,7 @@ describe("conversation mutations", () => {
       customerId: a.customer.id,
       subject: "With a log attached",
     });
-    await createConversationMessage({
+    const message = await createConversationMessage({
       conversation,
       authorType: "customer",
       body: "Console log attached.",
@@ -530,6 +530,9 @@ describe("conversation mutations", () => {
       .values({
         conversationId: conversation.id,
         productId: a.product.id,
+        // The thread shows attachments once the reply that carried them is
+        // sent; an unconsumed upload stays out of the projection until then.
+        messageId: message.id,
         kind: "file",
         storageKey: uniqueLabel("attachments/log"),
         filename: "console.txt",

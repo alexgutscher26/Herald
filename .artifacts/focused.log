@@ -1,0 +1,85 @@
+bun test v1.4.0 (34cbb9a40)
+
+tests\integration\conversations.test.ts:
+(node:40968) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `bun.exe --trace-warnings ...` to show where the warning was created)
+(pass) conversation inbox > views separate the working inbox from spam and archived [70.31ms]
+(pass) conversation inbox > search matches subject, customer and preview but never spam or archived [32.33ms]
+(pass) conversation inbox > a team reply opens a queued thread, clears unread and updates the preview [42.41ms]
+(pass) conversation inbox > an internal note stays out of the status and the inbox preview [19.91ms]
+(pass) conversation inbox > slash commands resolve, reopen and snooze without a second action [22.85ms]
+(pass) conversation inbox > snoozing hides a thread from Queue until its deadline passes [13.92ms]
+(pass) conversation inbox > restoring a spam or archived thread returns it to the working inbox [34.12ms]
+(pass) conversation inbox > opening a thread clears unread and records one participant [10.98ms]
+(pass) conversation mutations > a thread's messages and attachments never leak into another product [19.29ms]
+(pass) conversation mutations > a message cannot be filed under another product [7.31ms]
+(pass) conversation mutations > an attachment cannot be filed under another product [5.70ms]
+(pass) conversation mutations > status writes and the thread read are scoped to the product [9.06ms]
+(pass) conversation mutations > assignment requires a workspace member and stays inside the product [10.72ms]
+(pass) conversation mutations > blocking a sender records the block once and moves the thread to spam [12.54ms]
+(pass) conversation mutations > reminders are personal, become due once and can be reset [17.99ms]
+
+tests\integration\cron-route.test.ts:
+{"time":"2026-11-23T03:35:37.490Z","level":"error","event":"auth.email_misconfigured","release":"dev","error":{"name":"Error","message":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.","stack":"Error: Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.\n    at getEmailConfig (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\env.ts:160:15)\n    at isAuthEmailConfigured (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\email\\auth-mail.ts:28:12)\n    at sendDueOnboardingEmails (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\onboarding\\emails.ts:362:8)\n    at <anonymous> (C:\\Users\\gutsc\\O"}}
+{"time":"2026-11-23T03:35:37.526Z","level":"info","event":"backup.verification","release":"dev","database":"ok","storage":"ok","manifest":"ok","objects":6,"bytes":16029,"attachmentsChecked":1,"attachmentsFailed":0,"manifestsPruned":0,"recorded":true,"durationMs":21}
+{"time":"2026-11-23T03:35:37.535Z","level":"info","event":"observability.pruned","release":"dev","requestMetrics":0,"dashboardViews":0,"aiUsage":0,"backupVerifications":0,"backupManifests":0}
+{"time":"2026-11-23T03:35:37.560Z","level":"info","event":"job_run.completed","release":"dev","claimed":11,"succeeded":11,"failed":0,"retrying":0,"durationMs":98}
+(pass) GET /api/cron/jobs > returns per-type counts without job payloads [124.89ms]
+(pass) GET /api/cron/jobs > rejects a request without the bearer secret [1.49ms]
+
+tests\integration\csat-intake.test.ts:
+(pass) CSAT > is off by default, requests once on resolution and accepts one rating [33.15ms]
+(pass) CSAT > a foreign customer cannot rate someone else's thread [11.72ms]
+(pass) structured intake > widget answers persist as traits and an unanswered guest still starts a thread [36.72ms]
+(pass) structured intake > a trait that gates a board cannot be collected publicly [11.02ms]
+(pass) structured intake > board questions stay on their board [10.38ms]
+
+tests\integration\entitlements.test.ts:
+(pass) workspace usage > counts products, members and unarchived boards [21.75ms]
+(pass) workspace usage > reports the plan, feature matrix and limits [7.03ms]
+(pass) limit gates > refuses the increment that would exceed the free product limit [14.70ms]
+(pass) limit gates > refuses the third board and frees a slot when one is archived [7.19ms]
+(pass) limit gates > counts members against the free limit [6.75ms]
+
+tests\integration\import-export-branding.test.ts:
+(pass) CSV import > imports mapped rows, preserves votes and dates, reports bad rows [45.55ms]
+(pass) CSV import > a 10,000-row import is stored, queued and then advanced without blocking the request [1003.88ms]
+(pass) CSV import > import progress is scoped to the authorized product [10.02ms]
+(pass) CSV import > refuses a board that belongs to another product [4.14ms]
+(pass) import planning, cancel and presets > a dry run reports counts and writes nothing [4.22ms]
+(pass) import planning, cancel and presets > cancelling stops the worker before it imports pending rows [11.74ms]
+(pass) import planning, cancel and presets > a workspace mapping preset is replaced by its column signature [6.48ms]
+(pass) import planning, cancel and presets > remote images refuse loopback and private addresses [2.19ms]
+(pass) export > includes merge provenance, comments and tags, and marks duplicates [20.74ms]
+(pass) export > never exports a product through a foreign workspace id [3.09ms]
+(pass) branding > defaults, validates, upserts and preserves an existing logo [4.84ms]
+(pass) custom domains > verification and HTTPS health are stored and visible [9.95ms]
+(pass) server-side plan gates > the free board limit counts active boards only [8.10ms]
+(pass) server-side plan gates > a downgraded workspace loses guest posting on public resolution [12.70ms]
+
+tests\integration\public-tenant.test.ts:
+(pass) public tenant resolution > serves only public, unarchived boards [16.09ms]
+(pass) public tenant resolution > resolves a workspace only when it has a public board [7.92ms]
+(pass) public projections > hide internal notes, archived requests and merged requests [49.78ms]
+(pass) public projections > approves each request and comment before publishing it [37.53ms]
+(pass) public projections > hides a rejected request even where approval is not required [11.51ms]
+(pass) public projections > drops banned authors and never answers a foreign tenant's request id [19.47ms]
+(pass) public projections > serialises nothing beyond the public field list [24.39ms]
+(pass) public projections > return null when the deployment flag closes the surface [4.63ms]
+
+tests\integration\saved-views-triage.test.ts:
+(pass) saved feedback views > saves, updates and deletes a private view [13.60ms]
+(pass) saved feedback views > a malformed stored filter set falls back to the unfiltered view [3.22ms]
+(pass) bulk triage > updates only this product's canonical requests [48.10ms]
+(pass) bulk triage > hides and restores only requests in the authorized product [12.74ms]
+
+tests\integration\setup-completion.test.ts:
+(pass) setup completion offer > requires every setup fact before it completes [41.46ms]
+(pass) setup completion offer > keeps the base trial before setup is complete [11.07ms]
+(pass) setup completion offer > starts a 30-day trial after setup is complete [24.41ms]
+
+ 56 pass
+ 0 fail
+ 308 expect() calls
+Ran 56 tests across 8 files. [16.73s]
+EXIT:0

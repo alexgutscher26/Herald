@@ -74,10 +74,10 @@ test("dashboard: skip link, route and dialog focus, roadmap menu and mobile targ
   // The command palette opens from the keyboard, puts focus in its search
   // field, and restores the element that opened it when Escape closes it.
   const paletteTrigger = page.getByRole("button", {
-    name: "Search and navigate (Command K)",
+    name: "Search (Command K)",
   });
   await page.keyboard.press("Control+k");
-  const palette = page.getByRole("dialog", { name: "Search and navigate" });
+  const palette = page.getByRole("dialog", { name: "Search" });
   await expect(palette).toBeVisible();
   await expect(page.getByRole("combobox", { name: "Search workspace" })).toBeFocused();
   await page.keyboard.press("Escape");

@@ -66,7 +66,10 @@ describe("workspace usage", () => {
     expect(entitlements.planName.length).toBeGreaterThan(0);
     expect(entitlements.features.publicFeedback).toBe(true);
     expect(entitlements.features.api).toBe(true);
-    expect(entitlements.limits.products).toBeGreaterThan(1);
+    // Professional is unlimited, which the catalogue expresses as null rather
+    // than a very large number; the settings screen renders it as "Unlimited".
+    expect(entitlements.limits.products).toBeNull();
+    expect(entitlements.limits.members).toBeGreaterThan(1);
   });
 });
 

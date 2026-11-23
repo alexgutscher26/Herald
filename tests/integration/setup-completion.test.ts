@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { products } from "@/db/schema";
+import { workspaceEmailIdentities } from "@/db/schema/email";
 import { startCheckout } from "@/features/billing/service";
 import { saveSenderIdentity } from "@/features/email/identity";
 import { isWorkspaceSetupComplete } from "@/features/overview/setup";
@@ -76,6 +77,12 @@ async function completeSetup(workspaceId: string): Promise<void> {
     replyTo: null,
     postalAddress: "123 Test Street, Test City",
   });
+  // A saved sender is not a ready sender: the checklist requires a verified
+  // address, because campaign email may only go out from one.
+  await db
+    .update(workspaceEmailIdentities)
+    .set({ fromVerifiedAt: new Date(), replyToVerifiedAt: new Date() })
+    .where(eq(workspaceEmailIdentities.workspaceId, workspaceId));
   await createMember(workspaceId);
 }
 
@@ -158,6 +165,12 @@ describe("setup completion offer", () => {
       replyTo: null,
       postalAddress: "123 Test Street, Test City",
     });
+    expect(await isWorkspaceSetupComplete(workspace.id)).toBe(false);
+
+    await db
+      .update(workspaceEmailIdentities)
+      .set({ fromVerifiedAt: new Date(), replyToVerifiedAt: new Date() })
+      .where(eq(workspaceEmailIdentities.workspaceId, workspace.id));
     expect(await isWorkspaceSetupComplete(workspace.id)).toBe(false);
 
     await createMember(workspace.id);

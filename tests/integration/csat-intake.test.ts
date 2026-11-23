@@ -126,7 +126,7 @@ describe("CSAT", () => {
           rating: 1,
           sessionCookie: session.cookieValue,
         }),
-      ).toEqual({ state: "invalid", error: "This conversation is not waiting for a rating." });
+      ).toEqual({ state: "invalid", error: "This conversation already has a rating." });
       expect((await conversationRow(conversation.id))?.csatRating).toBe(5);
     },
   );

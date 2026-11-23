@@ -106,16 +106,6 @@ const FOOTER_COLUMNS = [
   },
 ] as const;
 
-const TRUST = [
-  "Public feedback boards",
-  "Changelog + RSS",
-  "Help center + search",
-  "OpenAPI docs",
-  "In-app widget",
-  "Request briefs for agents",
-  "Win-back campaigns",
-] as const;
-
 const FAMILIAR = [
   "a request got 40 votes.",
   "you shipped it.",
@@ -564,7 +554,7 @@ export function LandingPage() {
             New
           </span>
           <p className="min-w-0 text-[13px] leading-snug text-[#dedad2] sm:text-[14px]">
-            Run several products from one account — and copy a request brief for your agent.
+            Move your boards and votes over from Canny, Productboard or Nolt.
           </p>
           <Link
             href="/sign-up"
@@ -659,10 +649,9 @@ export function LandingPage() {
               One customer loop for every product you run.
             </h1>
             <p className="max-w-[720px] text-pretty text-[17px] leading-[1.45] text-[#4e4a44] sm:text-[19px] lg:text-[20px]">
-              Feedback, roadmap, changelog, widget and win-back for each product under one
-              account — 1 product free, 5 on Indie, unlimited on Professional. Copy a request brief
-              with its dated evidence and demand into your coding agent, so the ticket starts from
-              what customers actually said.
+              A feedback board, roadmap and changelog for each product — one account, one login.
+              Every request becomes a Markdown brief with quotes, dates and demand, ready to paste
+              into your coding agent.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
               <Button href="/sign-up">
@@ -681,7 +670,7 @@ export function LandingPage() {
               <ArrowRight className="size-3.5" aria-hidden="true" />
             </Link>
             <p className="text-[13px] text-[#6b6862]">
-              Free plan includes win-back · no credit card · no sales call
+              Free: 1 product · Indie: 5 · Professional: unlimited · no credit card
             </p>
           </div>
 
@@ -698,16 +687,13 @@ export function LandingPage() {
 
         <section className="bg-[#1c1b19] text-[#f4f3ee]">
           <div
-            className={`${CONTAINER} flex flex-col gap-4 py-6 sm:h-[98px] sm:flex-row sm:items-center sm:justify-between sm:gap-10 sm:py-0`}
+            className={`${CONTAINER} flex flex-col gap-2.5 py-6 sm:flex-row sm:items-baseline sm:gap-8 sm:py-7`}
           >
             <p className="shrink-0 text-[14px] text-[#a8a49c]">Built for founders who ship</p>
-            <div className="grid flex-1 grid-cols-2 gap-x-6 gap-y-2.5 sm:flex sm:items-center sm:justify-between sm:gap-6">
-              {TRUST.map((item) => (
-                <span key={item} className="text-[15px] font-medium text-[#dedad2]">
-                  {item}
-                </span>
-              ))}
-            </div>
+            <p className="text-pretty text-[15px] leading-snug text-[#dedad2]">
+              Surveys, tours, help center, widget and win-back on every plan — no add-ons, no
+              per-seat pricing.
+            </p>
           </div>
         </section>
 

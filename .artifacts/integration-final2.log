@@ -1,0 +1,842 @@
+$ bun --conditions=react-server test tests/integration --concurrency=1
+bun test v1.4.0 (34cbb9a40)
+
+tests\integrations.test.ts:
+(pass) issue webhook signatures > Linear signs the raw body with Linear-Signature [0.29ms]
+(pass) issue webhook signatures > GitHub accepts the sha256= prefixed digest and requires a secret [0.09ms]
+(pass) issue webhook signatures > ClickUp uses the X-Signature header [0.03ms]
+(pass) issue webhook signatures > Jira and Azure DevOps rely on the unguessable URL token [0.02ms]
+(pass) issue webhook payloads > Linear Issue webhooks carry the state name and delivery id [0.36ms]
+(pass) issue webhook payloads > Jira issue events read fields.status.name [0.06ms]
+(pass) issue webhook payloads > GitHub labels are considered before the open/closed state [0.06ms]
+(pass) issue webhook payloads > ClickUp reads the latest status history entry [0.03ms]
+(pass) issue webhook payloads > Azure DevOps work-item events read System.State [0.03ms]
+(pass) status mapping > maps case-insensitively and stops at the first known candidate [0.04ms]
+(pass) status mapping > normalization lowercases keys and rejects unknown Herald statuses [1.09ms]
+(pass) status mapping > every provider ships a default map with known statuses [0.08ms]
+(pass) provider configuration > requires the fields each provider needs [1.62ms]
+(pass) outbound issue creation > Linear sends issueCreate and returns the identifier and state [0.66ms]
+(pass) outbound issue creation > Jira uses Basic auth and the browse URL [0.21ms]
+(pass) outbound issue creation > GitHub posts to the repository issues endpoint [0.09ms]
+(pass) outbound issue creation > ClickUp posts to the configured list [0.07ms]
+(pass) outbound issue creation > Azure DevOps sends a JSON patch with the work item type [0.13ms]
+(pass) outbound issue creation > classifies provider failures for retry decisions [0.12ms]
+(pass) CRM adapters > HubSpot resolves a company by domain and reads contacts and open deals [0.54ms]
+(pass) CRM adapters > Salesforce applies SOQL counts and the open opportunity total [0.34ms]
+(pass) CRM adapters > Salesforce without an instance URL fails before any request [0.06ms]
+(pass) outbound issue status push > GitHub closes the issue only for a terminal Herald status [0.39ms]
+(pass) outbound issue status push > GitHub reopens for a non-terminal status [0.08ms]
+(pass) outbound issue status push > Jira resolves the transition whose destination matches the target [0.13ms]
+(pass) outbound issue status push > Jira fails with a safe message when no transition reaches the target [0.07ms]
+(pass) outbound issue status push > Linear resolves a state id before mutating the issue [0.13ms]
+
+tests\integration\acceptance-w1.test.ts:
+(node:39280) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `bun.exe --trace-warnings ...` to show where the warning was created)
+(pass) plan.md §9 A (W1 half) — anonymous submission, moderation and status > a guest submits, a moderator publishes, a visitor votes/comments/follows, and the author sees the status change [691.41ms]
+(pass) plan.md §9 B — duplicate and merge > suggests the first request before submission, merges, hides the duplicate and restores it on unmerge [127.12ms]
+(pass) plan.md §9 C — private board and moderation > a private board is invisible to every public projection [8.31ms]
+(pass) plan.md §9 C — private board and moderation > sensitive text is refused before storage, and a held submission stays out of public view until a moderator publishes it [37.50ms]
+(pass) plan.md §9 C — private board and moderation > a banned customer loses their session and cannot participate [18.64ms]
+
+tests\integration\account-lifecycle.test.ts:
+(pass) account deletion blockers > a sole owner is blocked by the workspace [10.90ms]
+(pass) account deletion blockers > an owner with another owner is not blocked [5.04ms]
+(pass) account deletion blockers > a non-owner member is not blocked [3.32ms]
+(pass) account deletion blockers > only sole-owned workspaces are listed [6.44ms]
+(pass) deleting an account > removes the user, sessions and memberships but keeps the workspace [51.70ms]
+{"time":"2026-11-23T03:50:55.288Z","level":"error","event":"auth.email_misconfigured","release":"dev","error":{"name":"Error","message":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.","stack":"Error: Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.\n    at getEmailConfig (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\env.ts:160:15)\n    at isAuthEmailConfigured (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\email\\auth-mail.ts:28:12)\n    at createAuth (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\auth.ts:53:25)\n    at getAuth (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\auth"}}
+(pass) delete endpoint > is enabled and refuses a request without a session [13.51ms]
+(pass) account security summary > reports whether the account has a password [4.21ms]
+
+tests\integration\ai-draft.test.ts:
+(pass) AI changelog drafts > creates a private draft from visible shipped requests only [74.42ms]
+(pass) AI changelog drafts > rewrites an existing draft in place and keeps its uploaded image [36.23ms]
+(pass) AI changelog drafts > refuses to rewrite a release that is no longer a draft [11.92ms]
+(pass) AI changelog drafts > refuses a request that is not shipped or not in this product [11.58ms]
+
+tests\integration\analytics-data-controls.test.ts:
+(pass) analytics history and rollups > the database trigger records status transitions and ship time [89.97ms]
+(pass) analytics history and rollups > daily rollups reconcile with independent SQL counts [36.93ms]
+(pass) analytics history and rollups > first response counts a customer-visible reply, not an internal note [68.07ms]
+(pass) workspace data controls > ownership transfer leaves one owner and an audit row [10.56ms]
+(pass) workspace data controls > deletion has a 30-day grace period and can be cancelled [7.85ms]
+(pass) workspace data controls > erasing a customer removes only that workspace's matching row [22.96ms]
+
+tests\integration\analytics-drift.test.ts:
+(pass) analytics rollup drift guard > daily rollup matches a direct recomputation of the same window [41.32ms]
+
+tests\integration\analytics-overview.test.ts:
+(pass) analytics overview through the reporting layer > reads all sixteen product-activity metrics past the report cap [27.06ms]
+
+tests\integration\api-docs-lifecycle.test.ts:
+(pass) OpenAPI lifecycle and playground scope > a draft is private until published as the live versioned page [33.78ms]
+{"time":"2026-11-23T03:51:05.279Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"0831368f-d8bc-4366-a069-f823e3bb2599","method":"GET","path":"/api/public/api-docs/playground"}
+(pass) OpenAPI lifecycle and playground scope > the playground proxy refuses a write for a read-only token [10.27ms]
+
+tests\integration\api-v1.test.ts:
+{"time":"2026-11-23T03:51:07.272Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8c66efbc-003b-4783-b1b2-d04ccefc7f07","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.290Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8c66efbc-003b-4783-b1b2-d04ccefc7f07","method":"GET","path":"/api/v1/requests/2ea5fc38-652d-4c51-aa74-85e6c18d5bf2"}
+{"time":"2026-11-23T03:51:07.295Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8c66efbc-003b-4783-b1b2-d04ccefc7f07","method":"GET","path":"/api/v1/boards"}
+(pass) REST API v1 > keeps every read inside the token's workspace [50.10ms]
+{"time":"2026-11-23T03:51:07.312Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"02436d91-f520-42d2-9e4e-f6a400a6999a","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.323Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"02436d91-f520-42d2-9e4e-f6a400a6999a","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.332Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"02436d91-f520-42d2-9e4e-f6a400a6999a","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.342Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"02436d91-f520-42d2-9e4e-f6a400a6999a","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.347Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"02436d91-f520-42d2-9e4e-f6a400a6999a","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.356Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"02436d91-f520-42d2-9e4e-f6a400a6999a","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.364Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"02436d91-f520-42d2-9e4e-f6a400a6999a","method":"GET","path":"/api/v1/requests"}
+(pass) REST API v1 > filters, sorts and pages with an opaque cursor [67.49ms]
+{"time":"2026-11-23T03:51:07.377Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"33b521b0-1734-4bd0-8d02-e4978bca9937","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.388Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"33b521b0-1734-4bd0-8d02-e4978bca9937","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.397Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"33b521b0-1734-4bd0-8d02-e4978bca9937","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.408Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"33b521b0-1734-4bd0-8d02-e4978bca9937","method":"GET","path":"/api/v1/requests"}
+(pass) REST API v1 > sorts requests by a numeric custom field with a cursor [44.71ms]
+{"time":"2026-11-23T03:51:07.417Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"458c1128-f8d2-41ef-8ce0-dc2f81cbb6fd","method":"POST","path":"/api/v1/requests/29a028e8-5fe0-4052-9e5a-e223eb6caa71/comments"}
+{"time":"2026-11-23T03:51:07.447Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"458c1128-f8d2-41ef-8ce0-dc2f81cbb6fd","method":"POST","path":"/api/v1/requests/29a028e8-5fe0-4052-9e5a-e223eb6caa71/comments"}
+{"time":"2026-11-23T03:51:07.452Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"458c1128-f8d2-41ef-8ce0-dc2f81cbb6fd","method":"POST","path":"/api/v1/requests/29a028e8-5fe0-4052-9e5a-e223eb6caa71/comments"}
+(pass) REST API v1 > replays an idempotent comment without writing twice [45.01ms]
+{"time":"2026-11-23T03:51:07.462Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"d5178d01-60bf-40c5-80e4-a9caadaa0001","method":"POST","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:51:07.482Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"d5178d01-60bf-40c5-80e4-a9caadaa0001","method":"POST","path":"/api/v1/requests"}
+(pass) REST API v1 > request creation is idempotent and moderated for customers [30.67ms]
+{"time":"2026-11-23T03:51:07.492Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"b12af373-adc7-4f82-863c-e744ae5cf565","method":"POST","path":"/api/v1/changelogs"}
+{"time":"2026-11-23T03:51:07.517Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"b12af373-adc7-4f82-863c-e744ae5cf565","method":"POST","path":"/api/v1/changelogs"}
+{"time":"2026-11-23T03:51:07.522Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"b12af373-adc7-4f82-863c-e744ae5cf565","method":"PATCH","path":"/api/v1/changelogs/b667cf6a-9efb-4df8-a7e9-7b36d1db2447"}
+(pass) REST API v1 > creates changelog drafts only and refuses to edit published rows [43.41ms]
+{"time":"2026-11-23T03:51:07.538Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"42ac53bf-f0ef-4087-a5ed-aa81b2e93990","method":"POST","path":"/api/v1/conversations/b1e3b22b-f5c2-4b5d-bffc-b25268a74551/messages"}
+{"time":"2026-11-23T03:51:07.559Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"42ac53bf-f0ef-4087-a5ed-aa81b2e93990","method":"POST","path":"/api/v1/conversations/b1e3b22b-f5c2-4b5d-bffc-b25268a74551/notes"}
+(pass) REST API v1 > notes stay internal while replies are customer-facing [39.97ms]
+{"time":"2026-11-23T03:51:07.575Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"POST","path":"/api/v1/boards"}
+{"time":"2026-11-23T03:51:07.580Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"PATCH","path":"/api/v1/boards/ab4b53a7-6ac3-4b23-91c1-a2103c8ad73c"}
+{"time":"2026-11-23T03:51:07.587Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"POST","path":"/api/v1/tags"}
+{"time":"2026-11-23T03:51:07.592Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"GET","path":"/api/v1/tags"}
+{"time":"2026-11-23T03:51:07.602Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"DELETE","path":"/api/v1/tags/6e0432aa-110d-4e09-b6b0-2f478fea87d6"}
+{"time":"2026-11-23T03:51:07.608Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"POST","path":"/api/v1/requests/9f75e5b0-9367-4ee7-af72-d278009e1e94/votes"}
+{"time":"2026-11-23T03:51:07.621Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"DELETE","path":"/api/v1/requests/9f75e5b0-9367-4ee7-af72-d278009e1e94/votes"}
+{"time":"2026-11-23T03:51:07.632Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"POST","path":"/api/v1/companies"}
+{"time":"2026-11-23T03:51:07.638Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"POST","path":"/api/v1/companies/60db95de-ff24-49b3-8feb-c672eb9da654/customers"}
+{"time":"2026-11-23T03:51:07.647Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"bfab8f79-2fea-409e-a4cf-4e2c3fe15cd4","method":"GET","path":"/api/v1/companies"}
+(pass) REST API v1 > manages boards, tags, votes and companies [80.10ms]
+{"time":"2026-11-23T03:51:07.654Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"ac8a0b6e-d5ae-4a80-91b8-db8870741f54","method":"GET","path":"/api/v1/members"}
+{"time":"2026-11-23T03:51:07.658Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"ac8a0b6e-d5ae-4a80-91b8-db8870741f54","method":"POST","path":"/api/v1/requests"}
+(pass) REST API v1 > requires a read scope and rejects missing tokens [10.11ms]
+
+tests\integration\billing.test.ts:
+(pass) Stripe subscription sync > a webhook makes the subscription the source of truth [24.10ms]
+(pass) Stripe subscription sync > a webhook upgrade lifts the free board limit immediately [13.05ms]
+(pass) Stripe subscription sync > replays are idempotent [7.80ms]
+{"time":"2026-11-23T03:51:09.668Z","level":"warn","event":"billing.stale_event_ignored","release":"dev","eventId":"evt_billing_order_stale_cancel","type":"customer.subscription.deleted","workspaceId":"91680d0d-7008-4691-add0-ea7359424904"}
+(pass) Stripe subscription sync > an out-of-order cancellation cannot undo a newer activation [13.78ms]
+{"time":"2026-11-23T03:51:09.684Z","level":"warn","event":"billing.lifetime_email_failed","release":"dev","seatNumber":1,"kind":"granted","error":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>."}
+(pass) Founding Lifetime > a paid session grants one seat and the lifetime plan once [13.66ms]
+(pass) Founding Lifetime > an expired checkout releases the reserved seat [7.73ms]
+{"time":"2026-11-23T03:51:09.703Z","level":"warn","event":"billing.lifetime_email_failed","release":"dev","seatNumber":3,"kind":"granted","error":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>."}
+(pass) Founding Lifetime > a full refund revokes lifetime and frees the seat [13.76ms]
+{"time":"2026-11-23T03:51:09.716Z","level":"warn","event":"billing.lifetime_email_failed","release":"dev","seatNumber":4,"kind":"granted","error":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>."}
+(pass) Founding Lifetime > a partial refund does not revoke lifetime [8.72ms]
+{"time":"2026-11-23T03:51:09.726Z","level":"warn","event":"billing.lifetime_email_failed","release":"dev","seatNumber":5,"kind":"granted","error":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>."}
+(pass) Founding Lifetime > subscription events cannot downgrade a lifetime workspace [10.54ms]
+{"time":"2026-11-23T03:51:09.736Z","level":"warn","event":"billing.lifetime_email_failed","release":"dev","seatNumber":6,"kind":"granted","error":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>."}
+(pass) Founding Lifetime > a lifetime workspace cannot start a subscription checkout [8.39ms]
+(pass) Founding Lifetime > one seat per purchaser account is enforced in the database [6.11ms]
+(pass) Founding Lifetime > a sold-out ledger refuses before Stripe is called [10.75ms]
+(pass) billing lifecycle notices > a failed invoice keeps paid limits during grace and queues the dunning sequence [25.75ms]
+(pass) billing lifecycle notices > trial reminders are queued once per trial period [5.87ms]
+
+tests\integration\board-access.test.ts:
+(pass) board segment access > an open board resolves for everyone and needs no viewer [14.44ms]
+(pass) board segment access > an email-domain rule denies anonymous visitors and other domains [15.46ms]
+(pass) board segment access > a company rule matches membership, not an emailed domain [13.35ms]
+(pass) board segment access > a trait rule matches the customer and their company [11.84ms]
+(pass) board segment access > clearing the rules reopens the board [9.40ms]
+(pass) board segment access > gating does not make a private board public, and rules stay in their product [10.00ms]
+
+tests\integration\board-backfill.test.ts:
+(pass) board backfill reconciliation > assigns every existing post and leaves status counts unchanged [28.52ms]
+(pass) board backfill reconciliation > refuses to repair while a post points at another product's board [10.03ms]
+
+tests\integration\boards.test.ts:
+(pass) board reads > lists active boards before archived ones, ordered by position [14.10ms]
+(pass) board reads > counts only live requests on each board [12.72ms]
+(pass) board reads > never resolves another product's board [5.83ms]
+
+tests\integration\changelog-draft-api.test.ts:
+(pass) changelog draft API service > creates a complete draft with tags, authors and request links [40.27ms]
+(pass) changelog draft API service > updates only the supplied fields and preserves the rest [34.73ms]
+(pass) changelog draft API service > clears links and tags only when the caller asks [28.55ms]
+(pass) changelog draft API service > refuses published releases and another product's draft [8.37ms]
+(pass) changelog draft API service > rejects a slug conflict and a request from another product [10.21ms]
+
+tests\integration\concurrent-runners.test.ts:
+{"time":"2026-11-23T03:51:19.522Z","level":"info","event":"job_run.completed","release":"dev","claimed":2,"succeeded":2,"failed":0,"retrying":0,"durationMs":31}
+{"time":"2026-11-23T03:51:19.528Z","level":"info","event":"job_run.completed","release":"dev","claimed":4,"succeeded":4,"failed":0,"retrying":0,"durationMs":37}
+{"time":"2026-11-23T03:51:19.534Z","level":"info","event":"job_run.completed","release":"dev","claimed":0,"succeeded":0,"failed":0,"retrying":0,"durationMs":2}
+(pass) two concurrent runners execute each due job exactly once [69.51ms]
+
+tests\integration\conversation-workflow.test.ts:
+(pass) conversation notifications > operator preferences decide who hears about a new conversation and where [51.01ms]
+(pass) conversation notifications > reply-only operators hear about a reply once, even when the queue retries [30.95ms]
+(pass) away replies > an away reply is sent once per away period, reaches the customer and resumes after a human reply [64.77ms]
+(pass) away replies > an available team or a disabled toggle never sends an away reply [33.02ms]
+(pass) conversation drafts > a draft is personal, keeps only the latest value and is consumed by a send [69.21ms]
+(pass) visitor context > the start route records safe context and the thread links the customer's requests [61.76ms]
+
+tests\integration\conversations.test.ts:
+(pass) conversation inbox > views separate the working inbox from spam and archived [58.88ms]
+(pass) conversation inbox > search matches subject, customer and preview but never spam or archived [33.09ms]
+(pass) conversation inbox > a team reply opens a queued thread, clears unread and updates the preview [40.43ms]
+(pass) conversation inbox > an internal note stays out of the status and the inbox preview [20.21ms]
+(pass) conversation inbox > slash commands resolve, reopen and snooze without a second action [27.17ms]
+(pass) conversation inbox > snoozing hides a thread from Queue until its deadline passes [14.45ms]
+(pass) conversation inbox > restoring a spam or archived thread returns it to the working inbox [35.74ms]
+(pass) conversation inbox > opening a thread clears unread and records one participant [10.94ms]
+(pass) conversation mutations > a thread's messages and attachments never leak into another product [19.55ms]
+(pass) conversation mutations > a message cannot be filed under another product [7.30ms]
+(pass) conversation mutations > an attachment cannot be filed under another product [6.08ms]
+(pass) conversation mutations > status writes and the thread read are scoped to the product [11.05ms]
+(pass) conversation mutations > assignment requires a workspace member and stays inside the product [11.78ms]
+(pass) conversation mutations > blocking a sender records the block once and moves the thread to spam [13.12ms]
+(pass) conversation mutations > reminders are personal, become due once and can be reset [16.08ms]
+
+tests\integration\cron-route.test.ts:
+{"time":"2026-11-23T03:51:25.875Z","level":"error","event":"auth.email_misconfigured","release":"dev","error":{"name":"Error","message":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.","stack":"Error: Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.\n    at getEmailConfig (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\env.ts:160:15)\n    at isAuthEmailConfigured (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\email\\auth-mail.ts:28:12)\n    at sendDueOnboardingEmails (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\onboarding\\emails.ts:362:8)\n    at <anonymous> (C:\\Users\\gutsc\\O"}}
+{"time":"2026-11-23T03:51:25.909Z","level":"info","event":"backup.verification","release":"dev","database":"ok","storage":"ok","manifest":"ok","objects":0,"bytes":0,"attachmentsChecked":0,"attachmentsFailed":0,"manifestsPruned":0,"recorded":true,"durationMs":19}
+{"time":"2026-11-23T03:51:25.917Z","level":"info","event":"observability.pruned","release":"dev","requestMetrics":0,"dashboardViews":0,"aiUsage":0,"backupVerifications":0,"backupManifests":0}
+{"time":"2026-11-23T03:51:25.945Z","level":"info","event":"job_run.completed","release":"dev","claimed":11,"succeeded":11,"failed":0,"retrying":0,"durationMs":97}
+(pass) GET /api/cron/jobs > returns per-type counts without job payloads [118.41ms]
+(pass) GET /api/cron/jobs > rejects a request without the bearer secret [1.60ms]
+
+tests\integration\cross-tenant.test.ts:
+(pass) cross-tenant reads > a guessed request id never resolves through another tenant's board [61.52ms]
+(pass) cross-tenant reads > workspace and product lookups stay inside their authorized scope [13.73ms]
+(pass) cross-tenant public writes > public engagement services treat a foreign request id as missing [12.29ms]
+(pass) cross-tenant public writes > a cookie from one workspace cannot submit, vote, comment, follow or react on a board that requires an email [30.20ms]
+(pass) cross-tenant public writes > a guessed customer id in the body is ignored; the route uses the session it just minted [40.90ms]
+(pass) cross-tenant dashboard services > moderation and merge refuse content and reviews from another workspace [29.45ms]
+(pass) cross-tenant dashboard services > tags, bans, bulk triage and saved views are workspace-scoped [19.44ms]
+{"time":"2026-11-23T03:51:28.086Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/boards/44e21e28-ea79-44b8-b5a7-6dd710296011"}
+{"time":"2026-11-23T03:51:28.089Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"PATCH","path":"/api/v1/boards/ea7b2c65-cf86-414d-8bca-c51cb90f91e8"}
+{"time":"2026-11-23T03:51:28.093Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/custom-fields/2e6cc186-e10e-47ac-ae8a-4da34cd84be5"}
+{"time":"2026-11-23T03:51:28.097Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"PATCH","path":"/api/v1/custom-fields/66e4d0de-4317-4010-bb43-23a44cc91833"}
+{"time":"2026-11-23T03:51:28.101Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/requests/66e4d0de-4317-4010-bb43-23a44cc91833"}
+{"time":"2026-11-23T03:51:28.105Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"PATCH","path":"/api/v1/requests/44e21e28-ea79-44b8-b5a7-6dd710296011"}
+{"time":"2026-11-23T03:51:28.111Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/requests/2e6cc186-e10e-47ac-ae8a-4da34cd84be5/brief"}
+{"time":"2026-11-23T03:51:28.116Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/requests/0af08a0c-1c50-4f54-9c81-eb282821276a/comments"}
+{"time":"2026-11-23T03:51:28.121Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/changelogs/9cf79d58-e513-4afe-8a72-5201a86a1322"}
+{"time":"2026-11-23T03:51:28.124Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"PATCH","path":"/api/v1/changelogs/44e21e28-ea79-44b8-b5a7-6dd710296011"}
+{"time":"2026-11-23T03:51:28.127Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/companies/9cf79d58-e513-4afe-8a72-5201a86a1322"}
+{"time":"2026-11-23T03:51:28.131Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"PATCH","path":"/api/v1/companies/82bd2612-1682-479b-a841-4c5cddb75e4a"}
+{"time":"2026-11-23T03:51:28.135Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/conversations/82bd2612-1682-479b-a841-4c5cddb75e4a"}
+{"time":"2026-11-23T03:51:28.139Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"PATCH","path":"/api/v1/conversations/0af08a0c-1c50-4f54-9c81-eb282821276a"}
+{"time":"2026-11-23T03:51:28.143Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"GET","path":"/api/v1/conversations/e96b2482-f24e-40a8-863b-7d75abd9910e/messages"}
+{"time":"2026-11-23T03:51:28.147Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"8e3f2fe5-b30b-4276-bd00-5ec354a9501d","method":"POST","path":"/api/v1/requests"}
+(pass) cross-tenant fuzz > foreign and nonexistent ids never resolve on any addressed API route [86.95ms]
+
+tests\integration\csat-intake.test.ts:
+(pass) CSAT > is off by default, requests once on resolution and accepts one rating [32.55ms]
+(pass) CSAT > a foreign customer cannot rate someone else's thread [12.13ms]
+(pass) structured intake > widget answers persist as traits and an unanswered guest still starts a thread [35.37ms]
+(pass) structured intake > a trait that gates a board cannot be collected publicly [11.45ms]
+(pass) structured intake > board questions stay on their board [10.58ms]
+
+tests\integration\csp-surfaces.test.ts:
+(pass) policy audit helpers > a policy is parsed into directives and sources [0.09ms]
+(pass) policy audit helpers > a script outside the policy is reported [0.27ms]
+(pass) policy audit helpers > inline scripts need 'unsafe-inline' [0.04ms]
+(pass) policy audit helpers > frames fall back to default-src unless frame-src names the host [0.04ms]
+(pass) policy audit helpers > data: images are allowed when img-src lists the scheme [0.02ms]
+(pass) served content security policy > every surface ships a policy that allows what it references [350.65ms]
+
+tests\integration\customer-auth.test.ts:
+(pass) magic link > upgrades the guest session instead of creating a second customer [27.85ms]
+(pass) magic link > moves a guest's posts and votes onto the signed-in customer [46.30ms]
+(pass) magic link > does not sign in a banned customer [7.37ms]
+(pass) magic link > expires unused tokens and invalidates sibling links [10.32ms]
+(pass) signed identity > creates a verified customer and is idempotent by subject [21.25ms]
+(pass) signed identity > merges an existing guest into the signed identity [20.55ms]
+(pass) signed identity > fails closed for a wrong secret, expiry and disabled SSO [9.09ms]
+(pass) signed identity > rotation keeps the previous secret valid until the overlap ends [21.24ms]
+(pass) signed identity > an expired rotation overlap stops accepting the previous secret [11.68ms]
+(pass) signed identity > settings report only whether a secret exists [4.85ms]
+(pass) session revocation > a revoked session no longer verifies [9.36ms]
+
+tests\integration\customer-session.test.ts:
+(pass) guest sessions > stores only a token hash and rejects a tampered cookie [13.68ms]
+(pass) guest sessions > identify attaches the email and rotates the token [10.27ms]
+(pass) guest sessions > refuses an address owned by another customer [9.98ms]
+(pass) revocation and bans > logout deletes the session row [5.54ms]
+(pass) revocation and bans > a banned customer cannot resolve an existing session [6.19ms]
+
+tests\integration\dashboard-shell.test.ts:
+(pass) dashboard shell > the pending-boundary detector recognises both failure shapes [0.09ms]
+(pass) dashboard shell > every dashboard route is enumerated from the filesystem [0.03ms]
+(pass) dashboard shell > each dashboard route renders a resolved shell for a signed-in owner [1495.82ms]
+
+tests\integration\deliverability-handoff.test.ts:
+(pass) delivery feedback > bounces and complaints update the log and suppress the address [19.78ms]
+(pass) delivery feedback > the webhook is closed without a secret and records an authorized batch [6.46ms]
+(pass) pre-inbox spam screening > a link-stuffed widget thread lands in Spam and never alerts the team [49.18ms]
+(pass) feedback handoff > files a request as the customer and notes it in the thread [27.74ms]
+
+tests\integration\delivery-log.test.ts:
+(pass) email delivery log > shows every status with content and counts [29.69ms]
+(pass) email delivery log > a foreign workspace id returns nothing [6.22ms]
+(pass) email delivery log > the limit bounds rows without changing the totals [7.51ms]
+
+tests\integration\email-delivery.test.ts:
+{"time":"2026-11-23T03:51:48.540Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":27}
+(pass) outbound delivery > sends through the adapter and records the delivery as sent [41.52ms]
+(pass) outbound delivery > sends the test email to the provider [2.49ms]
+(pass) outbound delivery > a suppressed address is skipped without calling the provider [12.82ms]
+{"time":"2026-11-23T03:51:48.573Z","level":"error","event":"job.retrying","release":"dev","jobId":"312fafe7-e837-463c-8f06-ced6c9fd23e4","type":"send_email","requestId":null,"attempts":1,"maxAttempts":5,"error":{"name":"Error","message":"Email provider rejected the message (HTTP 429).","stack":"Error: Email provider rejected the message (HTTP 429).\n    at <anonymous> (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\handlers.ts:184:17)\n    at async executeJob (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\queue.ts:203:26)\n    at async withSpan (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\observability\\tracing.ts:121:26)\n    at processTicksAndRejections (native:7:39)"}}
+{"time":"2026-11-23T03:51:48.575Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":0,"failed":0,"retrying":1,"durationMs":14}
+{"time":"2026-11-23T03:51:48.578Z","level":"info","event":"job_run.completed","release":"dev","claimed":0,"succeeded":0,"failed":0,"retrying":0,"durationMs":2}
+{"time":"2026-11-23T03:51:48.590Z","level":"error","event":"job.retrying","release":"dev","jobId":"312fafe7-e837-463c-8f06-ced6c9fd23e4","type":"send_email","requestId":null,"attempts":2,"maxAttempts":5,"error":{"name":"Error","message":"Email provider rejected the message (HTTP 429).","stack":"Error: Email provider rejected the message (HTTP 429).\n    at <anonymous> (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\handlers.ts:184:17)\n    at async executeJob (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\queue.ts:203:26)\n    at async withSpan (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\observability\\tracing.ts:121:26)\n    at processTicksAndRejections (native:7:39)"}}
+{"time":"2026-11-23T03:51:48.593Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":0,"failed":0,"retrying":1,"durationMs":13}
+{"time":"2026-11-23T03:51:48.608Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":13}
+(pass) retry policy > a retryable failure records the error and backs off before retrying [52.49ms]
+(pass) retry policy > sandbox mode skips email without calling the provider [12.86ms]
+(pass) provider server errors > a 500 is retried to the attempt ceiling and never disturbs suppressions [34.53ms]
+
+tests\integration\email-domain-auth.test.ts:
+(pass) emailDomainFromAddress > reads the domain from a display-name address [0.27ms]
+(pass) checkEmailDomainAuth > reports ok when all three records resolve [0.60ms]
+(pass) checkEmailDomainAuth > reads SPF from the Resend return-path subdomain [0.21ms]
+(pass) checkEmailDomainAuth > separates a missing record from a failed lookup [0.34ms]
+(pass) checkEmailDomainAuth > stays unconfigured without a sender address [0.15ms]
+
+tests\integration\entitlements.test.ts:
+(pass) workspace usage > counts products, members and unarchived boards [22.07ms]
+(pass) workspace usage > reports the plan, feature matrix and limits [7.34ms]
+(pass) limit gates > refuses the increment that would exceed the free product limit [13.32ms]
+(pass) limit gates > refuses the third board and frees a slot when one is archived [7.10ms]
+(pass) limit gates > counts members against the free limit [6.90ms]
+
+tests\integration\events.test.ts:
+{"time":"2026-11-23T03:51:52.510Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"28865b5d-3d7d-480b-9ad4-83d0e0b36fa6","method":"POST","path":"/api/v1/events"}
+(pass) POST /api/v1/events > records an event, resolves the customer and queues customer.event [24.82ms]
+{"time":"2026-11-23T03:51:52.526Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"e02d6412-26bf-40fc-9bd2-7a61b17acc55","method":"POST","path":"/api/v1/events"}
+{"time":"2026-11-23T03:51:52.534Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"e02d6412-26bf-40fc-9bd2-7a61b17acc55","method":"POST","path":"/api/v1/events"}
+{"time":"2026-11-23T03:51:52.538Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"e02d6412-26bf-40fc-9bd2-7a61b17acc55","method":"POST","path":"/api/v1/events"}
+(pass) POST /api/v1/events > replays an idempotency key and dedupes an event id [22.16ms]
+{"time":"2026-11-23T03:51:52.548Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"e7b2436f-9351-4dbe-bbd2-c1bc3c2f96d0","method":"POST","path":"/api/v1/events"}
+{"time":"2026-11-23T03:51:52.552Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"e7b2436f-9351-4dbe-bbd2-c1bc3c2f96d0","method":"POST","path":"/api/v1/events"}
+(pass) POST /api/v1/events > requires write scope and a product in the token's workspace [11.29ms]
+{"time":"2026-11-23T03:51:52.561Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"0daf9f3f-dfd8-4083-bb8e-b00d91fa7bf0","method":"POST","path":"/api/v1/events"}
+{"time":"2026-11-23T03:51:52.567Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"ac20ba0c-8c30-42f3-ba72-a34ee3beca7a","method":"POST","path":"/api/v1/events"}
+(pass) POST /api/v1/events > keeps identical external ids separate per workspace [18.10ms]
+{"time":"2026-11-23T03:51:52.578Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"69e1dc22-b6e6-4810-8849-655514af0e1c","method":"POST","path":"/api/v1/events"}
+{"time":"2026-11-23T03:51:52.581Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"69e1dc22-b6e6-4810-8849-655514af0e1c","method":"POST","path":"/api/v1/events"}
+(pass) POST /api/v1/events > rejects future timestamps and oversized properties [9.92ms]
+
+tests\integration\experiences.test.ts:
+(pass) experience administration > lists dismissal and completion totals [14.90ms]
+
+tests\integration\help-juno-lifecycle.test.ts:
+(pass) help publishing to Juno > a published article is cited, and unpublishing removes it [48.09ms]
+
+tests\integration\import-export-branding.test.ts:
+(pass) CSV import > imports mapped rows, preserves votes and dates, reports bad rows [50.65ms]
+(pass) CSV import > a 10,000-row import is stored, queued and then advanced without blocking the request [1031.11ms]
+(pass) CSV import > import progress is scoped to the authorized product [10.58ms]
+(pass) CSV import > refuses a board that belongs to another product [4.44ms]
+(pass) import planning, cancel and presets > a dry run reports counts and writes nothing [4.96ms]
+(pass) import planning, cancel and presets > cancelling stops the worker before it imports pending rows [12.62ms]
+(pass) import planning, cancel and presets > a workspace mapping preset is replaced by its column signature [5.33ms]
+(pass) import planning, cancel and presets > remote images refuse loopback and private addresses [2.56ms]
+(pass) export > includes merge provenance, comments and tags, and marks duplicates [22.66ms]
+(pass) export > never exports a product through a foreign workspace id [3.40ms]
+(pass) branding > defaults, validates, upserts and preserves an existing logo [5.79ms]
+(pass) custom domains > verification and HTTPS health are stored and visible [11.66ms]
+(pass) server-side plan gates > the free board limit counts active boards only [9.05ms]
+(pass) server-side plan gates > a downgraded workspace loses guest posting on public resolution [10.17ms]
+
+tests\integration\insights.test.ts:
+(pass) request insights > stores the wording, source and author of one piece of evidence [21.53ms]
+(pass) request insights > refuses to attach evidence to a request in another product [6.78ms]
+(pass) request insights > moves evidence when requests merge and restores it on unmerge [36.49ms]
+(pass) request insights > deletes only inside the request it was called for [7.99ms]
+
+tests\integration\integrations.test.ts:
+(pass) issue tracker sync > creates exactly one external issue across repeated attempts [42.18ms]
+{"time":"2026-11-23T03:52:03.409Z","level":"warn","event":"integration.issue.create_failed","release":"dev","productId":"f92ead6a-5c3c-491d-9b5f-45c895858a04","provider":"github","error":{"name":"IssueProviderError","message":"The issue tracker rejected the request (boom).","stack":"IssueProviderError: The issue tracker rejected the request (boom).\n    at providerJson (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\integrations\\issue-providers.ts:472:15)\n    at async createIssueInTracker (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\integrations\\issue-providers.ts:592:27)\n    at async createIssueForFeedback (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\integrations\\issue-service.ts:631:27)\n    at async <anonymous> (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\t"}}
+(pass) issue tracker sync > a failed creation stays failed and can be linked manually [25.88ms]
+(pass) issue tracker sync > a Herald status change pushes to the linked issue [20.20ms]
+(pass) issue tracker sync > a webhook moves the request status once, with an audit trail [34.63ms]
+(pass) issue tracker sync > an unmapped external status is recorded as skipped and changes nothing [18.49ms]
+(pass) issue tracker sync > a connection cannot reach another product's requests [25.32ms]
+(pass) issue tracker sync > settings never expose tokens or webhook secrets [12.49ms]
+(pass) CRM sync > caches read-only company, contact and deal totals for one tenant [28.43ms]
+(pass) CRM sync > a sync job is enqueued once per dedupe key [13.58ms]
+(pass) CRM sync > disconnecting a CRM stops the job from writing cached totals [10.52ms]
+
+tests\integration\job-chaos.test.ts:
+{"time":"2026-11-23T03:52:05.530Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":26}
+{"time":"2026-11-23T03:52:05.533Z","level":"info","event":"job_run.completed","release":"dev","claimed":0,"succeeded":0,"failed":0,"retrying":0,"durationMs":2}
+(pass) job runner recovery > a runner killed after claiming is reclaimed and sends once [45.10ms]
+
+tests\integration\jobs.test.ts:
+(pass) enqueueing > a dedupe key yields exactly one job [6.48ms]
+(pass) enqueueing > runJobNow reuses a succeeded job instead of running twice [11.04ms]
+{"time":"2026-11-23T03:52:07.476Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":6}
+(pass) running due work > runs a due job, records the result and one run row [9.11ms]
+{"time":"2026-11-23T03:52:07.480Z","level":"info","event":"job_run.completed","release":"dev","claimed":0,"succeeded":0,"failed":0,"retrying":0,"durationMs":2}
+(pass) running due work > does not claim a job scheduled for the future [4.48ms]
+{"time":"2026-11-23T03:52:07.486Z","level":"error","event":"job.failed","release":"dev","jobId":"4af839d0-1c0b-46d8-908b-9f3a862cd065","type":"send_email","requestId":null,"attempts":1,"maxAttempts":5,"error":{"name":"NonRetryableJobError","message":"send_email requires a deliveryId.","stack":"NonRetryableJobError: send_email requires a deliveryId.\n    at <anonymous> (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\handlers.ts:173:17)\n    at executeJob (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\queue.ts:203:26)\n    at withSpan (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\observability\\tracing.ts:121:26)\n    at run (node:async_hooks:99:29)\n    at executeClaimedJob (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\queue.ts:170:10)\n    at runDueJobs (C:"}}
+{"time":"2026-11-23T03:52:07.488Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":0,"failed":1,"retrying":0,"durationMs":5}
+(pass) running due work > a non-retryable failure is terminal after one attempt [7.42ms]
+{"time":"2026-11-23T03:52:07.493Z","level":"error","event":"job.failed","release":"dev","jobId":"b0ae9a5b-f12c-4547-a31a-6f4e77f26ffc","type":"process_import","requestId":null,"attempts":1,"maxAttempts":5,"error":{"name":"NonRetryableJobError","message":"process_import requires an importId.","stack":"NonRetryableJobError: process_import requires an importId.\n    at <anonymous> (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\handlers.ts:463:17)\n    at executeJob (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\queue.ts:203:26)\n    at withSpan (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\observability\\tracing.ts:121:26)\n    at run (node:async_hooks:99:29)\n    at executeClaimedJob (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\jobs\\queue.ts:170:10)\n    at runDueJobs "}}
+{"time":"2026-11-23T03:52:07.495Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":0,"failed":1,"retrying":0,"durationMs":5}
+(pass) running due work > an unregistered job type fails rather than silently succeeding [7.10ms]
+(pass) per-test isolation > sees its own uncommitted rows [2.04ms]
+(pass) per-test isolation > does not see the previous test's rows [1.44ms]
+
+tests\integration\juno-answers.test.ts:
+(pass) answer pipeline > a covered question is answered with visible citations [83.60ms]
+(pass) answer pipeline > an uncovered question hands off without calling the model [38.83ms]
+(pass) answer pipeline > billing questions hand off before generation [36.46ms]
+(pass) answer pipeline > account questions hand off before generation [19.40ms]
+(pass) answer pipeline > a disabled toggle stops new pickups entirely [18.79ms]
+(pass) answer pipeline > the daily budget hands off instead of degrading silently [29.24ms]
+(pass) answer pipeline > crossing 80% records one daily budget alert [29.69ms]
+(pass) human takeover > a team reply pauses Juno until the thread is handed back [46.23ms]
+(pass) auto-resolve timers > a chat thread resolves after its silence window [38.36ms]
+(pass) auto-resolve timers > an email thread keeps its longer silence window [19.25ms]
+(pass) auto-resolve timers > a team-touched thread never auto-resolves [14.66ms]
+{"time":"2026-11-23T03:52:09.959Z","level":"error","event":"trace.failed","release":"dev","span":"ai.provider.generate","traceId":"9ab5562f-fec4-48d7-afdf-e4fa0b209910","spanId":"cb6c05c8-36a1-4e","durationMs":102,"failed":true,"model":"timeout-model","feature":"ai","error":"[object]"}
+{"time":"2026-11-23T03:52:09.959Z","level":"error","event":"ai.generate_failed","release":"dev","model":"timeout-model","error":{"name":"AbortError","message":"The operation was aborted.","code":"20","stack":"abort@[native code]"}}
+{"time":"2026-11-23T03:52:09.960Z","level":"error","event":"juno.generate_failed","release":"dev","error":{"name":"AiProviderError","message":"AI drafting is temporarily unavailable. Please try again.","stack":"AiProviderError: AI drafting is temporarily unavailable. Please try again.\n    at generateAiText (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\ai\\provider.ts:150:11)\n    at async answerConversation (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\juno\\answer.ts:529:23)\n    at async <anonymous> (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\tests\\integration\\juno-answers.test.ts:645:31)\n    at async <anonymous> (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\tests\\integration\\harness.ts:374:48)\n    a"}}
+(pass) provider outage > a timed-out provider hands off without leaving a generated message [136.16ms]
+
+tests\integration\juno-backlog.test.ts:
+(pass) duplicate linking > automatic mode merges a high-confidence match and merge history can undo it [63.23ms]
+(pass) duplicate linking > assisted mode queues a match and only a person can merge it [34.96ms]
+(pass) rule-bounded actions > transcript email stays off until reviewed, then writes an audit row and delivery [33.67ms]
+
+tests\integration\juno-knowledge.test.ts:
+(pass) knowledge sources > an upload is chunked, published and retrievable only in its product [29.54ms]
+(pass) knowledge sources > pausing removes a source from retrieval and resuming restores it [16.31ms]
+(pass) knowledge sources > the beta limit is five sources, enforced on create [43.94ms]
+(pass) knowledge sources > replacing an upload publishes a new version and supersedes the old [16.89ms]
+(pass) knowledge sources > non-public crawl targets are refused before anything is fetched [4.46ms]
+(pass) knowledge sources > the recrawl sweep queues only due live sources and skips an in-flight build [9.78ms]
+(pass) knowledge sources > a failed crawl records the failure and invents no knowledge [10.93ms]
+
+tests\integration\juno-operations.test.ts:
+(pass) feedback cards > files a new request only after the customer confirms [88.49ms]
+(pass) feedback cards > a guest cannot vote or follow, and a member can [29.42ms]
+(pass) feedback cards > stops offering new requests after the per-conversation limit [15.32ms]
+(pass) guardrails and redaction > personal data never reaches the model or the audit row [32.44ms]
+(pass) guardrails and redaction > a thumbs-down opens one source task, and repeated clicks do not duplicate it [37.31ms]
+(pass) activity meter > a settings or permission change hands off before generation [24.14ms]
+(pass) activity meter > counts handoffs, reasons, cost and resolutions without a team reply [47.01ms]
+(pass) evaluation gate > a model change is refused until the golden set passes [26.74ms]
+(pass) auxiliary AI > stores tag suggestions and assisted duplicates without applying them [37.00ms]
+
+tests\integration\mcp.test.ts:
+{"time":"2026-11-23T03:52:18.196Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"1ea37bd9-e865-4c26-9bef-b2de412f1640","method":"POST","path":"/api/mcp"}
+{"time":"2026-11-23T03:52:18.200Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"1ea37bd9-e865-4c26-9bef-b2de412f1640","method":"POST","path":"/api/mcp"}
+{"time":"2026-11-23T03:52:18.203Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"1ea37bd9-e865-4c26-9bef-b2de412f1640","method":"POST","path":"/api/mcp"}
+(pass) MCP endpoint > initializes and lists the v1 tool catalog [22.89ms]
+{"time":"2026-11-23T03:52:18.220Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"ff463ddc-686b-4c22-bc66-85db0015e680","method":"POST","path":"/api/mcp"}
+{"time":"2026-11-23T03:52:18.256Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"ff463ddc-686b-4c22-bc66-85db0015e680","method":"POST","path":"/api/mcp"}
+(pass) MCP endpoint > creates a comment once and replays the same tool result [55.04ms]
+{"time":"2026-11-23T03:52:18.269Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"dcc2e122-e051-4a12-a547-02e39cd5fcd8","method":"POST","path":"/api/mcp"}
+{"time":"2026-11-23T03:52:18.275Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"dcc2e122-e051-4a12-a547-02e39cd5fcd8","method":"POST","path":"/api/mcp"}
+(pass) MCP endpoint > scopes reads to the token and enforces write scope [17.09ms]
+{"time":"2026-11-23T03:52:18.282Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"62ca134d-0ec9-408c-b17b-1a0f0d2599f2","method":"POST","path":"/api/mcp"}
+{"time":"2026-11-23T03:52:18.285Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"62ca134d-0ec9-408c-b17b-1a0f0d2599f2","method":"POST","path":"/api/mcp"}
+(pass) MCP endpoint > rejects missing tokens and unsupported protocol versions [9.78ms]
+
+tests\integration\merge-tags-preferences.test.ts:
+(pass) merge > moves comments, votes, reactions, followers and tags [54.22ms]
+(pass) merge > unmerge restores moved rows without duplicating engagement [29.90ms]
+(pass) visibility > a hidden request disappears from the board and its direct URL [37.59ms]
+(pass) visibility > banning a customer revokes sessions and hides their content [68.66ms]
+(pass) tags > creates, assigns and deletes board-scoped tags [11.95ms]
+(pass) tags > refuses a tag from another board or product [11.64ms]
+(pass) follows and preferences > voting follows the request [13.58ms]
+(pass) follows and preferences > a preference token turns updates and win-back on and off [28.72ms]
+(pass) follows and preferences > status, reply and digest choices are saved independently [23.47ms]
+(pass) follows and preferences > the preferences API rejects a foreign origin and saves a same-origin change [26.48ms]
+
+tests\integration\migration-drift.test.ts:
+(skip) migration drift > a from-zero build and an upgrade from the previous release have the same schema
+
+tests\integration\migrations.test.ts:
+(pass) disposable test database > is uniquely named and fully migrated [0.14ms]
+(pass) disposable test database > re-applying the journal applies nothing [18.39ms]
+
+tests\integration\moderation.test.ts:
+(pass) automated flags > flag spam yet leave it visible on an unmoderated board [40.24ms]
+(pass) automated flags > flag sensitive text as advisory when the board does not block it [23.06ms]
+(pass) decisions > publish a held request and make it public [30.66ms]
+(pass) decisions > keep hidden removes it from the public board, approve restores it [30.90ms]
+(pass) decisions > delete removes the row, its history and its stored attachment [34.68ms]
+(pass) decisions > cannot decide a review that belongs to another product [12.54ms]
+(pass) comments > approving a moderated comment publishes it [54.07ms]
+(pass) retry > re-running checks clears stale automated reasons [13.24ms]
+(pass) image checks > a configured provider scans an image for sensitive information [12.01ms]
+(pass) image checks > a board that blocks sensitive information refuses an unscanned image [4.36ms]
+(pass) image checks > a clean image passes a blocking board [9.80ms]
+(pass) queue counts > counts the newest review for each item [6.15ms]
+
+tests\integration\notifications.test.ts:
+(pass) feedback status notifications > queues one email and one in-app row, and a replay adds nothing [43.86ms]
+(pass) feedback status notifications > adds one internal note to each linked support thread and replays safely [28.83ms]
+(pass) feedback status notifications > rapid status changes on one request collapse into one pending email [78.59ms]
+(pass) feedback status notifications > a customer who turned status email off gets neither channel [19.84ms]
+(pass) feedback status notifications > hidden requests never notify anyone [6.80ms]
+(pass) release notifications > page subscribers and linked-request followers get one in-app row each [23.39ms]
+(pass) feedback reply notifications > notifies the author and skips the customer who replied [13.93ms]
+(pass) weekly digest > queues one digest per opted-in subscriber and replays safely [12.06ms]
+(pass) weekly digest > skips a product with no public release in the window [4.88ms]
+(pass) weekly digest > a Monday belongs to that Monday's ISO week [0.84ms]
+(pass) weekly digest > queues a daily digest for a daily subscriber only [7.97ms]
+(pass) public inbox > reads, scopes and marks the signed-in customer's rows [20.45ms]
+(pass) public inbox > without a session the inbox asks the visitor to sign in [3.92ms]
+
+tests\integration\openapi-contract.test.ts:
+(pass) OpenAPI contract > the served document and the route manifest are the same set [0.31ms]
+{"time":"2026-11-23T03:52:28.773Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/"}
+{"time":"2026-11-23T03:52:28.776Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/boards"}
+{"time":"2026-11-23T03:52:28.784Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/boards"}
+{"time":"2026-11-23T03:52:28.786Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/boards/90aee316-d852-47f6-b3c1-b916ee8d7cfe"}
+{"time":"2026-11-23T03:52:28.790Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"PATCH","path":"/api/v1/boards/c90edaa3-c714-4ca6-9f65-7d7a3e992eda"}
+{"time":"2026-11-23T03:52:28.794Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/tags"}
+{"time":"2026-11-23T03:52:28.799Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/tags"}
+{"time":"2026-11-23T03:52:28.801Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"DELETE","path":"/api/v1/tags/dff5e8b3-8c45-4b14-be3d-7ace9f90149f"}
+{"time":"2026-11-23T03:52:28.805Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/custom-fields"}
+{"time":"2026-11-23T03:52:28.810Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/custom-fields"}
+{"time":"2026-11-23T03:52:28.814Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/custom-fields/db40ac2b-308b-47ad-9c9b-7eea18c64afa"}
+{"time":"2026-11-23T03:52:28.817Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"PATCH","path":"/api/v1/custom-fields/d972e071-9234-4f6d-88ba-40c2051ce7d7"}
+{"time":"2026-11-23T03:52:28.820Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"DELETE","path":"/api/v1/custom-fields/3dc3be2b-2135-4fb7-beb8-33a4e4e57bbb"}
+{"time":"2026-11-23T03:52:28.824Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:52:28.833Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/requests"}
+{"time":"2026-11-23T03:52:28.836Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/requests/c1376e03-77fe-4c78-bf77-aaa01ffb47b9"}
+{"time":"2026-11-23T03:52:28.841Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"PATCH","path":"/api/v1/requests/0e2f6b5f-2900-4e70-988e-f9076d113e8a"}
+{"time":"2026-11-23T03:52:28.845Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/requests/028a13ce-3110-44c2-9c4c-47eaa4267c13/brief"}
+{"time":"2026-11-23T03:52:28.850Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/requests/d07e3519-964e-4f45-ab41-be4290dee116/comments"}
+{"time":"2026-11-23T03:52:28.854Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/requests/4e8090eb-b22a-4474-acc6-407344860973/comments"}
+{"time":"2026-11-23T03:52:28.857Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/requests/67be21f8-95c9-488c-b98c-f1c7f698bc2c/votes"}
+{"time":"2026-11-23T03:52:28.860Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"DELETE","path":"/api/v1/requests/52efd70d-5de8-4625-bc8f-8e35e57716df/votes"}
+{"time":"2026-11-23T03:52:28.864Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/changelogs"}
+{"time":"2026-11-23T03:52:28.869Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/changelogs"}
+{"time":"2026-11-23T03:52:28.871Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/changelogs/212e51b6-58e5-4abf-b14b-629c96010880"}
+{"time":"2026-11-23T03:52:28.875Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"PATCH","path":"/api/v1/changelogs/e2216b56-5043-4f3d-96af-d1f93780dda2"}
+{"time":"2026-11-23T03:52:28.878Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/members"}
+{"time":"2026-11-23T03:52:28.882Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/companies"}
+{"time":"2026-11-23T03:52:28.886Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/companies"}
+{"time":"2026-11-23T03:52:28.889Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/companies/3afd7abd-dc57-45c3-af93-6d6eadbeccaa"}
+{"time":"2026-11-23T03:52:28.892Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"PATCH","path":"/api/v1/companies/724f6651-5880-4468-8a24-6fdc8bfb82d7"}
+{"time":"2026-11-23T03:52:28.895Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/companies/8e9d5c73-4e6b-435f-ba8f-6aa401a65001/customers"}
+{"time":"2026-11-23T03:52:28.898Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/conversations"}
+{"time":"2026-11-23T03:52:28.905Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/conversations/21b67c9f-86fe-4c68-8427-b731601bcc40"}
+{"time":"2026-11-23T03:52:28.909Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"PATCH","path":"/api/v1/conversations/8030da41-dcb6-452a-a1f3-d522e1ed3577"}
+{"time":"2026-11-23T03:52:28.913Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"GET","path":"/api/v1/conversations/4a42cafb-394f-4561-90b7-73311404c5fd/messages"}
+{"time":"2026-11-23T03:52:28.917Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/conversations/39acd5e4-b46d-4d14-b0d9-133933860d86/messages"}
+{"time":"2026-11-23T03:52:28.919Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/conversations/e2efa78a-5349-4dab-8f8b-2c3effcc767c/notes"}
+{"time":"2026-11-23T03:52:28.922Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"f16f4a0a-b921-43b9-87cb-272f4ee64f4d","method":"POST","path":"/api/v1/events"}
+(pass) OpenAPI contract > every documented operation is reachable and answers [167.24ms]
+{"time":"2026-11-23T03:52:28.932Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"b45c0575-e87c-49e5-aaf9-4f9dea0a9a24","method":"GET","path":"/api/v1/requests/75542f61-0e3c-40ee-8caa-3e43f1753a9b"}
+{"time":"2026-11-23T03:52:28.937Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"b45c0575-e87c-49e5-aaf9-4f9dea0a9a24","method":"GET","path":"/api/v1/boards/cb21afce-0374-4bb5-8ac6-1602fa9a527a"}
+{"time":"2026-11-23T03:52:28.940Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"b45c0575-e87c-49e5-aaf9-4f9dea0a9a24","method":"GET","path":"/api/v1/conversations/61a4c7a8-6458-45ca-b7ae-fbb15ae3a1df"}
+(pass) OpenAPI contract > a documented path with a foreign-shaped id never returns a row [19.63ms]
+
+tests\integration\password-reset.test.ts:
+(pass) reset token storage > stores only a hash and drops the plaintext row [8.39ms]
+(pass) reset token storage > issuing a second token invalidates the first [6.56ms]
+(pass) reset token storage > a token is single use [4.23ms]
+(pass) reset token storage > an expired token is refused and removed [4.73ms]
+{"time":"2026-11-23T03:52:30.979Z","level":"error","event":"auth.email_misconfigured","release":"dev","error":{"name":"Error","message":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.","stack":"Error: Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.\n    at getEmailConfig (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\env.ts:160:15)\n    at isAuthEmailConfigured (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\email\\auth-mail.ts:28:12)\n    at sendAuthEmail (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\email\\auth-mail.ts:54:8)\n    at <anonymous> (C:\\Users\\gutsc\\OneDrive\\Deskt"}}
+{"time":"2026-11-23T03:52:30.979Z","level":"warn","event":"auth.password_changed","release":"dev"}
+{"time":"2026-11-23T03:52:31.080Z","level":"error","event":"auth.email_misconfigured","release":"dev","error":{"name":"Error","message":"Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.","stack":"Error: Invalid email configuration — EMAIL_FROM: EMAIL_FROM must not be empty; EMAIL_FROM: EMAIL_FROM must contain an email address, e.g. Herald <[redacted]>.\n    at getEmailConfig (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\lib\\env.ts:160:15)\n    at isAuthEmailConfigured (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\email\\auth-mail.ts:28:12)\n    at sendAuthEmail (C:\\Users\\gutsc\\OneDrive\\Desktop\\Herald\\src\\features\\email\\auth-mail.ts:54:8)\n    at <anonymous> (C:\\Users\\gutsc\\OneDrive\\Deskt"}}
+{"time":"2026-11-23T03:52:31.080Z","level":"warn","event":"auth.password_changed","release":"dev"}
+[2m2026-11-23T03:52:31.133Z[0m [33mWARN[0m [1m[Better Auth]:[0m Invalid password
+(pass) completing a reset > rotates the password and revokes existing sessions [270.18ms]
+(pass) completing a reset > rejects an expired token without changing the password [4.05ms]
+(pass) completing a reset > rejects a short password before spending the token [3.89ms]
+
+tests\integration\portal-privacy.test.ts:
+(pass) portal search and home > never expose a non-public request [56.55ms]
+
+tests\integration\product-create.test.ts:
+(pass) createProductForWorkspace > creates the product and its default feedback board [20.84ms]
+(pass) createProductForWorkspace > refuses a product beyond the Free allowance [7.33ms]
+(pass) createProductForWorkspace > allows another product on Professional [9.50ms]
+(pass) createProductForWorkspace > reports a duplicate slug as a field error and writes nothing [9.84ms]
+(pass) createProductForWorkspace > scopes slugs to the workspace, not the whole installation [10.49ms]
+
+tests\integration\public-board-filters.test.ts:
+(pass) public board search > matches title and body case-insensitively [60.68ms]
+(pass) public board search > treats a percent sign as a character, not a wildcard [19.60ms]
+(pass) public board filters > filters by status, tag and both together [38.31ms]
+(pass) public board filters > does not accept a tag from another board [10.31ms]
+(pass) public board sorting > Top ranks by all-time votes and Newest by creation time [24.71ms]
+(pass) public board sorting > Trending counts only recent engagement [25.66ms]
+(pass) public board pagination > reports the full total and clamps an out-of-range page [30.89ms]
+(pass) public board pagination > filters before paginating [18.32ms]
+(pass) public board facets > lists only public boards of this product and tags of this board [11.69ms]
+
+tests\integration\public-changelog.test.ts:
+(pass) public changelog > lists only published public entries with tags, authors and video [46.47ms]
+(pass) public changelog > the product switch closes list, detail and RSS [5.85ms]
+(pass) public changelog > a viewer sees only visible linked requests plus their own pending one [41.95ms]
+(pass) public changelog > sitemap and RSS expose only published public entries [25.03ms]
+
+tests\integration\public-rate-limits.test.ts:
+(pass) public write rate limits > every public POST route installs a limiter [9.35ms]
+(pass) public write rate limits > the shared gate answers 429 with Retry-After [22.19ms]
+(pass) public write rate limits > customer identify throttles repeated writes [19.87ms]
+(pass) public write rate limits > magic link request throttles repeated writes [11.39ms]
+(pass) public write rate limits > email preferences throttles repeated writes [36.22ms]
+(pass) public write rate limits > widget events throttles repeated writes [103.25ms]
+(pass) public write rate limits > outbound event throttles repeated writes [202.94ms]
+(pass) public write rate limits > conversation start throttles repeated writes [21.35ms]
+(pass) public write rate limits > experience view throttles repeated writes [210.68ms]
+
+tests\integration\public-request-loop.test.ts:
+(pass) public request detail > excludes internal notes and foreign requests [48.98ms]
+(pass) public request detail > shows a pending request to its author only [33.15ms]
+(pass) public request detail > reflects votes, follows and reactions for the viewer [50.85ms]
+(pass) public request detail > holds moderated comments until approval [47.06ms]
+(pass) public request detail > refuses to comment on a closed board [5.46ms]
+(pass) public submission > creates a pending request with an attachment and receipt [170.85ms]
+(pass) public submission > rejects sensitive content when the board asks [4.49ms]
+(pass) public submission > suggests duplicates across boards in the same product only [16.16ms]
+
+tests\integration\public-roadmap.test.ts:
+(pass) public roadmap > publishes only visible planned, in-progress and shipped requests [66.30ms]
+(pass) public roadmap > feedback and roadmap visibility are independent [25.19ms]
+(pass) public roadmap > a status move changes the public column without a second write [33.78ms]
+
+tests\integration\public-routes.test.ts:
+(pass) guest customer sessions > creates an anonymous session for a public workspace [41.71ms]
+(pass) guest customer sessions > refuses to create a session for a workspace with no public board [4.61ms]
+(pass) public board HTTP responses > returns the same 404 for foreign, private, archived and missing boards [22.16ms]
+
+tests\integration\public-seo.test.ts:
+(pass) public sitemap entries > lists public boards and only requests that are publicly visible [42.43ms]
+(pass) public sitemap entries > requires an approval before listing a moderated request [11.71ms]
+(pass) public sitemap entries > the sitemap route emits absolute URLs for those entries [12.46ms]
+(pass) merged request redirects > resolves the canonical request only while it is public [30.53ms]
+(pass) merged request redirects > never redirects a foreign board or a hidden canonical request [17.08ms]
+
+tests\integration\public-tenant.test.ts:
+(pass) public tenant resolution > serves only public, unarchived boards [17.03ms]
+(pass) public tenant resolution > resolves a workspace only when it has a public board [8.82ms]
+(pass) public projections > hide internal notes, archived requests and merged requests [50.38ms]
+(pass) public projections > approves each request and comment before publishing it [43.50ms]
+(pass) public projections > hides a rejected request even where approval is not required [12.96ms]
+(pass) public projections > drops banned authors and never answers a foreign tenant's request id [20.75ms]
+(pass) public projections > serialises nothing beyond the public field list [26.10ms]
+(pass) public projections > return null when the deployment flag closes the surface [5.08ms]
+
+tests\integration\public-visibility.test.ts:
+(pass) public visibility > search, suggestions and the sitemap exclude the same non-public rows [110.67ms]
+
+tests\integration\query-budgets.test.ts:
+(pass) query budgets > the dashboard snapshot statement count does not grow with requests [104.05ms]
+(pass) query budgets > the inbox list statement count does not grow with conversations [51.94ms]
+
+tests\integration\release-discovery.test.ts:
+(pass) changelog discovery > filters by tag and category, suggests related entries and stores reactions [79.37ms]
+
+tests\integration\release-inline-images.test.ts:
+(pass) public inline release images > serves an image referenced by a published changelog entry [13.53ms]
+
+tests\integration\release-publish.test.ts:
+(pass) release publishing > emails only entitled request participants and active subscribers [105.09ms]
+(pass) concurrent scheduled publishers publish once and notify each recipient once [113.02ms]
+
+tests\integration\release-revisions.test.ts:
+(pass) release revisions > captures a baseline, dedupes unchanged saves and scopes reads [36.20ms]
+(pass) release revisions > the changelog API draft path records its writes [24.68ms]
+(pass) release revisions > consecutive autosaves by one editor coalesce into one entry [19.05ms]
+(pass) release revisions > a status-only publish records a revision even when content is unchanged [15.85ms]
+(pass) release revisions > restores a revision in place and keeps the publication state [27.51ms]
+(pass) release audience preview > separates recipients, suppressions, unsubscribes and pending rows [23.60ms]
+(pass) release audience preview > suppression is workspace-scoped [7.58ms]
+
+tests\integration\reporting-engagement.test.ts:
+(pass) engagement report totals > counts each survey and tour recipient once [32.71ms]
+
+tests\integration\request-brief.test.ts:
+(pass) loadRequestBrief > renders public evidence but never an internal note or email [31.72ms]
+(pass) loadRequestBrief > returns null for a request in another workspace [13.61ms]
+(pass) loadRequestBrief > refuses a request from another product in the same workspace [16.87ms]
+
+tests\integration\request-evidence-links.test.ts:
+(pass) linking a support message to an existing request > records the message as evidence without filing a duplicate [39.16ms]
+(pass) linking a support message to an existing request > refuses team messages, foreign posts and foreign conversations [16.69ms]
+(pass) help article and changelog context > attaches both kinds, dedupes, and never counts as demand [24.11ms]
+(pass) help article and changelog context > refuses an article or release from another product [12.74ms]
+(pass) public demand > shows counts only, never quotes or the people behind them [30.23ms]
+(pass) public demand > shows the planned target only when the workspace policy allows it [34.42ms]
+
+tests\integration\request-workflow.test.ts:
+(pass) bulk assignment > assigns live requests, skips merged duplicates and can unassign [24.27ms]
+(pass) bulk assignment > refuses an assignee outside the workspace and rows outside the product [9.14ms]
+(pass) bulk tagging > tags only requests on the tag's board and is idempotent [16.15ms]
+(pass) bulk tagging > refuses a tag from another product [7.92ms]
+(pass) bulk board move > moves requests, clears old-board tags and skips merged duplicates [15.30ms]
+(pass) bulk board move > refuses an archived or foreign board and leaves the request alone [7.36ms]
+(pass) bulk undo > restores a status change once, inside its own product [29.82ms]
+(pass) bulk undo > restores the previous visibility [9.67ms]
+(pass) bulk undo > removes an added tag [12.71ms]
+(pass) bulk undo > restores the old board and its tags [18.74ms]
+
+tests\integration\saved-views-triage.test.ts:
+(pass) saved feedback views > saves, updates and deletes a private view [13.33ms]
+(pass) saved feedback views > a malformed stored filter set falls back to the unfiltered view [3.18ms]
+(pass) bulk triage > updates only this product's canonical requests [47.12ms]
+(pass) bulk triage > hides and restores only requests in the authorized product [12.94ms]
+
+tests\integration\seams.test.ts:
+(pass) email adapter seam > a provider 500 is retryable and never leaks its body [1.03ms]
+(pass) email adapter seam > a successful send returns the provider message id [0.26ms]
+{"time":"2026-11-23T03:53:15.301Z","level":"error","event":"trace.failed","release":"dev","span":"ai.provider.generate","traceId":"e7922afa-e6ba-4f60-af95-9f6e467e7f9e","spanId":"47f1a2c8-6a39-4c","durationMs":101,"failed":true,"model":"seam-model","feature":"ai","error":"[object]"}
+{"time":"2026-11-23T03:53:15.301Z","level":"error","event":"ai.generate_failed","release":"dev","model":"seam-model","error":{"name":"AbortError","message":"The operation was aborted.","code":"20","stack":"abort@[native code]"}}
+(pass) AI adapter seam > a stalled provider becomes an AiProviderError at the configured timeout [101.43ms]
+(pass) AI adapter seam > a successful completion is trimmed and capped [0.75ms]
+
+tests\integration\setup-completion.test.ts:
+(pass) setup completion offer > requires every setup fact before it completes [41.65ms]
+(pass) setup completion offer > keeps the base trial before setup is complete [9.44ms]
+(pass) setup completion offer > starts a 30-day trial after setup is complete [13.35ms]
+
+tests\integration\slack-support.test.ts:
+(pass) Slack support commands > parses !support without swallowing lookalike words [1.06ms]
+(pass) Slack support commands > starts a conversation, customer and thread link in one transaction [21.49ms]
+(pass) Slack support commands > continues the mapped thread, dedupes retries and reopens resolved threads [22.32ms]
+(pass) Slack support commands > never lets a thread from another product be continued [9.43ms]
+(pass) Slack support commands > queues one idempotent mirror job per team message [13.17ms]
+
+tests\integration\slack.test.ts:
+(pass) Slack integration > verifies the challenge and rejects an invalid signature [2.24ms]
+{"time":"2026-11-23T03:53:21.173Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":22}
+(pass) Slack integration > files a message once and replies in the original thread [41.54ms]
+{"time":"2026-11-23T03:53:21.194Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":12}
+(pass) Slack integration > uses the AI suggestion when a provider is configured [20.93ms]
+{"time":"2026-11-23T03:53:21.214Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":11}
+{"time":"2026-11-23T03:53:21.238Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":5}
+{"time":"2026-11-23T03:53:21.242Z","level":"info","event":"job_run.completed","release":"dev","claimed":0,"succeeded":0,"failed":0,"retrying":0,"durationMs":2}
+(pass) Slack integration > posts a thread reply when a Slack request changes status [46.81ms]
+(pass) Slack integration > exchanges OAuth once and saves the installation without a channel [10.59ms]
+{"time":"2026-11-23T03:53:21.263Z","level":"info","event":"job_run.completed","release":"dev","claimed":0,"succeeded":0,"failed":0,"retrying":0,"durationMs":2}
+(pass) Slack integration > isolates events by connected channel [10.61ms]
+{"time":"2026-11-23T03:53:21.290Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":17}
+{"time":"2026-11-23T03:53:21.305Z","level":"info","event":"job_run.completed","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"durationMs":9}
+{"time":"2026-11-23T03:53:21.311Z","level":"info","event":"job_run.completed","release":"dev","claimed":0,"succeeded":0,"failed":0,"retrying":0,"durationMs":1}
+(pass) Slack integration > starts and continues a support thread through the signed route [48.76ms]
+
+tests\integration\subscribers.test.ts:
+(pass) subscriber import > creates rows, then updates status without rotating the token [20.35ms]
+(pass) subscriber import > rejects an invalid address at the service boundary [2.27ms]
+(pass) subscriber import > an old export cannot silently reactivate an unsubscribed address [6.78ms]
+(pass) subscriber import > export round-trips every subscriber through the CSV parser [5.87ms]
+(pass) subscriber status and suppressions > the preference token unsubscribes without deleting history [20.69ms]
+(pass) subscriber status and suppressions > unsubscribing keeps the row and suppress/unsuppress is workspace-scoped [8.70ms]
+(pass) follower sync > creates pending subscribers without opting them into the changelog [21.96ms]
+
+tests\integration\support-channels.test.ts:
+(pass) widget conversations > start, reply, unread and read-state stay on one customer [89.84ms]
+(pass) widget conversations > another customer can neither list nor open the thread [28.88ms]
+(pass) end-to-end support loop > a widget thread survives the closed tab and an email round trip [85.05ms]
+(pass) inbound email > a new thread is parsed, deduped and reopened by a reply [47.53ms]
+(pass) inbound email > junk, wrong sender, pause and block are all refused [19.20ms]
+(pass) inbound email > one sender address stays two separate customers and threads [31.16ms]
+(pass) operators > only owners and admins count, and preferences drive presence [21.42ms]
+
+tests\integration\tokens.test.ts:
+{"time":"2026-11-23T03:53:27.699Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"0ab7e1ca-bb1e-49b3-a37b-02e6c428a966","method":"GET","path":"/api/v1/members"}
+{"time":"2026-11-23T03:53:27.706Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"0ab7e1ca-bb1e-49b3-a37b-02e6c428a966","method":"GET","path":"/api/v1/members"}
+{"time":"2026-11-23T03:53:27.709Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"0ab7e1ca-bb1e-49b3-a37b-02e6c428a966","method":"GET","path":"/api/v1/members"}
+(pass) API token rotation > keeps both tokens working during the grace period [23.73ms]
+{"time":"2026-11-23T03:53:27.720Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"15f48401-1c66-497b-ade0-9fe8261fb3ca","method":"GET","path":"/api/v1/members"}
+(pass) API token rotation > stops the old token at retirement and refuses to rotate it again [11.09ms]
+(pass) API token rotation > does not rotate a token from another workspace [4.40ms]
+
+tests\integration\webhooks.test.ts:
+{"time":"2026-11-23T03:53:29.700Z","level":"info","event":"webhook.delivery_run","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"skipped":0}
+(pass) webhooks > delivers a signed event and records success [17.34ms]
+{"time":"2026-11-23T03:53:29.709Z","level":"info","event":"webhook.delivery_run","release":"dev","claimed":1,"succeeded":0,"failed":0,"retrying":1,"skipped":0}
+{"time":"2026-11-23T03:53:29.713Z","level":"info","event":"webhook.delivery_run","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"skipped":0}
+(pass) webhooks > retries a failed delivery with a growing delay [12.30ms]
+{"time":"2026-11-23T03:53:29.723Z","level":"info","event":"webhook.delivery_run","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"skipped":0}
+(pass) webhooks > sends the previous signature during the rotation overlap [9.17ms]
+{"time":"2026-11-23T03:53:29.731Z","level":"info","event":"webhook.delivery_run","release":"dev","claimed":1,"succeeded":0,"failed":1,"retrying":0,"skipped":0}
+{"time":"2026-11-23T03:53:29.738Z","level":"info","event":"webhook.delivery_run","release":"dev","claimed":1,"succeeded":1,"failed":0,"retrying":0,"skipped":0}
+(pass) webhooks > marks a delivery failed after the attempt limit and can replay it [15.67ms]
+{"time":"2026-11-23T03:53:29.745Z","level":"info","event":"webhook.delivery_run","release":"dev","claimed":1,"succeeded":0,"failed":0,"retrying":0,"skipped":1}
+(pass) webhooks > sandbox mode records a skipped delivery without calling the receiver [7.50ms]
+{"time":"2026-11-23T03:53:29.758Z","level":"info","event":"api.request","release":"dev","tokenId":"[redacted]","workspaceId":"6683e16a-5126-4d8d-b165-8c70e0b782bc","method":"POST","path":"/api/v1/requests"}
+(pass) webhooks > the API emits request.created for subscribed webhooks [36.76ms]
+
+tests\integration\widget-embed.test.ts:
+(pass) widget embed > resolves panels and the default public board [20.88ms]
+(pass) widget embed > settings issue a stable key and gate key plus origin [13.83ms]
+(pass) widget embed > an empty allowlist still requires the key once configured [9.11ms]
+(pass) widget embed > the unread endpoint reflects a publish or reply without a reload [17.74ms]
+(pass) widget embed > a product with no public surface cannot be embedded [2.83ms]
+(pass) widget embed > signed identity sets a public session without duplicating the customer [30.80ms]
+(pass) widget embed > a rejected identity sets no session [6.63ms]
+(pass) widget embed > widget identify is rate limited per client [78.56ms]
+(pass) widget embed > the deployment flag closes the embed even when the product is public [2.97ms]
+
+tests\integration\widget-projections.test.ts:
+(pass) widget projections > the bootstrap and panels never expose non-public requests [97.38ms]
+(pass) widget projections > a private-only workspace never gets a customer session [21.57ms]
+
+tests\integration\winback-campaigns.test.ts:
+(pass) cancellation import > is idempotent even when the CSV has no cancellation timestamp [25.00ms]
+(pass) audience builder > accounts for every exclusion before a campaign is created [20.60ms]
+(pass) campaign lifecycle > requires approval, rechecks opt-outs, and never queues a duplicate [64.10ms]
+(pass) campaign lifecycle > queues a canary batch first and unlocks the rest only after it settles [53.61ms]
+(pass) campaign lifecycle > stops a campaign and skips every delivery that has not left yet [43.32ms]
+(pass) campaign lifecycle > re-checks global suppression immediately before sending [29.31ms]
+(pass) campaign lifecycle > refuses to attribute a return after the 30-day window [32.18ms]
+(pass) campaign lifecycle > blocks sending when the linked release is not published [16.92ms]
+(pass) campaign lifecycle > refuses a release from another product [5.13ms]
+(pass) win-back opt-out > preference changes reach the customer account and future audiences [21.88ms]
+
+tests\integration\workspace-access.test.ts:
+(pass) invitation resend > issues a new link, retires the old one and extends expiry [32.33ms]
+(pass) invitation resend > refuses to resend an invitation that was already accepted [17.88ms]
+(pass) invitation acceptance for an existing account > adds the membership and is single use [18.26ms]
+(pass) invitation acceptance for an existing account > refuses a signed-in account whose address is not the invited one [9.93ms]
+(pass) last-owner guard > refuses to demote or remove the only owner [7.80ms]
+(pass) last-owner guard > allows the change once a second owner exists, and reports the previous role [10.54ms]
+(pass) last-owner guard > refuses to let an owner change their own role [5.29ms]
+(pass) SCIM deprovisioning > revokes sessions, reassigns open conversations and removes the membership [22.36ms]
+(pass) SCIM deprovisioning > refuses to deprovision the only owner [4.20ms]
+(pass) domain capture > normalizes company domains and rejects public mailbox providers [0.84ms]
+(pass) domain capture > only a verified claim enrolls new accounts [16.58ms]
+{"time":"2026-11-23T03:53:38.410Z","level":"warn","event":"workspace.domain_capture_seat_limit","release":"dev","workspaceId":"792e7804-bff9-4131-80ad-9218c4924218","domain":"full-mwsqdy01-1aw.test"}
+(pass) domain capture > skips the join when the paid seat allowance is used up [14.06ms]
+(pass) domain capture > a real sign-up joins a verified domain through the auth hook [69.28ms]
+(pass) domain capture > refuses a domain another workspace already claimed [6.79ms]
+(pass) audit metadata > returns the recorded detail for a role change [4.13ms]
+
+tests\integration\workspace-admin-isolation.test.ts:
+(pass) cross-tenant member administration > role changes and removals refuse a member from another workspace [13.38ms]
+(pass) cross-tenant member administration > invitation resend and revoke refuse an invitation from another workspace [8.29ms]
+(pass) cross-tenant member administration > ownership transfer refuses a member from another workspace [4.79ms]
+(pass) last manager guard > a workspace with only an admin cannot demote or remove them [11.55ms]
+(pass) token access follows the creator's role > demoting an admin revokes the tokens they created [8.37ms]
+(pass) token access follows the creator's role > revoking for lost access stays inside the named workspace [7.22ms]
+(pass) token access follows the creator's role > rotating a token through the wrong workspace finds nothing [5.45ms]
+(pass) audit, export and domain claims stay scoped > the audit query returns only this workspace and honours filters [11.63ms]
+(pass) audit, export and domain claims stay scoped > a workspace export never contains another workspace's content [25.41ms]
+(pass) audit, export and domain claims stay scoped > removing a domain claim touches only that workspace [10.03ms]
+(pass) audit, export and domain claims stay scoped > a domain already claimed by another workspace cannot be claimed again [6.55ms]
+
+1 tests skipped:
+(skip) migration drift > a from-zero build and an upgrade from the previous release have the same schema
+
+ 485 pass
+ 1 skip
+ 0 fail
+ 2708 expect() calls
+Ran 486 tests across 83 files. [171.29s]
+EXIT:0

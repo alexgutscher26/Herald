@@ -64,7 +64,12 @@ describe("saved feedback views", () => {
       status: "planned",
       category: "bug",
       sort: "votes",
+      assignee: "all",
+      stale: "all",
+      segment: null,
+      minScore: null,
       customFields: {},
+      customFieldSort: null,
     });
 
     const listed = await listFeedbackSavedViews(product.id, owner.id);
@@ -91,7 +96,12 @@ describe("saved feedback views", () => {
       status: "in_progress",
       category: "all",
       sort: "newest",
+      assignee: "all",
+      stale: "all",
+      segment: null,
+      minScore: null,
       customFields: {},
+      customFieldSort: null,
     });
 
     // Another member cannot list or delete the owner's view.
@@ -136,7 +146,12 @@ describe("saved feedback views", () => {
       status: "all",
       category: "all",
       sort: "newest",
+      assignee: "all",
+      stale: "all",
+      segment: null,
+      minScore: null,
       customFields: {},
+      customFieldSort: null,
     });
   });
 });

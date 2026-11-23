@@ -332,6 +332,7 @@ describe("import planning, cancel and presets", () => {
         ["Valid request", "", "", "planned", "bug", "", "", "5", "2024-01-02"],
         ["", "", "", "", "", "", "", "", ""],
         ["Another request", "", "", "mystery", "", "", "", "", ""],
+        ["", "", "", "planned", "", "", "", "", ""],
       ],
       mapping: {
         title: "Title",
@@ -344,10 +345,10 @@ describe("import planning, cancel and presets", () => {
 
     expect(analysis.ok).toBe(true);
     if (!analysis.ok) return;
-    expect(analysis.plan.totalRows).toBe(3);
+    expect(analysis.plan.totalRows).toBe(4);
     expect(analysis.plan.importable).toBe(2);
     expect(analysis.plan.failed).toBe(1);
-    expect(analysis.plan.skipped).toBe(0);
+    expect(analysis.plan.skipped).toBe(1);
     expect(analysis.plan.warnings).toBe(1);
     expect(await listFeedbackImports(product.id)).toEqual([]);
   });
