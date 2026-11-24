@@ -1,0 +1,389 @@
+$ bun --bun next build
+▲ Next.js 16.4.6 (Turbopack)
+- Environments: .env
+[2m2026-11-23T23:59:46.551982Z[0m [32m INFO[0m [2mposthog_cli::api::releases[0m[2m:[0m found release herald@dev
+✓ Running next.config.ts took 1124ms
+- Experiments (use with caution):
+  · serverActions
+  ✓ serverSourceMaps
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.2s
+  Running next.config.js provided runAfterProductionCompile ...
+Processing source maps from compilation hook...
+[2m2026-11-23T23:59:54.582985Z[0m [32m INFO[0m [2mposthog_cli::sourcemaps::source_pairs[0m[2m:[0m found 2203 pairs
+[2m2026-11-23T23:59:54.666346Z[0m [33m WARN[0m [2mposthog_cli::sourcemaps::plain::upload[0m[2m:[0m Skipping 301 source map pairs without a PostHog chunk ID or native debug ID: \\?\C:\Users\gutsc\OneDrive\Desktop\Herald\.next\build\chunks\node_modules_20v-8wlfss9m1._.js, \\?\C:\Users\gutsc\OneDrive\Desktop\Herald\.next\build\chunks\pool_entry-[turbopack-node]_transforms_postcss_ts_0tp-k2vy8nj6i._.js, \\?\C:\Users\gutsc\OneDrive\Desktop\Herald\.next\build\chunks\[root-of-the-server]__05i36w1t4lzaf._.js and 298 more (set RUST_LOG=debug to list them all)
+[2m2026-11-23T23:59:54.667044Z[0m [32m INFO[0m [2mposthog_cli::sourcemaps::plain::upload[0m[2m:[0m Found 1902 chunks to upload
+[2m2026-11-23T23:59:54.668108Z[0m [32m INFO[0m [2mposthog_cli::sourcemaps::plain::upload[0m[2m:[0m Skipped 12 empty sourcemaps whose sibling JS file is at least 4096 bytes: \\?\C:\Users\gutsc\OneDrive\Desktop\Herald\.next\dev\server\chunks\ssr\[externals]__1422pp8atd_1r._.js.map, \\?\C:\Users\gutsc\OneDrive\Desktop\Herald\.next\dev\server\chunks\ssr\[root-of-the-server]__16d0wfzomzbvs._.js.map, \\?\C:\Users\gutsc\OneDrive\Desktop\Herald\.next\dev\server\chunks\ssr\[root-of-the-server]__1dxip-095t_qj._.js.map and 9 more (set RUST_LOG=debug to list them all). If those files must symbolicate, check your bundler's source-map setting (e.g. webpack `devtool`, Next.js `productionBrowserSourceMaps`, server compiler config).
+[2m2026-11-23T23:59:55.219789Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id d5686c67-c422-6f11-c2e0-cc3a08fe0897 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219839Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e94a19a6-b429-a8b2-71f6-da3a7dad8b25 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219856Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 437c001b-07ba-8c62-cb66-7e93b2c79ae1 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219866Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 437c001b-07ba-8c62-cb66-7e93b2c79ae1 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219882Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 437c001b-07ba-8c62-cb66-7e93b2c79ae1 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219895Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 437c001b-07ba-8c62-cb66-7e93b2c79ae1 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219938Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 437c001b-07ba-8c62-cb66-7e93b2c79ae1 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219969Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 3c495681-4653-145c-73d0-7d0f9ad72ac4 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219981Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id ac7104e0-e256-a591-f021-147b9b894e2d across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.219993Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 97d286de-a771-cfea-7d8c-63160ec63d65 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220040Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 8c0939c0-eb96-c0e5-c8fa-a4206ea4754a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220066Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 5e1e9bbc-38a4-2f7f-f9f3-d67ea838531b across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220088Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id a146b092-2193-31d2-5cd7-5f84b9e0bd8f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220103Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e55623d6-7fd8-b7e7-355c-5c279a807cf4 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220140Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9d99abb3-ebeb-244c-0639-dd5328ade0a4 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220155Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e6d12cef-5aff-0579-d69f-e754cbf3a0a5 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220169Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 8c89ccf8-a5dd-d17a-3f18-5824ce6c8a56 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220182Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4d7e3c0d-1419-7f3a-1cbb-03e51dd5c213 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220197Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 455af88b-bb57-1b81-b774-aae7c5834254 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220219Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id a6722f9a-3d85-db71-747b-d715d79f8842 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220228Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 508367c6-28da-0baa-8a8e-5e5cc6ff616a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220249Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 70d34043-0b21-52d8-1486-6a5a3444d3ed across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220261Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e7c34c10-1996-fe9a-bdda-53af4c10f66b across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220269Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e7c34c10-1996-fe9a-bdda-53af4c10f66b across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.220288Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 185cc6f1-d093-3d0c-936f-d7310f8d4903 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221094Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9e416a52-204c-50e9-40ef-0603f4cbfbe2 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221136Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 407f94d3-d2fb-bd6b-12c8-ccec41b449af across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221160Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id cd4fceee-7d41-4a91-675d-1949984f5885 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221181Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 248c7e75-2fc9-8857-460b-0d78c2a5ef5d across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221199Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9d00e98d-a293-b1ce-d89d-b35481d6557e across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221236Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9d00e98d-a293-b1ce-d89d-b35481d6557e across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221245Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 810ea679-0d2e-5a6e-f283-5a9d220971cf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221254Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id eed12960-07db-55b3-af1f-06416a86561a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221264Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id eed12960-07db-55b3-af1f-06416a86561a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221271Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id eed12960-07db-55b3-af1f-06416a86561a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221279Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id de3aa083-f8d3-262f-9110-91651d9e4ee2 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221288Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id eed12960-07db-55b3-af1f-06416a86561a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221299Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 49c8e769-bddf-6a53-07b0-d46e2f59a1b0 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221312Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 967afa25-f4fe-de0d-8ecb-4fed76603afa across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221322Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 487b70e8-b192-3977-2703-194076d963a8 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221347Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 7d315a8b-4846-5f28-8308-a0ac7563f981 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221356Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 891321b7-d055-f003-f103-6180ec9fa985 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221369Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 14b06295-fd36-8943-f29b-3a3fb39b7b80 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221377Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 14b06295-fd36-8943-f29b-3a3fb39b7b80 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221383Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 0ec43e26-1aad-d8fa-79a6-336ed98c573b across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221395Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id a84cca9d-d162-a630-e3ee-d7a38f9fe8ae across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221406Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1ea5051d-c249-fe31-44f6-3c86e311cfad across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221426Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 989f1905-b13e-c1b3-ee73-146f2d478fdb across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221435Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4d8c036d-b3e9-b02b-a7a0-b36a9de604df across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221442Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id a346a41f-418f-8a37-e149-4b4ef13fca0a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221448Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id a346a41f-418f-8a37-e149-4b4ef13fca0a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221455Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id a346a41f-418f-8a37-e149-4b4ef13fca0a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221467Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4fdfdfc7-1f4f-c314-ce75-dfd6e5e06d64 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221482Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4fdfdfc7-1f4f-c314-ce75-dfd6e5e06d64 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221492Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4fdfdfc7-1f4f-c314-ce75-dfd6e5e06d64 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221511Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4fdfdfc7-1f4f-c314-ce75-dfd6e5e06d64 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221531Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4fdfdfc7-1f4f-c314-ce75-dfd6e5e06d64 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221540Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 8a999fd2-ae35-23ab-b7a1-1de17465f14e across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221553Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4fdfdfc7-1f4f-c314-ce75-dfd6e5e06d64 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221560Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4fdfdfc7-1f4f-c314-ce75-dfd6e5e06d64 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221575Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9cbd1b6d-f02d-20d6-2ec2-4c98437a4dfa across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221581Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 124f35c2-3037-b3de-e4bd-d3ef75bb8f7d across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221591Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9cbd1b6d-f02d-20d6-2ec2-4c98437a4dfa across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221599Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e29c2b69-02f4-9bac-39de-477c7a1c4544 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221607Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9cbd1b6d-f02d-20d6-2ec2-4c98437a4dfa across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221615Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 3deed4da-6e1c-25d6-48de-fb7398ece7fd across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221622Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 9cbd1b6d-f02d-20d6-2ec2-4c98437a4dfa across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221699Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 7fafd511-d344-124d-9585-85891ab2743d across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221709Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e38ef620-1c2c-a1e5-5f40-27e9eae953d0 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221718Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id acae4a26-9a56-fc37-dd35-94dee8a87fc3 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221752Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e5b223a0-79d9-cba1-f3e9-81b7d32577f7 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221763Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 3312b458-4613-1bc3-de4b-38ad062de579 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221826Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221864Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221884Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221937Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 89ffac8a-fb53-1a5c-1dbc-df7162505d50 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221948Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221970Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1ad3ce44-63f6-5f5a-975b-24ab5b5235e0 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221990Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 3bcc18f8-af65-84d4-38a5-8ae33e4eaf12 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.221998Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 3b0c292f-b46c-9bee-56c2-e14737f8955a across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222008Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1ad3ce44-63f6-5f5a-975b-24ab5b5235e0 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222073Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222109Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id e2028df0-c9e4-0b81-90e2-6300856e383d across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222124Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 43f5a37b-87b7-beab-344b-c0b4228bf69e across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222139Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1ad3ce44-63f6-5f5a-975b-24ab5b5235e0 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222149Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222163Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222175Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 81ab7f10-91b9-7037-42a1-3c96aa2becbf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222185Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 4b701d89-5d22-d6d3-3a88-fa88ca24ac6f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222200Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 2cc73ee8-562c-172e-caba-2a4780beacb0 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222207Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id b3c66dee-9f94-6f20-1e54-4076af2a8d88 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222214Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 999a9d25-f315-234f-6277-e379d756d77c across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222227Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id b57c4ced-01e5-8484-19b7-bb9e04b9fbc7 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222234Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 48e7424d-b542-2457-744c-6e0c0cc1302f across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222241Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id de21db67-6cb7-6fc4-53cb-1bbebbbf1d47 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222247Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 0e80ba55-1e38-be96-73be-2f4b8f018395 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222261Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222310Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 39403234-7c28-36bd-842a-8fe394c61be5 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222962Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.222995Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223024Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 39403234-7c28-36bd-842a-8fe394c61be5 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223039Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223052Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 39403234-7c28-36bd-842a-8fe394c61be5 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223096Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223117Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 757245b1-8215-f705-24f3-78688e162733 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223126Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 39403234-7c28-36bd-842a-8fe394c61be5 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223137Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 7c88ad04-bb17-b3e1-debd-61e2620acf4c across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223199Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223229Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 39403234-7c28-36bd-842a-8fe394c61be5 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223242Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 201619d1-4e5e-ffc1-65b1-061153cd57fd across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223255Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223274Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 5157f6a7-3298-6040-62cd-5d20c2c162f3 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223284Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 39403234-7c28-36bd-842a-8fe394c61be5 across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.223296Z[0m [33m WARN[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Duplicate chunk id 1c81ab47-9392-4862-8223-2227fc7a07bf across symbol sets; keeping the first
+[2m2026-11-23T23:59:55.712255Z[0m [32m INFO[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Server needs 1 of 1487 chunk(s) (1486 already present)
+[2m2026-11-23T23:59:55.712281Z[0m [32m INFO[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Starting upload of batch 0, 1 symbol sets
+[2m2026-11-23T23:59:55.813767Z[0m [32m INFO[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Server returned 1 upload keys (0 skipped as already present)
+[2m2026-11-23T23:59:56.181192Z[0m [32m INFO[0m [2mposthog_cli::api::symbol_sets[0m[2m:[0m Upload summary: 1 chunk(s) uploaded, 1486 skipped (1486 already present, 0 too large)
+✓ Completed runAfterProductionCompile in 3.4s
+  Running TypeScript ...
+  Finished TypeScript in 3.3s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/35) ...
+  Generating static pages using 15 workers (8/35) 
+  Generating static pages using 15 workers (17/35) 
+  Generating static pages using 15 workers (26/35) 
+✓ Generating static pages using 15 workers (35/35) in 777ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /accessibility
+├ ƒ /api/api-docs/[workspaceSlug]/[productSlug]/[docSlug]/versions
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/analytics/events/export
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/changelog
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/changelog/[releaseId]
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/conversations/[conversationId]/attachments
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/conversations/[conversationId]/typing
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/conversations/events
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/export
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/imports
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/imports/[importId]
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/imports/source
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/releases/cover
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/releases/images
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/releases/social-image
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/reports/[reportId]/export
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/search
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/subscribers/export
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/subscribers/import
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/subscribers/suppressions/export
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/subscribers/suppressions/import
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/surveys/[surveyId]/export
+├ ƒ /api/app/[workspaceSlug]/[productSlug]/winback/import
+├ ƒ /api/app/[workspaceSlug]/api-idempotency
+├ ƒ /api/app/[workspaceSlug]/api-tokens
+├ ƒ /api/app/[workspaceSlug]/api-tokens/[tokenId]/rotate
+├ ƒ /api/app/[workspaceSlug]/audit/export
+├ ƒ /api/app/[workspaceSlug]/dashboard-views
+├ ƒ /api/app/[workspaceSlug]/export
+├ ƒ /api/app/[workspaceSlug]/webhooks
+├ ƒ /api/app/[workspaceSlug]/webhooks/[webhookId]
+├ ƒ /api/app/[workspaceSlug]/webhooks/[webhookId]/deliveries
+├ ƒ /api/app/[workspaceSlug]/webhooks/[webhookId]/deliveries/[deliveryId]/replay
+├ ƒ /api/app/[workspaceSlug]/webhooks/[webhookId]/rotate
+├ ƒ /api/app/[workspaceSlug]/webhooks/[webhookId]/test
+├ ƒ /api/app/[workspaceSlug]/webhooks/deliveries
+├ ƒ /api/app/[workspaceSlug]/webhooks/deliveries/replay
+├ ƒ /api/auth/[...all]
+├ ƒ /api/auth/password-reset
+├ ƒ /api/cron/jobs
+├ ƒ /api/cron/publish-releases
+├ ƒ /api/cron/webhooks
+├ ƒ /api/cron/weekly-digest
+├ ƒ /api/email/inbound
+├ ƒ /api/email/webhook
+├ ƒ /api/health
+├ ƒ /api/integrations/github/callback
+├ ƒ /api/integrations/github/install
+├ ƒ /api/integrations/issues/[token]
+├ ƒ /api/integrations/slack/callback
+├ ƒ /api/integrations/slack/commands
+├ ƒ /api/integrations/slack/events
+├ ƒ /api/integrations/slack/install
+├ ƒ /api/integrations/support-tools/[token]
+├ ƒ /api/mcp
+├ ƒ /api/public/api-docs/playground
+├ ƒ /api/public/auth/magic-link
+├ ƒ /api/public/auth/magic-link/verify
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/requests
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/requests/[requestId]
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/requests/[requestId]/comments
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/requests/[requestId]/follow
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/requests/[requestId]/reactions
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/requests/[requestId]/vote
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/requests/suggestions
+├ ƒ /api/public/boards/[workspaceSlug]/[productSlug]/[boardSlug]/rewrite
+├ ƒ /api/public/conversations
+├ ƒ /api/public/conversations/[conversationId]
+├ ƒ /api/public/conversations/[conversationId]/csat
+├ ƒ /api/public/conversations/[conversationId]/feedback
+├ ƒ /api/public/conversations/[conversationId]/stream
+├ ƒ /api/public/email-preferences
+├ ƒ /api/public/email-preferences/unsubscribe
+├ ƒ /api/public/help/search
+├ ƒ /api/public/locale
+├ ƒ /api/public/notifications/read
+├ ƒ /api/public/notifications/unread
+├ ƒ /api/public/outbound
+├ ƒ /api/public/releases/[releaseId]/reactions
+├ ƒ /api/public/session
+├ ƒ /api/public/session/identify
+├ ƒ /api/public/session/logout
+├ ƒ /api/public/session/sso
+├ ƒ /api/public/surveys/[surveySlug]/impressions
+├ ƒ /api/public/surveys/[surveySlug]/responses
+├ ƒ /api/public/widget/events
+├ ƒ /api/public/widget/experiences
+├ ƒ /api/public/widget/experiences/[experienceId]/complete
+├ ƒ /api/public/widget/experiences/[experienceId]/dismiss
+├ ƒ /api/public/widget/experiences/[experienceId]/view
+├ ƒ /api/public/workspaces/[workspaceSlug]/logo
+├ ƒ /api/release-images/[...key]
+├ ƒ /api/scim/v2/[workspaceSlug]/Users
+├ ƒ /api/scim/v2/[workspaceSlug]/Users/[memberId]
+├ ƒ /api/storage/[...key]
+├ ƒ /api/v1/[[...segments]]
+├ ○ /api/v1/openapi.json
+├ ƒ /api/webhooks/stripe
+├ ƒ /api/well-known/oauth-authorization-server
+├ ƒ /api/well-known/oauth-protected-resource
+├ ƒ /api/widget/identify
+├ ƒ /app
+├ ƒ /app/[workspaceSlug]/[productSlug]
+├ ƒ /app/[workspaceSlug]/[productSlug]/analytics
+├ ƒ /app/[workspaceSlug]/[productSlug]/analytics/drilldown
+├ ƒ /app/[workspaceSlug]/[productSlug]/api-docs
+├ ƒ /app/[workspaceSlug]/[productSlug]/api-docs/[docId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/boards
+├ ƒ /app/[workspaceSlug]/[productSlug]/conversations
+├ ƒ /app/[workspaceSlug]/[productSlug]/conversations/[conversationId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/conversations/[conversationId]/export
+├ ƒ /app/[workspaceSlug]/[productSlug]/conversations/answers
+├ ƒ /app/[workspaceSlug]/[productSlug]/conversations/spam-rules
+├ ƒ /app/[workspaceSlug]/[productSlug]/experiences
+├ ƒ /app/[workspaceSlug]/[productSlug]/feedback
+├ ƒ /app/[workspaceSlug]/[productSlug]/feedback/duplicates
+├ ƒ /app/[workspaceSlug]/[productSlug]/help
+├ ƒ /app/[workspaceSlug]/[productSlug]/help/[articleId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/import
+├ ƒ /app/[workspaceSlug]/[productSlug]/integrations
+├ ƒ /app/[workspaceSlug]/[productSlug]/integrations/webhooks
+├ ƒ /app/[workspaceSlug]/[productSlug]/moderation
+├ ƒ /app/[workspaceSlug]/[productSlug]/operations
+├ ƒ /app/[workspaceSlug]/[productSlug]/outbound
+├ ƒ /app/[workspaceSlug]/[productSlug]/outbound/[messageId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/releases
+├ ƒ /app/[workspaceSlug]/[productSlug]/releases/[releaseId]/edit
+├ ƒ /app/[workspaceSlug]/[productSlug]/releases/new
+├ ƒ /app/[workspaceSlug]/[productSlug]/roadmap
+├ ƒ /app/[workspaceSlug]/[productSlug]/segments
+├ ƒ /app/[workspaceSlug]/[productSlug]/settings
+├ ƒ /app/[workspaceSlug]/[productSlug]/subscribers
+├ ƒ /app/[workspaceSlug]/[productSlug]/subscribers/[subscriberId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/surveys
+├ ƒ /app/[workspaceSlug]/[productSlug]/surveys/[surveyId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/surveys/[surveyId]/responses/[responseId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/widget
+├ ƒ /app/[workspaceSlug]/[productSlug]/winback
+├ ƒ /app/[workspaceSlug]/[productSlug]/winback/campaigns/[campaignId]
+├ ƒ /app/[workspaceSlug]/[productSlug]/winback/new
+├ ƒ /app/[workspaceSlug]/settings
+├ ƒ /app/[workspaceSlug]/settings/access
+├ ƒ /app/account
+├ ƒ /app/admin
+├ ƒ /app/onboarding
+├ ○ /compare
+├   /compare/[vendor]
+│ ├ ● /compare/canny
+│ ├ ● /compare/featurebase
+│ └ ● /compare/userjot
+├ ○ /demo
+├ ○ /docs
+├ ○ /docs/api
+├ ○ /docs/api/cookbook
+├ ○ /docs/api/events
+├ ○ /docs/api/versioning
+├ ○ /docs/api/workflows
+├ ○ /docs/integrations/segment
+├ ○ /docs/integrations/slack
+├ ○ /docs/integrations/zapier
+├ ○ /docs/mcp
+├ ƒ /email/verify
+├ ƒ /forgot-password
+├ ƒ /invite/[token]
+├ ○ /legal/data-residency
+├ ○ /legal/dpa
+├ ○ /legal/lifetime
+├ ○ /legal/privacy
+├ ○ /legal/subprocessors
+├ ○ /legal/terms
+├ ƒ /llms.txt
+├ ƒ /oauth/authorize
+├ ƒ /oauth/register
+├ ƒ /oauth/token
+├ ○ /offline
+├ ○ /open-source
+├ ƒ /p/[workspaceSlug]/[productSlug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/[boardSlug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/[boardSlug]/[requestId]
+├ ƒ /p/[workspaceSlug]/[productSlug]/[boardSlug]/[requestId]/opengraph-image
+├ ƒ /p/[workspaceSlug]/[productSlug]/[boardSlug]/opengraph-image
+├ ƒ /p/[workspaceSlug]/[productSlug]/[boardSlug]/submit
+├ ƒ /p/[workspaceSlug]/[productSlug]/confirm
+├ ƒ /p/[workspaceSlug]/[productSlug]/csat/[conversationId]
+├ ƒ /p/[workspaceSlug]/[productSlug]/docs/api
+├ ƒ /p/[workspaceSlug]/[productSlug]/docs/api/[docSlug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/embed/[[...panel]]
+├ ƒ /p/[workspaceSlug]/[productSlug]/help
+├ ƒ /p/[workspaceSlug]/[productSlug]/help/[collectionSlug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/help/[collectionSlug]/[articleSlug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/help/search
+├ ƒ /p/[workspaceSlug]/[productSlug]/llms.txt
+├ ƒ /p/[workspaceSlug]/[productSlug]/login
+├ ƒ /p/[workspaceSlug]/[productSlug]/notifications
+├ ƒ /p/[workspaceSlug]/[productSlug]/preferences
+├ ƒ /p/[workspaceSlug]/[productSlug]/roadmap
+├ ƒ /p/[workspaceSlug]/[productSlug]/roadmap/[roadmapSlug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/search
+├ ƒ /p/[workspaceSlug]/[productSlug]/support
+├ ƒ /p/[workspaceSlug]/[productSlug]/surveys/[surveySlug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/[slug]
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/[slug]/opengraph-image
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/category/[category]
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/category/[category]/rss.xml
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/opengraph-image
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/rss.xml
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/tag/[tag]
+├ ƒ /p/[workspaceSlug]/[productSlug]/updates/tag/[tag]/rss.xml
+├ ƒ /preview/experiences/[token]
+├ ƒ /pricing
+├ ƒ /reset-password
+├ ○ /roadmap
+├ ƒ /robots.txt
+├ ƒ /sign-in
+├ ƒ /sign-up
+├ ƒ /sitemap.xml
+├ ƒ /status
+├ ○ /status/incidents
+└ ○ /trust
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+$ bun scripts/check-bundle-budget.ts
+ok   public/widget/v1.js raw                  53.1 KiB / 54.0 KiB
+ok   public/widget/v1.js gzip                 12.9 KiB / 13.0 KiB
+ok   public/widget/v1.css raw                  8.7 KiB / 10.0 KiB
+ok   public/widget/v1.css gzip                 2.2 KiB / 3.0 KiB
+ok   dashboard feedback route js             135.2 KiB / 150.0 KiB
+ok   dashboard feedback route css             20.3 KiB / 24.0 KiB
+ok   dashboard all routes js                 550.3 KiB / 560.0 KiB
+
+chunks: feedback route 13 js / 2 css, all dashboard routes 51 js
+EXIT:0

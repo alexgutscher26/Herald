@@ -250,7 +250,9 @@ const companyCustomerSchema = z.object({
 
 const conversationUpdateSchema = z.object({
   status: z.enum(["open", "resolved", "spam", "archived"]).optional(),
-  assignee_id: z.uuid().nullable().optional(),
+  // Better Auth user ids are opaque strings, not uuids; the service verifies
+  // that the id belongs to a member of this workspace.
+  assignee_id: z.string().trim().min(1).max(120).nullable().optional(),
 });
 
 const messageSchema = z.object({

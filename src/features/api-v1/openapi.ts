@@ -1653,7 +1653,7 @@ const openApiSpec = {
         type: "object",
         properties: {
           status: { type: "string", enum: ["open", "resolved", "spam", "archived"] },
-          assignee_id: { type: ["string", "null"], format: "uuid" },
+          assignee_id: { type: ["string", "null"] },
         },
       },
       Message: {

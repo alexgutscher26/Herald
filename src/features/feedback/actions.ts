@@ -81,6 +81,15 @@ const bulkTargetSchema = z.object({
     .max(100, "Select at most 100 requests at a time."),
 });
 
+/**
+ * A workspace member's user id.
+ *
+ * Better Auth issues opaque string ids by default; `user.id` is text, not a
+ * uuid. The membership lookup after parsing is what proves the id is real, so
+ * this only bounds the value to the column width.
+ */
+const assigneeIdSchema = z.string().trim().min(1).max(120).nullable();
+
 function revalidate(workspaceSlug: string, productSlug: string) {
   revalidatePath(`/app/${workspaceSlug}/${productSlug}`, "layout");
 }
@@ -244,7 +253,7 @@ export async function setFeedbackAssigneeAction(
   input: SetFeedbackAssigneeInput,
 ): Promise<ActionResult<{ assigneeId: string | null }>> {
   const parsed = targetSchema
-    .extend({ assigneeId: z.uuid().nullable() })
+    .extend({ assigneeId: assigneeIdSchema })
     .safeParse(input);
   if (!parsed.success) {
     return { ok: false, error: "Choose an assignee or leave it unassigned." };
@@ -352,7 +361,7 @@ export async function bulkAssignFeedbackAction(
   input: BulkFeedbackAssigneeInput,
 ): Promise<ActionResult<{ updated: number; skipped: number; undoId?: string }>> {
   const parsed = bulkTargetSchema
-    .extend({ assigneeId: z.uuid().nullable() })
+    .extend({ assigneeId: assigneeIdSchema })
     .safeParse(input);
   if (!parsed.success) {
     return { ok: false, error: "Select requests and an assignee." };

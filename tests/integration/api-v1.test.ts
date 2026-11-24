@@ -7,6 +7,7 @@ import { db } from "@/db";
 import {
   apiTokens,
   conversationMessages,
+  conversations,
   customFields,
   feedbackComments,
   feedbackCustomFieldValues,
@@ -492,6 +493,36 @@ describe("REST API v1", () => {
     expect(stored.map((row) => row.kind).sort()).toEqual(["message", "note"]);
     const savedNote = stored.find((row) => row.kind === "note");
     expect(savedNote?.body).toBe("/refund is not a slash command here");
+  });
+
+  isolatedTest("assigns a conversation to a member whose id is not a uuid", async () => {
+    const workspace = await createWorkspace({ plan: "pro" });
+    const product = await createProduct(workspace.id);
+    const customer = await createCustomer(workspace.id, { email: "customer@example.test" });
+    const { user: owner } = await createMember(workspace.id, { role: "owner" });
+    const { user: teammate } = await createMember(workspace.id, { role: "editor" });
+    const token = await mintToken(workspace.id, owner.id);
+    const conversation = await createConversation({
+      productId: product.id,
+      workspaceId: workspace.id,
+      customerId: customer.id,
+      subject: "Assign me",
+    });
+
+    // Better Auth issues opaque string user ids by default; the factory keeps
+    // that shape so this guard fails if the API starts demanding a uuid again.
+    expect(teammate.id).not.toMatch(/^[0-9a-f-]{36}$/i);
+
+    const assigned = await call(token, "PATCH", `/conversations/${conversation.id}`, {
+      assignee_id: teammate.id,
+    });
+    expect(assigned.status).toBe(200);
+
+    const [saved] = await db
+      .select({ assigneeId: conversations.assigneeId })
+      .from(conversations)
+      .where(eq(conversations.id, conversation.id));
+    expect(saved?.assigneeId).toBe(teammate.id);
   });
 
   isolatedTest("manages boards, tags, votes and companies", async () => {

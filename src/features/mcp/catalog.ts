@@ -686,7 +686,7 @@ export const MCP_TOOLS: McpTool[] = [
       {
         conversation_id: uuid("Conversation UUID."),
         status: enumeration(["open", "resolved", "spam", "archived"], "New status."),
-        assignee_id: { type: ["string", "null"], format: "uuid", description: "Member id or null." },
+        assignee_id: { type: ["string", "null"], description: "Member id or null." },
       },
       ["conversation_id"],
     ),
