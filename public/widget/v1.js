@@ -511,7 +511,10 @@
     fallbackLink.textContent =
       state.locale === "es" ? "Abrir en una pestaña nueva" : "Open in a new tab";
     fallbackLink.href = buildFrameUrl(state.panel);
-    node.hidden = false;
+    // Only reveal the card with the panel (or in place for an inline embed).
+    // Shown while the launcher is closed, it floats over the host page and
+    // swallows clicks meant for the page underneath.
+    node.hidden = !(state.open || state.inline);
 
     if (frame) {
       frame.hidden = true;
@@ -649,6 +652,8 @@
     host.setAttribute("data-herald-open", "true");
     setExpanded(true);
     if (state.degraded) {
+      var degradedNode = ensureFallback();
+      degradedNode.hidden = false;
       if (fallbackRetry) fallbackRetry.focus();
     } else {
       requestUnreadRefresh();
@@ -662,6 +667,7 @@
     // An inline embed is part of the page, not a dismissible dialog.
     if (state.destroyed || state.inline || !panel) return;
     panel.hidden = true;
+    if (state.degraded && fallback) fallback.hidden = true;
     state.open = false;
     host.removeAttribute("data-herald-open");
     setExpanded(false);

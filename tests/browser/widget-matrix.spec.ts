@@ -84,7 +84,8 @@ test("shows the offline fallback instead of a blank panel", async ({ page }) => 
   await page.evaluate(() => window.dispatchEvent(new Event("offline")));
 
   // The panel explains the outage when opened; it does not pop open by
-  // itself.
+  // itself, and the card never covers the host page while closed.
+  await expect(page.locator(".herald-fallback")).toBeHidden();
   await launcher.click();
 
   const fallback = page.locator(".herald-fallback");
