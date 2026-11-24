@@ -1,6 +1,7 @@
 import "server-only";
 
 import { publicOrigin } from "@/features/public/urls";
+import { WIDGET_ASSET_REVISION } from "@/features/widget/paths";
 
 /**
  * Herald's own installation of its widget.
@@ -20,9 +21,6 @@ export type HeraldWidgetInstall = {
   publicKey: string;
 };
 
-/** Loader revision the dashboard install page prints; both must agree. */
-const LOADER_REVISION = "5";
-
 export function getHeraldWidgetInstall(): HeraldWidgetInstall | null {
   const workspace = process.env.HERALD_WIDGET_WORKSPACE?.trim() ?? "";
   const product = process.env.HERALD_WIDGET_PRODUCT?.trim() ?? "";
@@ -30,7 +28,7 @@ export function getHeraldWidgetInstall(): HeraldWidgetInstall | null {
   if (workspace === "" || product === "" || publicKey === "") return null;
 
   return {
-    src: `${publicOrigin()}/widget/v1.js?v=${LOADER_REVISION}`,
+    src: `${publicOrigin()}/widget/v1.js?v=${WIDGET_ASSET_REVISION}`,
     project: `${workspace}/${product}`,
     publicKey,
   };

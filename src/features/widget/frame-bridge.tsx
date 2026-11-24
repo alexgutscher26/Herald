@@ -503,7 +503,7 @@ export function WidgetCloseButton({
       type="button"
       variant="ghost"
       size="icon"
-      className="size-8 shrink-0"
+      className="size-8 shrink-0 transition-all duration-200 hover:rotate-90 active:scale-90"
       aria-label={label}
       title={label}
       onClick={() => postToParent(target, { type: "close" })}

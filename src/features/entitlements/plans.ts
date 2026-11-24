@@ -457,7 +457,8 @@ export const PLAN_GATE_MATRIX: readonly PlanGate[] = [
     feature: "hideAttribution",
     label: "Hide the Herald attribution",
     serverGate: "saveBrandingAction() in features/branding/actions.ts",
-    alsoEnforcedAt: "public branding projection",
+    alsoEnforcedAt:
+      "getPublicSite() branding projection and the embedded widget chrome",
   },
 ] as const;
 

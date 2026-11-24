@@ -13,6 +13,13 @@ import { normalizeWidgetSections, type WidgetSection } from "./policy";
 
 export const WIDGET_VERSION = "v1";
 
+/**
+ * Cache key for the immutable loader assets and the dashboard snippet.
+ * Bump this together with the stylesheet URL in `public/widget/v1.js` whenever
+ * either shipped file changes; browsers keep the old revision for a year.
+ */
+export const WIDGET_ASSET_REVISION = "8";
+
 export const WIDGET_PANELS = [
   "home",
   "help",

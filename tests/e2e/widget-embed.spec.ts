@@ -36,17 +36,33 @@ test("the loader mounts a launcher and opens the embed panel", async ({ page }) 
 
   await launcher.click();
   await expect(launcher).toHaveAttribute("aria-expanded", "true");
-  await expect(page.locator(".herald-panel")).toBeVisible();
+  await expect(launcher).toBeHidden();
+  const panel = page.locator(".herald-panel");
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveCSS("bottom", "20px");
 
   const frame = page.frameLocator(".herald-frame");
   await expect(frame.locator("body")).toBeVisible();
+  await expect(
+    frame.getByText("Powered by Herald", { exact: true }),
+  ).toBeVisible();
 
-  // The panel opens on the changelog; the Feedback tab is the public board.
-  await frame.getByRole("link", { name: "Feedback", exact: true }).click();
+  // A first visit can show the cookie notice over the widget's bottom tabs;
+  // clear it before trying to reach the navigation.
   const essential = frame.getByRole("button", { name: "Essential only", exact: true });
   if (await essential.isVisible().catch(() => false)) await essential.click();
+
+  // The panel opens on What's new; the Feedback tab is the public board.
+  await frame.getByRole("link", { name: "Feedback", exact: true }).click();
 
   await expect(
     frame.getByRole("link", { name: /Export every request as a CSV/ }),
   ).toBeVisible({ timeout: 30_000 });
+
+  // The launcher is part of the closed state only; closing the panel brings it
+  // back with the expected collapsed accessibility state.
+  await frame.getByRole("button", { name: "Close widget" }).click();
+  await expect(launcher).toBeVisible();
+  await expect(launcher).toHaveAttribute("aria-expanded", "false");
+  await expect(panel).toBeHidden();
 });

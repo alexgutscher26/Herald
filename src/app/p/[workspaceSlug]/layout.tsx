@@ -60,6 +60,14 @@ export default async function PublicWorkspaceLayout({
         }`}
         style={style}
       >
+        {/* The public palette lives on this wrapper, while the document keeps
+         * the dashboard's light background. Paint the full visual viewport so
+         * a short page, a nested scroll area or a dynamic browser toolbar can
+         * never show that background as a light strip under a dark page. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 -z-10 bg-background"
+        />
         {PUBLIC_LOCALES.map((code) => (
           <link
             key={code}

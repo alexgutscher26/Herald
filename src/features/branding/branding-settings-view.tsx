@@ -335,7 +335,8 @@ export function BrandingSettingsView({
             )}
           </div>
           <p id="hide-attribution-hint" className="mt-1 text-xs leading-5 text-muted-foreground">
-            Removes the small attribution from public pages.{" "}
+            Removes the small attribution from public pages and the embedded
+            widget.{" "}
             {hideAttributionAllowed ? (
               "Indie and Professional plans."
             ) : (

@@ -82,6 +82,14 @@ export type CustomerMessage = {
   createdAt: string;
 };
 
+type CustomerAttachmentUpload = {
+  storageKey: string;
+  fileName: string;
+  mimeType: string;
+  sizeBytes: number;
+  kind: "image" | "file";
+};
+
 export type CustomerCsat = {
   /** True once this thread has been resolved with CSAT enabled. */
   requested: boolean;
@@ -404,10 +412,15 @@ export async function loadCustomerThread(input: {
     .where(eq(junoSettings.productId, product.id))
     .limit(1);
   const juno = junoRows[0];
-  const latestMessage = messages.at(-1);
+  // An away reply is written by the system, not a teammate. It must not hide
+  // the fact that the customer's question is still waiting for Juno, or every
+  // first message sent while the team is away would lose its typing hint.
+  const lastSubstantiveMessage = [...messages]
+    .reverse()
+    .find((message) => message.authorType !== "system");
   const junoPending = Boolean(
     juno?.enabled &&
-      latestMessage?.authorType === "customer" &&
+      lastSubstantiveMessage?.authorType === "customer" &&
       (thread.status === "queue" || thread.status === "open") &&
       juno.state !== "paused" &&
       juno.state !== "handed_off",
@@ -466,6 +479,8 @@ export async function startCustomerConversation(input: {
   sourceContext?: ConversationSourceContext | null | undefined;
   /** Optional intake answers, keyed by trait name; invalid keys are dropped. */
   intake?: unknown;
+  /** A validated upload to link to the opening message in the same transaction. */
+  attachment?: CustomerAttachmentUpload | null | undefined;
   sessionCookie?: string | null | undefined;
   now?: Date | undefined;
 }): Promise<
@@ -483,8 +498,13 @@ export async function startCustomerConversation(input: {
   });
   if (!active) return { state: "signed_out" };
 
-  const body = input.body.trim().slice(0, 4000);
-  if (body.length === 0) return { state: "invalid", error: "Write a message first." };
+  const rawBody = input.body.trim().slice(0, 4000);
+  if (rawBody.length === 0 && !input.attachment) {
+    return { state: "invalid", error: "Write a message first." };
+  }
+  // An attachment-only message still needs a customer-visible line in the
+  // inbox preview and email fallback; the file itself renders separately.
+  const body = rawBody.length > 0 ? rawBody : "Sent an image";
 
   const email = input.email?.trim() ?? "";
   if (email !== "" && !isValidEmail(email)) {
@@ -493,7 +513,8 @@ export async function startCustomerConversation(input: {
 
   const now = input.now ?? new Date();
   const subject =
-    input.subject?.replace(/[\r\n]+/g, " ").trim().slice(0, 160) || "Conversation";
+    input.subject?.replace(/[\r\n]+/g, " ").trim().slice(0, 160) ||
+    (input.attachment ? "Image attachment" : "Conversation");
   const verdict = classifyConversationSpam(
     { subject, body },
     await loadSpamRules(db, product.id),
@@ -557,6 +578,20 @@ export async function startCustomerConversation(input: {
       })
       .returning({ id: conversationMessages.id });
 
+    if (inserted[0] && input.attachment) {
+      await tx.insert(conversationAttachments).values({
+        conversationId: conversation.id,
+        productId: product.id,
+        messageId: inserted[0].id,
+        kind: input.attachment.kind,
+        storageKey: input.attachment.storageKey,
+        filename: input.attachment.fileName,
+        mimeType: input.attachment.mimeType,
+        sizeBytes: input.attachment.sizeBytes,
+        createdAt: now,
+      });
+    }
+
     if (inserted[0] && !verdict.spam) {
       const customerEmail = active.customer.email ?? (email || null);
       await queueCustomerMessageNotifications(tx, {
@@ -590,6 +625,8 @@ export async function appendCustomerMessage(input: {
   productSlug: string;
   conversationId: string;
   body: string;
+  /** A validated upload to link to the reply in the same transaction. */
+  attachment?: CustomerAttachmentUpload | null | undefined;
   sessionCookie?: string | null | undefined;
   now?: Date;
 }): Promise<
@@ -607,8 +644,11 @@ export async function appendCustomerMessage(input: {
   });
   if (!active) return { state: "signed_out" };
 
-  const body = input.body.trim().slice(0, 4000);
-  if (body.length === 0) return { state: "invalid", error: "Write a message first." };
+  const rawBody = input.body.trim().slice(0, 4000);
+  if (rawBody.length === 0 && !input.attachment) {
+    return { state: "invalid", error: "Write a message first." };
+  }
+  const body = rawBody.length > 0 ? rawBody : "Sent an image";
 
   const now = input.now ?? new Date();
 
@@ -652,6 +692,20 @@ export async function appendCustomerMessage(input: {
         createdAt: now,
       })
       .returning({ id: conversationMessages.id });
+
+    if (inserted[0] && input.attachment) {
+      await tx.insert(conversationAttachments).values({
+        conversationId: conversation.id,
+        productId: product.id,
+        messageId: inserted[0].id,
+        kind: input.attachment.kind,
+        storageKey: input.attachment.storageKey,
+        filename: input.attachment.fileName,
+        mimeType: input.attachment.mimeType,
+        sizeBytes: input.attachment.sizeBytes,
+        createdAt: now,
+      });
+    }
 
     const reopened =
       conversation.status === "resolved" ||

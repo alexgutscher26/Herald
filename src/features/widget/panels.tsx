@@ -1,6 +1,5 @@
 import {
   ArrowLeft,
-  ArrowRight,
   ArrowUpRight,
   CalendarDays,
   MessageSquare,
@@ -19,6 +18,7 @@ import {
 } from "@/components/shared/status-badge";
 import { YouTubeEmbed } from "@/components/shared/youtube-embed";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { loadCustomerThreads } from "@/features/conversations/customer";
 import type { PublicInbox } from "@/features/notifications/inbox";
 import { hasCommentAnchor } from "@/features/notifications/links";
@@ -52,18 +52,23 @@ import type {
   PublicSubmitPage,
 } from "@/features/public/types";
 
-import { WidgetCloseButton } from "./frame-bridge";
 import { translatedRelease } from "@/features/i18n/content";
 import {
   widgetEmbedHref,
   widgetRouteFromPublicPath,
   type WidgetQuery,
 } from "./paths";
+import { WidgetCloseButton } from "./frame-bridge";
+import {
+  WidgetFeedbackView,
+  type WidgetFeedbackRow,
+} from "./feedback-view";
+import { WidgetHomeView, type WidgetHomeAction } from "./home-view";
 import { WidgetMessagesView } from "./messages-view";
 import type { WidgetSection } from "./policy";
 import { WidgetWhatsNewView } from "./whats-new-view";
 import type { WidgetShell } from "./service";
-import { WidgetEmpty, WidgetSectionNav } from "./shell";
+import { WidgetEmpty } from "./shell";
 
 /**
  * Panel bodies.
@@ -73,6 +78,15 @@ import { WidgetEmpty, WidgetSectionNav } from "./shell";
  * closing a board, turning off the changelog or changing a status takes effect
  * on the next iframe render just as it does on the public pages.
  */
+
+function commentInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const initials = parts
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+  return initials || "?";
+}
 
 function requestApiBase(page: PublicRequestPage): string {
   return `/api/public/boards/${encodeURIComponent(
@@ -106,7 +120,7 @@ function RequestRow({
   query: WidgetQuery;
 }) {
   return (
-    <article className="rounded-lg border bg-card p-3">
+    <article className="rounded-lg border bg-card p-3 transition-[border-color,box-shadow] duration-200 ease-out hover:border-primary/30 hover:shadow-sm">
       <div className="flex items-start gap-2.5">
         <span className="mt-0.5 shrink-0 rounded-md border bg-muted/40 px-1.5 py-1 text-center text-[11px] font-semibold tabular-nums text-foreground">
           {request.voteCount}
@@ -370,56 +384,64 @@ export function WidgetFeedbackPanel({
     );
   }
 
-  const newRequestHref = panelHref(
+  const rows: WidgetFeedbackRow[] = page.requests.map((request) => ({
+    id: request.id,
+    title: request.title,
+    body: request.body,
+    authorName: request.authorName,
+    status: request.status,
+    voteCount: request.voteCount,
+    votesAria: t("board.votesAria", { count: request.voteCount }),
+    createdAt: request.createdAt,
+    href: panelHref(
+      shell,
+      {
+        view: "feedback",
+        boardSlug: page.board.slug,
+        requestId: request.id,
+      },
+      query,
+    ),
+  }));
+
+  const submitHref = panelHref(
     shell,
     { view: "feedback", boardSlug: page.board.slug, compose: true },
     query,
   );
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <h1 className="text-base font-semibold tracking-tight">
-            {page.board.name}
-          </h1>
-          {page.board.description ? (
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              {page.board.description}
-            </p>
-          ) : null}
-          <p className="mt-1 text-[11px] text-muted-foreground">
-            {t("board.range", {
-              from: page.pagination.total === 0 ? 0 : 1,
-              to: Math.min(page.pagination.pageSize, page.pagination.total),
-              total: page.pagination.total,
-            })}
-          </p>
-        </div>
-        <Button asChild size="sm" className="shrink-0">
-          <Link href={newRequestHref}>{t("board.newRequest")}</Link>
-        </Button>
-      </div>
-
-      {page.requests.length === 0 ? (
-        <WidgetEmpty title={t("board.emptyTitle")} body={t("board.emptyBody")} />
-      ) : (
-        <ol className="space-y-2" aria-label={t("board.requestsList")}>
-          {page.requests.map((request) => (
-            <li key={request.id}>
-              <RequestRow
-                shell={shell}
-                request={request}
-                boardSlug={page.board.slug}
-                locale={locale}
-                t={t}
-                query={query}
-              />
-            </li>
-          ))}
-        </ol>
-      )}
-    </div>
+    <WidgetFeedbackView
+      rows={rows}
+      locale={locale}
+      submitHref={submitHref}
+      labels={{
+        title: t("widget.feedbackTitle"),
+        search: t("widget.feedbackSearch"),
+        noResults: t("widget.feedbackNoResults"),
+        noMatches: t("widget.feedbackNoMatches"),
+        searchHint: t("widget.feedbackSearchHint"),
+        filterHint: t("widget.feedbackFilterHint"),
+        filters: t("widget.feedbackFilters"),
+        sortSection: t("widget.feedbackSortSection"),
+        statusSection: t("widget.feedbackStatusSection"),
+        sortTop: t("widget.feedbackSortTop"),
+        sortNew: t("widget.feedbackSortNew"),
+        sortTrending: t("widget.feedbackSortTrending"),
+        statuses: {
+          open: t("widget.feedbackStatusPending"),
+          under_review: t("widget.feedbackStatusReview"),
+          planned: t("widget.feedbackStatusPlanned"),
+          in_progress: t("widget.feedbackStatusProgress"),
+          shipped: t("widget.feedbackStatusCompleted"),
+          closed: t("widget.feedbackStatusClosed"),
+        },
+        submit: t("widget.feedbackSubmit"),
+        list: t("widget.feedbackList"),
+        emptyTitle: t("board.emptyTitle"),
+        emptyBody: t("board.emptyBody"),
+      }}
+    />
   );
 }
 
@@ -428,11 +450,13 @@ export function WidgetComposePanel({
   page,
   t,
   query,
+  hostOrigin,
 }: {
   shell: WidgetShell;
   page: PublicSubmitPage | null;
   t: Translate;
   query: WidgetQuery;
+  hostOrigin: string | null;
 }) {
   if (!page) {
     return (
@@ -444,40 +468,44 @@ export function WidgetComposePanel({
   }
 
   return (
-    <div className="space-y-4">
-      <Link
-        href={panelHref(
-          shell,
-          { view: "feedback", boardSlug: page.board.slug },
-          query,
-        )}
-        className="inline-flex min-h-6 items-center gap-1.5 py-0.5 text-xs font-medium text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-3.5" aria-hidden="true" />
-        {page.board.name}
-      </Link>
-      <div>
-        <h1 className="text-base font-semibold tracking-tight">
-          {t("submit.title")}
+    <div className="flex min-h-full flex-col">
+      <header className="sticky top-0 z-20 -mx-4 -mt-2 flex items-center gap-1 bg-background px-3 py-2">
+        <Link
+          href={panelHref(
+            shell,
+            { view: "feedback", boardSlug: page.board.slug },
+            query,
+          )}
+          aria-label={t("widget.feedbackComposeBack")}
+          className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <ArrowLeft className="size-5" strokeWidth={2} aria-hidden="true" />
+        </Link>
+        <h1 className="min-w-0 flex-1 truncate text-[16px] font-semibold tracking-tight">
+          {t("widget.feedbackComposeTitle")}
         </h1>
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-          {t("submit.subtitle")}
-        </p>
+        <WidgetCloseButton
+          hostOrigin={hostOrigin}
+          label={t("widget.close")}
+        />
+      </header>
+
+      <div className="flex flex-1 flex-col pt-2">
+        <SubmitForm
+          workspaceSlug={page.workspace.slug}
+          productSlug={page.product.slug}
+          boardSlug={page.board.slug}
+          boards={page.boards}
+          customFields={page.customFields}
+          intakeQuestions={page.intakeQuestions}
+          aiRewriteEnabled={page.aiRewriteEnabled}
+          guestPosting={page.board.guestPosting}
+          identified={page.viewer.identified}
+          hasCompany={page.viewer.hasCompany}
+          mode="embed"
+          widgetQuery={query}
+        />
       </div>
-      <SubmitForm
-        workspaceSlug={page.workspace.slug}
-        productSlug={page.product.slug}
-        boardSlug={page.board.slug}
-        boards={page.boards}
-        customFields={page.customFields}
-        intakeQuestions={page.intakeQuestions}
-        aiRewriteEnabled={page.aiRewriteEnabled}
-        guestPosting={page.board.guestPosting}
-        identified={page.viewer.identified}
-        hasCompany={page.viewer.hasCompany}
-        mode="embed"
-        widgetQuery={query}
-      />
     </div>
   );
 }
@@ -619,90 +647,111 @@ export function WidgetRequestPanel({
         </div>
       </article>
 
-      <section aria-labelledby="widget-discussion">
+      <section
+        aria-labelledby="widget-discussion"
+        className="space-y-2 border-t border-border/70 pt-4"
+      >
         <h2
           id="widget-discussion"
-          className="flex items-center gap-1.5 text-sm font-semibold"
+          className="flex items-center gap-1.5 text-[13px] font-semibold"
         >
           <MessageSquare className="size-3.5" aria-hidden="true" />
           {t("request.discussion")}
-          <span className="text-xs font-normal text-muted-foreground">
+          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-muted-foreground">
             {publicCommentCount}
           </span>
         </h2>
         {request.comments.length === 0 ? (
-          <p className="mt-1.5 text-xs text-muted-foreground">
-            {t("request.noComments")}
-          </p>
+          <div className="flex items-start gap-2 rounded-xl border border-dashed border-border/70 bg-muted/15 px-3 py-3">
+            <MessageSquare
+              className="mt-0.5 size-3.5 shrink-0 text-muted-foreground/70"
+              aria-hidden="true"
+            />
+            <p className="text-[11.5px] leading-relaxed text-muted-foreground">
+              {t("request.noComments")}
+            </p>
+          </div>
         ) : (
-          <ol className="mt-2 space-y-2">
+          <ol className="space-y-2">
             {request.comments.map((comment) => (
               <li
                 key={comment.id}
                 id={`comment-${comment.id}`}
-                className={`scroll-mt-20 rounded-md border p-2.5 target:ring-2 target:ring-ring/50 ${
+                className={cn(
+                  "flex scroll-mt-20 gap-2.5 rounded-xl border p-3 target:ring-2 target:ring-ring/50",
                   comment.pending
                     ? "border-warning/30 bg-warning-muted/40"
-                    : "bg-card"
-                }`}
+                    : "border-border/70 bg-card",
+                )}
               >
-                <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-muted-foreground">
-                  <span className="font-medium text-foreground">
-                    {comment.authorName}
-                  </span>
-                  {comment.authorType === "team" ? (
-                    <span className="rounded-full border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-medium uppercase tracking-wide text-primary">
-                      {t("common.team")}
+                <span
+                  aria-hidden="true"
+                  className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold text-muted-foreground"
+                >
+                  {commentInitials(comment.authorName)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-muted-foreground">
+                    <span className="font-medium text-foreground">
+                      {comment.authorName}
                     </span>
-                  ) : null}
-                  <time dateTime={comment.createdAt}>
-                    {formatPublicDate(locale, comment.createdAt)}
-                  </time>
+                    {comment.authorType === "team" ? (
+                      <span className="rounded-full border border-primary/30 bg-primary/10 px-1.5 py-0.5 font-medium uppercase tracking-wide text-primary">
+                        {t("common.team")}
+                      </span>
+                    ) : null}
+                    <time dateTime={comment.createdAt}>
+                      {formatPublicDate(locale, comment.createdAt)}
+                    </time>
+                  </div>
+                  <p className="mt-1 whitespace-pre-line break-words text-xs leading-relaxed">
+                    {comment.body}
+                  </p>
                 </div>
-                <p className="mt-1 whitespace-pre-line break-words text-xs leading-relaxed">
-                  {comment.body}
-                </p>
               </li>
             ))}
           </ol>
         )}
 
         {!board.acceptsComments ? (
-          <p className="mt-3 rounded-md border bg-muted/40 px-2.5 py-2 text-xs text-muted-foreground">
+          <p className="rounded-xl border border-dashed border-border/70 bg-muted/15 px-3 py-2.5 text-[11px] text-muted-foreground">
             {t("request.commentsClosed")}
           </p>
         ) : needsIdentity ? (
-          <div className="mt-3">
+          <div className="pt-1">
             <IdentifyForm workspaceSlug={page.workspace.slug} />
           </div>
         ) : (
-          <div className="mt-3">
+          <div className="pt-1">
             <CommentForm
               requestApiBase={requestApi}
               hasCompany={page.request.viewer.hasCompany}
+              variant="widget"
             />
           </div>
         )}
       </section>
 
-      <section aria-labelledby="widget-share">
+      <section
+        aria-labelledby="widget-share"
+        className="space-y-2 border-t border-border/70 pt-4"
+      >
         <h2
           id="widget-share"
           className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground"
         >
           {t("request.share")}
         </h2>
-        <div className="mt-1.5">
-          <ShareLinks
-            path={publicRequestPath(
-              page.workspace.slug,
-              page.product.slug,
-              board.slug,
-              request.id,
-            )}
-            title={request.title}
-          />
-        </div>
+        <ShareLinks
+          path={publicRequestPath(
+            page.workspace.slug,
+            page.product.slug,
+            board.slug,
+            request.id,
+          )}
+          title={request.title}
+          variant="widget"
+        />
       </section>
     </div>
   );
@@ -846,11 +895,29 @@ export function WidgetUpdatesPanel({
     );
   }
 
+  const items = page.entries.map((entry) => {
+    const copy = translatedRelease(entry, locale, translationEnabled);
+    return {
+      id: entry.id,
+      title: copy.title,
+      summary: copy.summary,
+      category: entry.category,
+      categoryLabel:
+        entry.category === "feature"
+          ? t("widget.categoryFeature")
+          : entry.category === "improvement"
+            ? t("widget.categoryImprovement")
+            : t("widget.categoryFix"),
+      dateLabel: formatPublicDate(locale, entry.publishedAt),
+      href: panelHref(shell, { view: "updates", slug: entry.slug }, query),
+    };
+  });
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <div>
-        <h1 className="text-base font-semibold tracking-tight">
-          {t("updates.title")}
+        <h1 className="text-lg font-semibold tracking-tight">
+          {t("widget.updatesTitle")}
         </h1>
         <p className="mt-1 text-xs text-muted-foreground">
           {t("updates.subtitle", { product: page.product.name })}
@@ -862,37 +929,15 @@ export function WidgetUpdatesPanel({
           body={t("updates.emptyBody")}
         />
       ) : (
-        <ol className="space-y-2.5">
-          {page.entries.map((entry) => {
-            const copy = translatedRelease(entry, locale, translationEnabled);
-            return (
-            <li key={entry.id}>
-              <Link
-                href={panelHref(
-                  shell,
-                  { view: "updates", slug: entry.slug },
-                  query,
-                )}
-                className="block rounded-lg border bg-card p-3 transition-colors hover:border-primary/30"
-              >
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <ReleaseCategoryBadge category={entry.category} />
-                  <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                    <CalendarDays className="size-3" aria-hidden="true" />
-                    {formatPublicDate(locale, entry.publishedAt)}
-                  </span>
-                </div>
-                <h2 className="mt-1.5 break-words text-sm font-semibold leading-snug">
-                  {copy.title}
-                </h2>
-                <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
-                  {copy.summary}
-                </p>
-              </Link>
-            </li>
-            );
-          })}
-        </ol>
+        <WidgetWhatsNewView
+          items={items}
+          labels={{
+            search: t("widget.searchUpdates"),
+            noResults: t("widget.noSearchResults"),
+            emptyTitle: t("updates.emptyTitle"),
+            emptyBody: t("updates.emptyBody"),
+          }}
+        />
       )}
     </div>
   );
@@ -1167,8 +1212,7 @@ export function WidgetWhatsNewPanel({
   shell,
   page,
   accentColor,
-  hideAttribution,
-  hostOrigin,
+  accentForeground = "#ffffff",
   t,
   locale,
   translationEnabled,
@@ -1178,91 +1222,136 @@ export function WidgetWhatsNewPanel({
   shell: WidgetShell;
   page: PublicChangelogPage | null;
   accentColor: string;
-  hideAttribution: boolean;
-  hostOrigin: string | null;
+  accentForeground?: string;
   t: Translate;
   locale: PublicLocaleCode;
   translationEnabled: boolean;
   sections: WidgetSection[];
   query: WidgetQuery;
 }) {
-  const updatesHref = panelHref(shell, { view: "updates", slug: null }, query);
-  const items = (page?.entries ?? []).map((entry) => {
+  const updatesHref = panelHref(
+    shell,
+    { view: "updates", slug: null },
+    query,
+  );
+  const messagesHref =
+    sections.includes("messages") && shell.panels.messages
+      ? panelHref(shell, { view: "messages" }, query)
+      : null;
+  const helpHref =
+    sections.includes("help") && shell.panels.help
+      ? panelHref(shell, { view: "help" }, query)
+      : null;
+  const composeHref =
+    sections.includes("feedback") &&
+    shell.panels.feedback &&
+    shell.boardSlug !== null
+      ? panelHref(
+          shell,
+          {
+            view: "feedback",
+            boardSlug: shell.boardSlug,
+            compose: true,
+          },
+          query,
+        )
+      : null;
+  const roadmapHref =
+    sections.includes("roadmap") && shell.panels.roadmap
+      ? panelHref(shell, { view: "roadmap" }, query)
+      : null;
+
+  const latest = page?.entries[0] ?? null;
+  const latestCopy = latest
+    ? translatedRelease(latest, locale, translationEnabled)
+    : null;
+  const moreUpdates = (page?.entries ?? []).slice(1, 3).map((entry) => {
     const copy = translatedRelease(entry, locale, translationEnabled);
     return {
       id: entry.id,
-      title: copy.title,
-      summary: copy.summary,
-      category: entry.category,
-      categoryLabel:
-        entry.category === "feature"
-          ? t("widget.categoryFeature")
-          : entry.category === "improvement"
-            ? t("widget.categoryImprovement")
-            : t("widget.categoryFix"),
-      dateLabel: formatPublicDate(locale, entry.publishedAt),
       href: panelHref(shell, { view: "updates", slug: entry.slug }, query),
+      title: copy.title,
     };
   });
 
+  const actions: WidgetHomeAction[] = [];
+  if (helpHref) {
+    actions.push({
+      href: helpHref,
+      label: t("widget.searchHelp"),
+      icon: "help",
+    });
+  }
+  if (composeHref) {
+    actions.push({
+      href: composeHref,
+      label: t("widget.submitRequest"),
+      icon: "request",
+    });
+  }
+  if (roadmapHref) {
+    actions.push({
+      href: roadmapHref,
+      label: t("roadmap.nav"),
+      icon: "roadmap",
+    });
+  }
+
   return (
-    <div className="flex h-full min-h-0 flex-col bg-card text-foreground">
-      <header className="flex shrink-0 items-start justify-between gap-2 border-b border-border/70 px-4 py-3">
-        <div className="flex min-w-0 items-start gap-2">
-          <span
-            className="mt-1.5 size-2 shrink-0 rounded-full"
-            style={{ backgroundColor: accentColor }}
-            aria-hidden="true"
-          />
-          <div className="min-w-0">
-            <p className="truncate text-[14px] font-semibold leading-tight">
-              {t("widget.homeTitle", { product: shell.product.name })}
-            </p>
-            <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
-              {shell.product.description?.trim() || t("widget.subtitle")}
-            </p>
-          </div>
-        </div>
-        <WidgetCloseButton hostOrigin={hostOrigin} label={t("widget.close")} />
-      </header>
-
-      <WidgetSectionNav
-        shell={shell}
-        active="home"
-        sections={sections}
-        query={query}
-        t={t}
-      />
-
-      <WidgetWhatsNewView
-        items={items}
-        labels={{
-          search: t("widget.searchUpdates"),
-          noResults: t("widget.noSearchResults"),
-          emptyTitle: t("widget.noPublishedTitle"),
-          emptyBody: t("widget.noPublishedBody"),
-        }}
-      />
-
-      <footer className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-4 py-2.5 text-[10.5px] text-muted-foreground">
-        <Link
-          href={updatesHref}
-          className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-        >
-          {t("widget.viewAllUpdates")}
-          <ArrowRight className="size-2.5" aria-hidden="true" />
-        </Link>
-        {hideAttribution ? null : <span>{t("widget.poweredBy")}</span>}
-      </footer>
-    </div>
+    <WidgetHomeView
+      productInitial={shell.product.name.trim().charAt(0).toUpperCase() || "H"}
+      accentColor={accentColor}
+      accentForeground={accentForeground}
+      greeting={t("widget.greeting")}
+      title={t("widget.homeTitle", { product: shell.product.name })}
+      message={
+        messagesHref
+          ? {
+              href: messagesHref,
+              title: t("widget.sendMessage"),
+              body: t("widget.sendMessageBody"),
+              placeholder: t("widget.writeMessage"),
+            }
+          : null
+      }
+      actions={actions}
+      latestUpdate={
+        latest && latestCopy
+          ? {
+              id: latest.id,
+              href: panelHref(
+                shell,
+                { view: "updates", slug: latest.slug },
+                query,
+              ),
+              title: latestCopy.title,
+              summary: latestCopy.summary,
+              category: latest.category,
+              cover: latest.cover,
+              dateLabel: formatPublicDate(locale, latest.publishedAt),
+            }
+          : null
+      }
+      moreUpdates={moreUpdates}
+      updatesHref={updatesHref}
+      labels={{
+        latestUpdate: t("widget.latestUpdate"),
+        viewAllUpdates: t("widget.viewAllUpdates"),
+        emptyTitle: t("widget.noPublishedTitle"),
+        emptyBody: t("widget.noPublishedBody"),
+      }}
+      updatesEnabled={shell.panels.updates}
+    />
   );
 }
 
 export async function WidgetMessagesPanel({
   shell,
+  hostOrigin,
 }: {
   shell: WidgetShell;
   query: WidgetQuery;
+  hostOrigin: string | null;
 }) {
   const initial = await loadCustomerThreads({
     workspaceSlug: shell.workspace.slug,
@@ -1270,13 +1359,12 @@ export async function WidgetMessagesPanel({
   });
 
   return (
-    <div className="h-[calc(100vh-9rem)] overflow-hidden rounded-lg border bg-card">
-      <WidgetMessagesView
-        workspaceSlug={shell.workspace.slug}
-        productSlug={shell.product.slug}
-        initial={initial}
-        online={shell.presence.online}
-      />
-    </div>
+    <WidgetMessagesView
+      workspaceSlug={shell.workspace.slug}
+      productSlug={shell.product.slug}
+      productName={shell.product.name}
+      hostOrigin={hostOrigin}
+      initial={initial}
+    />
   );
 }

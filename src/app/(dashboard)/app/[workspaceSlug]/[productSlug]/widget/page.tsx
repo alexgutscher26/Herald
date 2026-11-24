@@ -12,11 +12,15 @@ import { Card } from "@/components/ui/card";
 import { getWorkspaceBranding } from "@/features/branding/branding";
 import { foregroundFor } from "@/features/branding/schema";
 import { getIdentitySettings } from "@/features/customer-auth/identity-settings";
+import { workspaceHasFeature } from "@/features/entitlements/entitlements";
 import { isFeatureEnabled } from "@/features/entitlements/flags";
 import { getPublicChangelogPage } from "@/features/public/changelog";
 import { publicOrigin } from "@/features/public/urls";
 import { readWidgetHealth } from "@/features/widget/health";
-import { widgetEmbedPath } from "@/features/widget/paths";
+import {
+  WIDGET_ASSET_REVISION,
+  widgetEmbedPath,
+} from "@/features/widget/paths";
 import { ensureWidgetSettings } from "@/features/widget/settings";
 import { WidgetSettingsView } from "@/features/widget/settings-view";
 import { resolveProductPage } from "@/lib/product-page";
@@ -43,6 +47,7 @@ function formatPreviewDate(value: string): string {
   return new Intl.DateTimeFormat("en", {
     month: "short",
     day: "numeric",
+    year: "numeric",
   }).format(date);
 }
 
@@ -91,29 +96,30 @@ export default async function WidgetPage({
 }) {
     const { workspaceSlug, productSlug, context } = await resolveProductPage(params, "widget:manage");
 
-  const [settings, identity, branding, changelog, health] = await Promise.all([
-    ensureWidgetSettings(context.workspace.id),
-    getIdentitySettings(context.workspace.id, context.workspace.slug),
-    getWorkspaceBranding(context.workspace.id),
-    getPublicChangelogPage({
-      workspaceSlug,
-      productSlug,
-      pageSize: 2,
-    }),
-    readWidgetHealth({
-      workspaceId: context.workspace.id,
-      productId: context.product.id,
-    }),
-  ]);
+  const [settings, identity, branding, changelog, health, hideAttributionAllowed] =
+    await Promise.all([
+      ensureWidgetSettings(context.workspace.id),
+      getIdentitySettings(context.workspace.id, context.workspace.slug),
+      getWorkspaceBranding(context.workspace.id),
+      getPublicChangelogPage({
+        workspaceSlug,
+        productSlug,
+        pageSize: 3,
+      }),
+      readWidgetHealth({
+        workspaceId: context.workspace.id,
+        productId: context.product.id,
+      }),
+      workspaceHasFeature(context.workspace.id, "hideAttribution"),
+    ]);
   const canManage = hasPermission(context.role, "widget:manage");
   const widgetEnabled = isFeatureEnabled("widget");
 
   const origin = publicOrigin();
   const project = `${context.workspace.slug}/${context.product.slug}`;
-  // The loader is cached immutably, so the query marks the release that added
-  // the nonce, live-region and degraded-state work; new installs fetch this
-  // revision while an existing page keeps the bytes it already downloaded.
-  const scriptUrl = `${origin}/widget/v1.js?v=6`;
+  // The loader is cached immutably. Bump the shared revision when the loader
+  // or its stylesheet changes so a copied snippet fetches the new bytes.
+  const scriptUrl = `${origin}/widget/v1.js?v=${WIDGET_ASSET_REVISION}`;
   const embedPath = widgetEmbedPath(
     context.workspace.slug,
     context.product.slug,
@@ -149,6 +155,7 @@ export default async function WidgetPage({
     title: entry.title,
     summary: entry.summary || "A new update is ready for your customers.",
     category: entry.category,
+    cover: entry.cover,
     publishedLabel: formatPreviewDate(entry.publishedAt),
   }));
 
@@ -303,7 +310,9 @@ export default async function WidgetPage({
           accentColor: branding.primaryColor || "#1f6b45",
           logoUrl,
           entries: previewEntries,
-          showAttribution: !branding.hideAttribution,
+          // Match the live embed: the stored flag only removes the footer when
+          // the plan still grants the paid hide-attribution feature.
+          showAttribution: !(branding.hideAttribution && hideAttributionAllowed),
           sections: settings.sections,
         }}
       />
@@ -363,11 +372,9 @@ export default async function WidgetPage({
               <code className="rounded border bg-muted px-1 py-0.5 font-mono text-[10.5px] text-foreground">
                 data-sections
               </code>{" "}
-              — comma-separated extra panels:{" "}
-              <code className="font-mono text-[10.5px]">feedback</code>,{" "}
-              <code className="font-mono text-[10.5px]">roadmap</code>,{" "}
-              <code className="font-mono text-[10.5px]">messages</code>. Omit for
-              every available panel; an empty value hides them all.
+              — legacy fallback for installations without saved widget settings.{" "}
+              The Widget sections above are authoritative; a tag cannot re-enable
+              a panel disabled there.
             </li>
             <li>
               <code className="rounded border bg-muted px-1 py-0.5 font-mono text-[10.5px] text-foreground">

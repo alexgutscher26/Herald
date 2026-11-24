@@ -91,7 +91,7 @@ export async function PublicRequestView({
       <main
         id="public-main"
         tabIndex={-1}
-        className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 sm:py-8"
+        className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-28 sm:px-6 sm:pt-8 sm:pb-12"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Link

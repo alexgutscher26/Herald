@@ -232,6 +232,17 @@ export function cleanAnswer(raw: string, maxChars = 4_000): string {
   return raw
     .replace(/^\s*(answer|response)\s*:\s*/i, "")
     .replace(/\s*\[\d+\]\s*$/g, "")
+    // Models occasionally wrap words in HTML. Strip those tags so neither the
+    // widget nor the email copy shows literal <b> or <br> markup, but leave
+    // code spans and fences alone: `</body>` in an install snippet is content,
+    // not markup. The remaining text is still rendered as Markdown.
+    .replace(
+      /(```[\s\S]*?```|`[^`\n]*`)|<\/?[a-z][^>]*>/gi,
+      (match: string, code: string | undefined) => {
+        if (code) return code;
+        return /^<br\b/i.test(match) ? "\n" : "";
+      },
+    )
     .trim()
     .slice(0, maxChars);
 }

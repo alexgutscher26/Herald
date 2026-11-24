@@ -1,20 +1,26 @@
 "use client";
 
 import {
-  ArrowRight,
+  ArrowLeft,
   ArrowUpRight,
   Bell,
+  BookOpen,
+  Camera,
   Check,
   CheckCircle2,
   Code2,
   Copy,
   ExternalLink,
+  House,
   KeyRound,
   Lock,
+  Megaphone,
+  MessageCircle,
+  MessagesSquare,
   Monitor,
   Moon,
+  Paperclip,
   RefreshCw,
-  Search,
   ShieldCheck,
   SlidersHorizontal,
   Smartphone,
@@ -26,7 +32,12 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type CSSProperties } from "react";
+import {
+  useState,
+  useTransition,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { toast } from "sonner";
 
 import { toastActionFailure } from "@/components/shared/action-toast";
@@ -39,6 +50,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { accessibleAccent, foregroundFor } from "@/features/branding/schema";
+import type { PublicReleaseCover } from "@/features/public/types";
 import { cn } from "@/lib/utils";
 
 import {
@@ -49,6 +61,23 @@ import {
 } from "./policy";
 import { saveWidgetSettingsAction } from "./settings-actions";
 import type { WidgetSettingsView } from "./settings";
+import {
+  WidgetFeedbackView,
+  type WidgetFeedbackLabels,
+  type WidgetFeedbackRow,
+} from "./feedback-view";
+import {
+  WidgetHelpView,
+  type WidgetHelpCollectionView,
+  type WidgetHelpLabels,
+} from "./help-view";
+import {
+  WidgetFeedbackDetailView,
+  type WidgetFeedbackDetailComment,
+} from "./feedback-detail-view";
+import { WidgetHomeView, type WidgetHomeAction } from "./home-view";
+import { WidgetMessagesListView } from "./messages-list-view";
+import { WidgetWhatsNewView } from "./whats-new-view";
 
 type Check = { label: string; ok: boolean; detail: string };
 
@@ -57,6 +86,7 @@ export type WidgetPreviewEntry = {
   title: string;
   summary: string;
   category: "feature" | "improvement" | "fix";
+  cover: PublicReleaseCover;
   publishedLabel: string;
 };
 
@@ -114,13 +144,6 @@ const SECTION_OPTIONS: {
     description: "Show published collections and answers in the widget.",
   },
 ];
-
-const SECTION_LABELS: Record<WidgetSection, string> = {
-  help: "Help",
-  feedback: "Feedback",
-  roadmap: "Roadmap",
-  messages: "Messages",
-};
 
 const POSITION_DOT: Record<WidgetPosition, string> = {
   "bottom-right": "bottom-1 right-1",
@@ -208,27 +231,552 @@ function Segmented<T extends string>({
   );
 }
 
-function CategoryPill({ category }: { category: WidgetPreviewEntry["category"] }) {
-  const label =
-    category === "feature"
-      ? "Feature"
-      : category === "improvement"
-        ? "Improvement"
-        : "Fix";
+type PreviewTab = "home" | "messages" | "help" | "feedback" | "updates";
+
+type PreviewTabItem = {
+  key: PreviewTab;
+  label: string;
+  icon: LucideIcon;
+};
+
+const PREVIEW_FEEDBACK_ROWS: WidgetFeedbackRow[] = [
+  {
+    id: "preview-linear",
+    title: "Linear Integration",
+    body: "Integrate directly with linear for creating / updating requests and the product roadmap.",
+    authorName: "Shayan Taslim",
+    status: "planned",
+    voteCount: 147,
+    votesAria: "147 votes",
+    createdAt: "2025-11-22T10:00:00.000Z",
+    href: "#request",
+  },
+  {
+    id: "preview-csv",
+    title: "Add CSV export to reports",
+    body: "Let me share report data with finance without copying it by hand.",
+    authorName: "Maya Chen",
+    status: "open",
+    voteCount: 12,
+    votesAria: "12 votes",
+    createdAt: "2026-11-22T10:00:00.000Z",
+    href: "#request",
+  },
+  {
+    id: "preview-dark-mode",
+    title: "Dark mode for the dashboard",
+    body: "Easier on the eyes when working late.",
+    authorName: "Leo Martins",
+    status: "planned",
+    voteCount: 8,
+    votesAria: "8 votes",
+    createdAt: "2026-11-20T10:00:00.000Z",
+    href: "#request",
+  },
+  {
+    id: "preview-custom-fields",
+    title: "Custom fields on requests",
+    body: "Capture plan and region on every request.",
+    authorName: "Priya Shah",
+    status: "shipped",
+    voteCount: 5,
+    votesAria: "5 votes",
+    createdAt: "2026-11-18T10:00:00.000Z",
+    href: "#request",
+  },
+];
+
+const PREVIEW_FEEDBACK_LABELS: WidgetFeedbackLabels = {
+  title: "Feedback",
+  search: "Search feedback",
+  noResults: "No feedback matches your search.",
+  noMatches: "No feedback matches these filters.",
+  searchHint: "Try another word or submit your own feedback.",
+  filterHint: "Try another search or status.",
+  filters: "Filter feedback",
+  sortSection: "Sort",
+  statusSection: "Status",
+  sortTop: "Top",
+  sortNew: "New",
+  sortTrending: "Trending",
+  statuses: {
+    open: "Open",
+    under_review: "Under review",
+    planned: "Planned",
+    in_progress: "In progress",
+    shipped: "Shipped",
+    closed: "Closed",
+  },
+  submit: "Submit feedback",
+  list: "Feedback requests",
+  emptyTitle: "No feedback yet",
+  emptyBody: "Submit the first request to get started.",
+};
+
+const PREVIEW_REQUEST_VOTERS = [
+  "Shayan Taslim",
+  "Ian Hunter",
+  "Jeffrey Zang",
+  "Maya Chen",
+];
+
+const PREVIEW_REQUEST_COMMENTS: WidgetFeedbackDetailComment[] = [
+  {
+    id: "preview-comment-ian",
+    authorName: "Ian Hunter",
+    body: "This would be insanely helpful.",
+    ageLabel: "1y",
+    voteCount: 7,
+  },
+  {
+    id: "preview-comment-jeffrey-one",
+    authorName: "Jeffrey Zang",
+    body: "+1",
+    ageLabel: "1y",
+    voteCount: 2,
+  },
+  {
+    id: "preview-comment-jeffrey-sync",
+    authorName: "Jeffrey Zang",
+    body: "Sync with GitHub Issues would be amazing as well",
+    ageLabel: "1y",
+    voteCount: 6,
+  },
+];
+
+const PREVIEW_HELP_COLLECTIONS: WidgetHelpCollectionView[] = [
+  {
+    id: "preview-start",
+    slug: "getting-started",
+    name: "Getting started",
+    description: "Set up your workspace and first board.",
+    articles: [
+      { id: "preview-start-1", title: "Create your first board", href: "#" },
+      { id: "preview-start-2", title: "Invite your team", href: "#" },
+      { id: "preview-start-3", title: "Publish your first update", href: "#" },
+    ],
+  },
+  {
+    id: "preview-feedback",
+    slug: "feedback-roadmap",
+    name: "Feedback & roadmap",
+    description: "Collect requests and show what is planned.",
+    articles: [
+      { id: "preview-feedback-1", title: "Review incoming requests", href: "#" },
+      { id: "preview-feedback-2", title: "Move a request across the roadmap", href: "#" },
+      { id: "preview-feedback-3", title: "Merge duplicate feedback", href: "#" },
+    ],
+  },
+  {
+    id: "preview-widget",
+    slug: "widget-install",
+    name: "Widget & install",
+    description: "Put Herald inside your product.",
+    articles: [
+      { id: "preview-widget-1", title: "Install the widget", href: "#" },
+      { id: "preview-widget-2", title: "Theme and position", href: "#" },
+    ],
+  },
+];
+
+const PREVIEW_HELP_LABELS: WidgetHelpLabels = {
+  title: "Help & Support",
+  search: "Search help",
+  noResults: "No help articles match your search.",
+  searchHint: "Try a shorter phrase or browse a collection.",
+  back: "Back to help",
+  articles: "articles",
+  articleOne: "article",
+  emptyTitle: "No help articles yet",
+  emptyBody: "No help articles have been published yet.",
+  noArticles: "No articles have been published in this collection yet.",
+};
+
+function previewCategoryLabel(
+  category: WidgetPreviewEntry["category"],
+): string {
+  return category === "feature"
+    ? "Feature"
+    : category === "improvement"
+      ? "Improvement"
+      : "Fix";
+}
+
+function initialPreviewTab(sections: WidgetSection[]): PreviewTab {
+  if (sections.includes("feedback")) return "feedback";
+  if (sections.includes("help")) return "help";
+  if (sections.includes("messages")) return "messages";
+  return "home";
+}
+
+/** Preview links stay inert; hash links route to an in-preview tab. */
+function PreviewLinkGuard({
+  children,
+  onNavigate,
+}: {
+  children: ReactNode;
+  onNavigate?: (target: string) => void;
+}) {
+  return (
+    <div
+      className="flex min-h-full flex-col"
+      onClickCapture={(event) => {
+        const anchor = (event.target as HTMLElement).closest("a");
+        if (!anchor) return;
+        event.preventDefault();
+        const href = anchor.getAttribute("href");
+        if (href?.startsWith("#")) onNavigate?.(href.slice(1));
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function PreviewHeader({
+  preview,
+  onClose,
+}: {
+  preview: WidgetPreviewData;
+  onClose: () => void;
+}) {
+  const initial = preview.productName.trim().charAt(0).toUpperCase() || "H";
 
   return (
-    <span
-      className={cn(
-        "inline-flex rounded-full px-1.5 py-0.5 text-[9px] font-semibold",
-        category === "feature"
-          ? "bg-primary/10 text-primary"
-          : category === "improvement"
-            ? "bg-info-muted text-info"
-            : "bg-warning-muted text-warning",
-      )}
+    <header className="flex shrink-0 items-center justify-between gap-3 px-4 pb-1.5 pt-3">
+      <div className="flex min-w-0 items-center gap-2.5">
+        <span
+          aria-hidden="true"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] font-bold"
+          style={{
+            backgroundColor: preview.accentColor,
+            color: foregroundFor(preview.accentColor),
+          }}
+        >
+          {initial}
+        </span>
+        <p className="truncate text-[15px] font-semibold tracking-tight">
+          {preview.productName}
+        </p>
+      </div>
+
+      <div className="flex shrink-0 items-center gap-0.5">
+        <span
+          aria-hidden="true"
+          className="relative inline-flex size-8 items-center justify-center rounded-full text-muted-foreground"
+        >
+          <Bell className="size-4" strokeWidth={1.8} />
+          {preview.entries.length > 0 ? (
+            <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-primary ring-2 ring-background" />
+          ) : null}
+        </span>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close widget preview"
+          className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <X className="size-4" aria-hidden="true" />
+        </button>
+      </div>
+    </header>
+  );
+}
+
+function PreviewTabBar({
+  tabs,
+  active,
+  onSelect,
+}: {
+  tabs: PreviewTabItem[];
+  active: PreviewTab;
+  onSelect: (tab: PreviewTab) => void;
+}) {
+  return (
+    <nav
+      aria-label="Widget sections preview"
+      className="shrink-0 border-t border-border/70 bg-card/70 px-1.5 pt-1"
     >
-      {label}
-    </span>
+      <ul className="flex items-stretch">
+        {tabs.map((item) => {
+          const current = item.key === active;
+          const Icon = item.icon;
+
+          return (
+            <li key={item.key} className="min-w-0 flex-1">
+              <button
+                type="button"
+                onClick={() => onSelect(item.key)}
+                aria-current={current ? "page" : undefined}
+                className="group flex min-h-14 w-full flex-col items-center justify-center gap-1 rounded-xl px-0.5 py-1.5 transition-transform duration-150 active:scale-[0.97]"
+              >
+                <span
+                  className={cn(
+                    "flex h-7 w-11 items-center justify-center rounded-full transition-[background-color,color,box-shadow] duration-200",
+                    current
+                      ? "bg-foreground text-background shadow-sm"
+                      : "text-muted-foreground group-hover:bg-muted group-hover:text-foreground",
+                  )}
+                >
+                  <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
+                </span>
+                <span
+                  className={cn(
+                    "w-full truncate text-center text-[10px] leading-none",
+                    current
+                      ? "font-semibold text-foreground"
+                      : "font-medium text-muted-foreground",
+                  )}
+                >
+                  {item.label}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+function PreviewHomeScreen({
+  preview,
+  onOpenMessages,
+  onOpenHelp,
+  onCompose,
+  onOpenUpdates,
+}: {
+  preview: WidgetPreviewData;
+  onOpenMessages: () => void;
+  onOpenHelp: () => void;
+  onCompose: () => void;
+  onOpenUpdates: () => void;
+}) {
+  const latest = preview.entries[0] ?? null;
+  const productInitial = preview.productName.trim().charAt(0).toUpperCase() || "H";
+  const actions: WidgetHomeAction[] = [];
+
+  if (preview.sections.includes("help")) {
+    actions.push({ href: "#help", label: "Search for help", icon: "help" });
+  }
+  if (preview.sections.includes("feedback")) {
+    actions.push({ href: "#compose", label: "Submit a request", icon: "request" });
+  }
+  if (preview.sections.includes("roadmap")) {
+    actions.push({ href: "#roadmap", label: "Roadmap", icon: "roadmap" });
+  }
+
+  return (
+    <PreviewLinkGuard
+      onNavigate={(target) => {
+        if (target === "messages") onOpenMessages();
+        else if (target === "help") onOpenHelp();
+        else if (target === "compose") onCompose();
+        else if (target === "updates") onOpenUpdates();
+      }}
+    >
+      <WidgetHomeView
+        productInitial={productInitial}
+        accentColor={preview.accentColor}
+        accentForeground={foregroundFor(preview.accentColor)}
+        greeting="Hi there"
+        title={`What's new in ${preview.productName}`}
+        message={
+          preview.sections.includes("messages")
+            ? {
+                href: "#messages",
+                title: "Send us a message",
+                body: "Ask a question or share what you need.",
+                placeholder: "Write a message…",
+              }
+            : null
+        }
+        actions={actions}
+        latestUpdate={
+          latest
+            ? {
+                id: latest.id,
+                href: "#updates",
+                title: latest.title,
+                summary: latest.summary,
+                category: latest.category,
+                cover: latest.cover,
+                dateLabel: latest.publishedLabel,
+              }
+            : null
+        }
+        moreUpdates={preview.entries.slice(1, 3).map((entry) => ({
+          id: entry.id,
+          href: "#updates",
+          title: entry.title,
+        }))}
+        updatesHref="#updates"
+        labels={{
+          latestUpdate: "Latest update",
+          viewAllUpdates: "View all updates",
+          emptyTitle: "No published updates yet",
+          emptyBody: "Publish a changelog entry to see it here.",
+        }}
+        updatesEnabled
+      />
+    </PreviewLinkGuard>
+  );
+}
+
+function PreviewMessagesScreen({ preview }: { preview: WidgetPreviewData }) {
+  return (
+    <WidgetMessagesListView
+      items={[]}
+      labels={{
+        title: "Messages",
+        emptyTitle: "No messages yet",
+        emptyBody: "Ask a question or report a bug, and we'll reply right here.",
+        newConversation: "New conversation",
+      }}
+      productInitial={preview.productName.trim().charAt(0).toUpperCase() || "H"}
+      onNewConversation={() => {}}
+    />
+  );
+}
+
+function PreviewFeedbackScreen({
+  onCompose,
+  onOpenRequest,
+}: {
+  onCompose: () => void;
+  onOpenRequest: (id: string) => void;
+}) {
+  return (
+    <PreviewLinkGuard
+      onNavigate={(target) => {
+        if (target === "compose") onCompose();
+        else if (target.startsWith("request-")) {
+          onOpenRequest(target.slice("request-".length));
+        }
+      }}
+    >
+      <WidgetFeedbackView
+        rows={PREVIEW_FEEDBACK_ROWS.map((row) => ({
+          ...row,
+          href: `#request-${row.id}`,
+        }))}
+        labels={PREVIEW_FEEDBACK_LABELS}
+        submitHref="#compose"
+        locale="en"
+      />
+    </PreviewLinkGuard>
+  );
+}
+
+function PreviewHelpScreen() {
+  return (
+    <PreviewLinkGuard>
+      <WidgetHelpView
+        collections={PREVIEW_HELP_COLLECTIONS}
+        labels={PREVIEW_HELP_LABELS}
+      />
+    </PreviewLinkGuard>
+  );
+}
+
+function PreviewUpdatesScreen({ preview }: { preview: WidgetPreviewData }) {
+  const items = preview.entries.map((entry) => ({
+    id: entry.id,
+    title: entry.title,
+    summary: entry.summary,
+    category: entry.category,
+    categoryLabel: previewCategoryLabel(entry.category),
+    dateLabel: entry.publishedLabel,
+    href: "#",
+  }));
+
+  return (
+    <PreviewLinkGuard>
+      <div className="pb-1">
+        <div className="pt-1">
+          <h1 className="text-lg font-semibold tracking-tight">Updates</h1>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Latest news from {preview.productName}.
+          </p>
+        </div>
+        <div className="mt-3">
+          <WidgetWhatsNewView
+            items={items}
+            labels={{
+              search: "Search updates…",
+              noResults: "No updates match your search.",
+              emptyTitle: "No published updates yet",
+              emptyBody: "Publish a changelog entry to see it here.",
+            }}
+          />
+        </div>
+      </div>
+    </PreviewLinkGuard>
+  );
+}
+
+function PreviewComposeScreen({
+  showAttribution,
+  onBack,
+  onClose,
+}: {
+  showAttribution: boolean;
+  onBack: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col">
+      <header className="grid shrink-0 grid-cols-[2rem_1fr_2rem] items-center gap-2 px-2 pb-1 pt-2">
+        <button
+          type="button"
+          onClick={onBack}
+          aria-label="Back to feedback"
+          className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+        </button>
+        <p className="truncate text-center text-[14px] font-semibold">
+          Give feedback
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close widget preview"
+          className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <X className="size-4" aria-hidden="true" />
+        </button>
+      </header>
+
+      <div className="widget-scrollbars-hidden min-h-0 flex-1 overflow-y-auto px-4 py-2">
+        <p className="text-[18px] font-semibold leading-snug text-muted-foreground/50">
+          Title
+        </p>
+        <p className="mt-4 text-[14px] leading-relaxed text-muted-foreground/60">
+          What&apos;s on your mind?
+        </p>
+      </div>
+
+      <div className="flex shrink-0 items-center justify-between gap-3 border-t border-border/70 px-3 py-2">
+        <div className="flex items-center gap-1 text-muted-foreground" aria-hidden="true">
+          <span className="inline-flex size-8 items-center justify-center rounded-full">
+            <Paperclip className="size-4" />
+          </span>
+          <span className="inline-flex size-8 items-center justify-center rounded-full">
+            <Camera className="size-4" />
+          </span>
+        </div>
+        <span className="inline-flex h-9 items-center rounded-full bg-foreground px-4 text-[12px] font-semibold text-background">
+          Post
+        </span>
+      </div>
+
+      {showAttribution ? (
+        <p className="shrink-0 pb-1.5 text-center text-[8.5px] leading-tight text-muted-foreground/80">
+          Powered by Herald
+        </p>
+      ) : null}
+    </div>
   );
 }
 
@@ -253,9 +801,6 @@ function WidgetPreviewPanel({
   // and brand accent variables. Without them every colour token resolves
   // against the dashboard palette, which paints light text on the hardcoded
   // light surface whenever the dashboard itself is dark.
-  const border = "border-border/70";
-  const muted = "text-muted-foreground";
-  const panelSurface = "border-border/80 bg-card text-card-foreground";
   const accent = accessibleAccent(preview.accentColor);
   const panelScope = {
     "--brand-accent-light": accent.onLight,
@@ -264,14 +809,68 @@ function WidgetPreviewPanel({
     "--brand-accent-dark-fg": accent.foregroundOnDark,
   } as CSSProperties;
   const launcherText = foregroundFor(preview.accentColor);
+  const [tab, setTab] = useState<PreviewTab>(() =>
+    initialPreviewTab(preview.sections),
+  );
+  const [composing, setComposing] = useState(false);
+  const [requestId, setRequestId] = useState<string | null>(null);
+
+  const tabs: PreviewTabItem[] = [
+    { key: "home", label: "Home", icon: House },
+  ];
+  if (preview.sections.includes("messages")) {
+    tabs.push({ key: "messages", label: "Messages", icon: MessagesSquare });
+  }
+  if (preview.sections.includes("help")) {
+    tabs.push({ key: "help", label: "Help", icon: BookOpen });
+  }
+  if (preview.sections.includes("feedback")) {
+    tabs.push({ key: "feedback", label: "Feedback", icon: MessageCircle });
+  }
+  tabs.push({ key: "updates", label: "Updates", icon: Megaphone });
+
+  const activeTab = tabs.some((item) => item.key === tab)
+    ? tab
+    : initialPreviewTab(preview.sections);
+  const selectedRequest =
+    requestId === null
+      ? null
+      : PREVIEW_FEEDBACK_ROWS.find((row) => row.id === requestId) ?? null;
+  const composingVisible = composing && activeTab === "feedback";
+  const requestVisible =
+    !composingVisible && activeTab === "feedback" && selectedRequest !== null;
+
+  function openPreview() {
+    setComposing(false);
+    setRequestId(null);
+    onOpen();
+  }
+
+  function closePreview() {
+    setComposing(false);
+    setRequestId(null);
+    onClose();
+  }
+
+  function selectTab(next: PreviewTab) {
+    setTab(next);
+    setComposing(false);
+    setRequestId(null);
+  }
+
+  function openRequest(id: string) {
+    setTab("feedback");
+    setComposing(false);
+    setRequestId(id);
+  }
 
   if (!open) {
     return (
       <button
         type="button"
-        onClick={onOpen}
+        onClick={openPreview}
         className={cn(
-          "absolute z-10 inline-flex items-center gap-2 rounded-full px-3.5 py-2.5 text-[11px] font-semibold shadow-[0_10px_24px_rgba(23,22,20,0.22)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "absolute z-10 inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2.5 text-[12px] font-semibold shadow-[0_10px_24px_rgba(23,22,20,0.22)] transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
           PREVIEW_POSITION[position],
         )}
         style={{
@@ -294,152 +893,88 @@ function WidgetPreviewPanel({
     <div
       className={cn(
         `public-theme-${theme} public-brand-accent`,
-        "absolute z-10 flex max-h-[calc(100%-4.25rem)] flex-col overflow-hidden rounded-xl border shadow-[0_20px_48px_rgba(23,22,20,0.24)]",
-        panelSurface,
+        "absolute z-10 flex h-[480px] max-h-[calc(100%-4.25rem)] flex-col overflow-hidden rounded-[22px] border border-border/80 bg-background text-foreground shadow-[0_20px_48px_rgba(23,22,20,0.24)]",
         PREVIEW_POSITION[position],
         device === "mobile"
           ? "w-[calc(100%-1rem)]"
-          : "w-[min(304px,calc(100%-1.5rem))]",
+          : "w-[min(380px,calc(100%-1.5rem))]",
       )}
       style={panelScope}
     >
-      <div
-        className={cn(
-          "flex shrink-0 items-start justify-between gap-2 border-b px-3.5 py-3",
-          border,
-        )}
-      >
-        <div className="flex min-w-0 items-start gap-2">
-          <span
-            className="mt-1 size-2 shrink-0 rounded-full"
-            style={{ backgroundColor: preview.accentColor }}
-            aria-hidden="true"
+      {composingVisible ? (
+        <PreviewComposeScreen
+          showAttribution={preview.showAttribution}
+          onBack={() => setComposing(false)}
+          onClose={closePreview}
+        />
+      ) : requestVisible && selectedRequest ? (
+        <WidgetFeedbackDetailView
+          request={{
+            title: selectedRequest.title,
+            body: selectedRequest.body,
+            authorName: selectedRequest.authorName,
+            status: selectedRequest.status,
+            statusLabel: PREVIEW_FEEDBACK_LABELS.statuses[selectedRequest.status],
+            voteCount: selectedRequest.voteCount,
+          }}
+          comments={PREVIEW_REQUEST_COMMENTS}
+          voters={PREVIEW_REQUEST_VOTERS}
+          labels={{
+            header: "Request",
+            commentPlaceholder: "Add a comment...",
+            reply: "Reply",
+            attribution: "Powered by Herald",
+          }}
+          onBack={() => setRequestId(null)}
+          onClose={closePreview}
+          showAttribution={preview.showAttribution}
+        />
+      ) : (
+        <>
+          <PreviewHeader preview={preview} onClose={closePreview} />
+
+          <div className="widget-scrollbars-hidden min-h-0 flex-1 overflow-y-auto px-4 py-2">
+            {activeTab === "home" ? (
+              <PreviewHomeScreen
+                preview={preview}
+                onOpenMessages={() => selectTab("messages")}
+                onOpenHelp={() => selectTab("help")}
+                onCompose={() => {
+                  setTab("feedback");
+                  setComposing(true);
+                }}
+                onOpenUpdates={() => selectTab("updates")}
+              />
+            ) : activeTab === "messages" ? (
+              <PreviewMessagesScreen preview={preview} />
+            ) : activeTab === "help" ? (
+              <PreviewHelpScreen />
+            ) : activeTab === "feedback" ? (
+              <PreviewFeedbackScreen
+                onCompose={() => {
+                  setRequestId(null);
+                  setComposing(true);
+                }}
+                onOpenRequest={openRequest}
+              />
+            ) : (
+              <PreviewUpdatesScreen preview={preview} />
+            )}
+          </div>
+
+          <PreviewTabBar
+            tabs={tabs}
+            active={activeTab}
+            onSelect={selectTab}
           />
-          <div className="min-w-0">
-            <p className="truncate text-[12.5px] font-semibold leading-tight">
-              What&apos;s new in {preview.productName}
+
+          {preview.showAttribution ? (
+            <p className="shrink-0 pb-1.5 text-center text-[8.5px] leading-tight text-muted-foreground/80">
+              Powered by Herald
             </p>
-            <p className={cn("mt-0.5 truncate text-[10px]", muted)}>
-              Latest product updates
-            </p>
-          </div>
-        </div>
-        <div className="flex shrink-0 items-center gap-1">
-          {preview.entries.length > 0 ? (
-            <span
-              className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary"
-            >
-              {preview.entries.length} new
-            </span>
           ) : null}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close widget preview"
-                          className="inline-flex size-6 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <X className="size-3.5" aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-
-      {preview.sections.length > 0 ? (
-        <div
-          className={cn(
-            "flex shrink-0 items-center gap-1 overflow-hidden border-b px-3 py-1.5 text-[9.5px]",
-            border,
-          )}
-        >
-          <span className="rounded bg-primary/10 px-1.5 py-0.5 font-medium text-primary">
-            What&apos;s new
-          </span>
-          {preview.sections.map((section) => (
-            <span key={section} className={cn("rounded px-1.5 py-0.5", muted)}>
-              {SECTION_LABELS[section]}
-            </span>
-          ))}
-        </div>
-      ) : null}
-
-      <div className="min-h-0 overflow-y-auto [scrollbar-width:thin]">
-        {preview.entries.length === 0 ? (
-          <div className="px-4 py-7 text-center">
-            <span
-              className={cn(
-                "mx-auto flex size-8 items-center justify-center rounded-full border text-muted-foreground",
-                border,
-              )}
-            >
-              <Bell className="size-3.5" aria-hidden="true" />
-            </span>
-            <p className="mt-2 text-[11.5px] font-medium">
-              No published updates yet
-            </p>
-            <p className={cn("mt-1 text-[10px] leading-relaxed", muted)}>
-              Publish a changelog entry to see it here.
-            </p>
-          </div>
-        ) : (
-          preview.entries.slice(0, 2).map((entry, index) => (
-            <article
-              key={entry.id}
-              className={cn(
-                "px-3.5 py-3",
-                index < Math.min(preview.entries.length, 2) - 1 && "border-b",
-                border,
-              )}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <CategoryPill category={entry.category} />
-                <span className={cn("text-[9.5px]", muted)}>
-                  {entry.publishedLabel}
-                </span>
-              </div>
-              <h4 className="mt-1.5 text-[11.5px] font-semibold leading-snug">
-                {entry.title}
-              </h4>
-              <p
-                className={cn(
-                  "mt-1 line-clamp-2 text-[10px] leading-relaxed",
-                  muted,
-                )}
-              >
-                {entry.summary}
-              </p>
-            </article>
-          ))
-        )}
-      </div>
-
-      <div className={cn("shrink-0 border-t px-3 py-2", border)}>
-        <div
-          className={cn(
-            "flex items-center gap-1.5 rounded-md border px-2 py-1.5 text-[10px]",
-            border,
-            "bg-muted/30",
-            muted,
-          )}
-        >
-          <Search className="size-3 shrink-0" aria-hidden="true" />
-          <span>Search updates…</span>
-        </div>
-      </div>
-
-      <div
-        className={cn(
-          "flex shrink-0 items-center justify-between gap-2 border-t px-3 py-2.5 text-[9.5px]",
-          border,
-          muted,
-        )}
-      >
-        <span
-          className="inline-flex items-center gap-1 font-medium text-primary"
-        >
-          View all updates
-          <ArrowRight className="size-2.5" aria-hidden="true" />
-        </span>
-        {preview.showAttribution ? <span>Powered by Herald</span> : null}
-      </div>
+        </>
+      )}
     </div>
   );
 }
@@ -675,6 +1210,7 @@ function WidgetPreviewCard({
             </div>
 
             <WidgetPreviewPanel
+              key={open ? "open" : "closed"}
               position={position}
               theme={theme}
               preview={preview}
@@ -741,6 +1277,17 @@ export function WidgetSettingsView({
   const [saving, startSave] = useTransition();
   const [checking, setChecking] = useState(false);
   const [checks, setChecks] = useState<Check[] | null>(null);
+
+  // Keep the install snippet in step with the controls above, even before the
+  // operator saves. The server-rendered snippet supplies the stable loader,
+  // key and accent attributes; these three are the customizer's choices.
+  const currentSnippet = snippet
+    .replace(/data-position="[^"]*"/, `data-position="${position}"`)
+    .replace(/data-theme="[^"]*"/, `data-theme="${theme}"`)
+    .replace(
+      /data-sections="[^"]*"/,
+      `data-sections="${sections.join(",")}"`,
+    );
 
   function copyText(value: string, label: string) {
     void navigator.clipboard
@@ -1174,7 +1721,10 @@ export function WidgetSettingsView({
           description={
             <>
               Add this once before <code>&lt;/body&gt;</code>. The loader reads
-              its project, key, position, theme and sections from the tag.
+              its project, key and launcher defaults from the tag. The Widget
+              sections above decide which optional panels are served, including
+              for already-installed tags. The snippet follows your current
+              choices; save them to apply the same sections live.
             </>
           }
           badge={
@@ -1213,7 +1763,7 @@ export function WidgetSettingsView({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => copyText(snippet, "Installation snippet")}
+                  onClick={() => copyText(currentSnippet, "Installation snippet")}
                   className="h-6 gap-1.5 rounded px-2 text-[10px] text-white/65 hover:bg-white/10 hover:text-white"
                 >
                   <Copy className="size-3" aria-hidden="true" />
@@ -1221,7 +1771,7 @@ export function WidgetSettingsView({
                 </Button>
               </div>
               <pre className="max-h-44 overflow-auto p-3 font-mono text-[10px] leading-[1.7] text-[#f4f3ee] [scrollbar-color:rgba(255,255,255,0.25)_transparent] [scrollbar-width:thin]">
-                <code>{snippet}</code>
+                <code>{currentSnippet}</code>
               </pre>
             </div>
 

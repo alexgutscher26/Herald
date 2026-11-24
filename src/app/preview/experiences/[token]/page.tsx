@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import type { ExperienceCopy } from "@/db/schema/engagement";
 import { resolveExperiencePreview } from "@/features/engagement/preview";
+import { WIDGET_ASSET_REVISION } from "@/features/widget/paths";
 import { readWidgetAccessSettings } from "@/features/widget/settings";
 
 /**
@@ -110,7 +111,7 @@ export default async function ExperiencePreviewPage({
 
       <script
         async
-        src="/widget/v1.js"
+        src={`/widget/v1.js?v=${WIDGET_ASSET_REVISION}`}
         data-project={`${preview.workspaceSlug}/${preview.productSlug}`}
         data-key={settings?.publicKey}
         data-preview={token}

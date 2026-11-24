@@ -6,7 +6,7 @@ The widget has two independently versioned pieces:
 | --- | --- | --- |
 | Loader URL | `v1` | `/widget/v1.js`, `/widget/v1.css` |
 | Loader/frame handshake | `1` | `HeraldWidget.protocol`, the embed postMessage contract |
-| Snippet cache key | `v=6` | `src` query in the dashboard snippet |
+| Snippet cache key | `v=8` | `src` query in the dashboard snippet |
 
 `HeraldWidget.version` is the major URL (`"v1"`). The handshake revision is a
 number so a future loader can accept an older frame without parsing a string.
@@ -21,7 +21,7 @@ HeraldWidget.protocol; // 1
 
 The URL is served `Cache-Control: public, max-age=31536000, immutable`, so a
 cached copy never changes. The dashboard snippet adds a cache key
-(`/widget/v1.js?v=6`); when a release changes the loader, the key is bumped and
+(`/widget/v1.js?v=8`); when a release changes the loader, the key is bumped and
 a copied snippet fetches the new bytes while old pages keep the version they
 already downloaded.
 
@@ -77,7 +77,7 @@ revision bump.
 Only the `src` value changes; the data attributes keep their names:
 
 ```diff
-- src="https://herald.example.com/widget/v1.js?v=6"
+- src="https://herald.example.com/widget/v1.js?v=8"
 + src="https://herald.example.com/widget/v2.js?v=1"
 ```
 
@@ -101,6 +101,6 @@ copied the new snippet.
 
 ## Cache keys are not versions
 
-`?v=6` is only a browser cache key. It is not compared by the frame and it does
+`?v=8` is only a browser cache key. It is not compared by the frame and it does
 not change the API. The dashboard writes the current key into the snippet
 automatically; do not hand-edit it.

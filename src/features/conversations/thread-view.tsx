@@ -19,6 +19,7 @@ import { useAnnounce } from "@/features/accessibility/live-announcer";
 
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { DualTimestamp } from "@/components/shared/dual-timestamp";
+import { Markdown } from "@/components/shared/markdown";
 import {
   usePageShortcuts,
   type KeyboardShortcut,
@@ -653,9 +654,18 @@ export function ThreadView({
                       </Badge>
                       <DualTimestamp iso={message.createdAt} timeZone={workspaceTimezone} />
                     </div>
-                    <p className="mt-1.5 break-words text-sm whitespace-pre-wrap text-foreground">
-                      {message.body}
-                    </p>
+                    {message.authorType === "juno" ? (
+                      <Markdown
+                        skipHtml
+                        className="message-markdown mt-1.5 text-sm text-foreground"
+                      >
+                        {message.body}
+                      </Markdown>
+                    ) : (
+                      <p className="mt-1.5 break-words text-sm whitespace-pre-wrap text-foreground">
+                        {message.body}
+                      </p>
+                    )}
                     {message.citations && message.citations.length > 0 ? (
                       <div className="mt-2 border-t pt-2">
                         <p className="text-xs font-medium text-muted-foreground">

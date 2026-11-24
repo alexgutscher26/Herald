@@ -138,16 +138,18 @@ export default async function WidgetEmbedPage({
     originOverride?.position ?? widgetSettings?.position ?? "bottom-right";
   const t = createTranslator(locale).t;
 
-  // The snippet picks which optional panels to show; the product still gates
-  // whether feedback, a roadmap or messages are publicly available at all.
+  // Saved widget settings are authoritative for the optional panels. The
+  // tag's data-sections is only a fallback when no settings row exists, so a
+  // customizer change also reaches installations carrying an older script.
   const requestedSections = parseWidgetSections(first(search.sections));
   const availableSections = (["feedback", "roadmap", "help", "messages"] as const).filter(
     (section) => shell.panels[section],
   );
-  const sections: WidgetSection[] =
-    requestedSections === null
-      ? availableSections
-      : requestedSections.filter((section) => availableSections.includes(section));
+  const panelSections =
+    widgetSettings?.sections ?? requestedSections ?? availableSections;
+  const sections: WidgetSection[] = panelSections.filter((section) =>
+    availableSections.includes(section),
+  );
 
   const widgetQuery: WidgetQuery = {
     theme: requestedTheme,
@@ -184,8 +186,7 @@ export default async function WidgetEmbedPage({
           shell={shell}
           page={updates}
           accentColor={site.primaryColor || "#1f6b45"}
-          hideAttribution={site.hideAttribution}
-          hostOrigin={hostOrigin}
+          accentForeground={foregroundFor(site.primaryColor || "#1f6b45")}
           t={t}
           locale={locale}
           translationEnabled={site.contentTranslationEnabled}
@@ -238,6 +239,7 @@ export default async function WidgetEmbedPage({
             page={page}
             t={t}
             query={widgetQuery}
+            hostOrigin={hostOrigin}
           />
         );
         break;
@@ -256,7 +258,7 @@ export default async function WidgetEmbedPage({
               status: first(search.status),
               tag: first(search.tag),
               q: first(search.q),
-              pageSize: "8",
+              pageSize: "50",
             }),
           )
         : null;
@@ -349,7 +351,6 @@ export default async function WidgetEmbedPage({
           workspaceSlug={shell.workspace.slug}
           productSlug={shell.product.slug}
           t={t}
-          locale={locale}
         />
       );
       break;
@@ -357,7 +358,11 @@ export default async function WidgetEmbedPage({
 
     case "messages":
       content = (
-        <WidgetMessagesPanel shell={shell} query={widgetQuery} />
+        <WidgetMessagesPanel
+          shell={shell}
+          query={widgetQuery}
+          hostOrigin={hostOrigin}
+        />
       );
       break;
 
@@ -399,22 +404,22 @@ export default async function WidgetEmbedPage({
           position={launcherPosition}
           previewToken={previewToken}
         />
-        {route.view === "home" ? (
-          content
-        ) : (
-          <WidgetChrome
-            shell={shell}
-            accentColor={site.primaryColor || "#1f6b45"}
-            locale={locale}
-            t={t}
-            active={route.view}
-            query={widgetQuery}
-            hostOrigin={hostOrigin}
-            sections={sections}
-          >
-            {content}
-          </WidgetChrome>
-        )}
+        <WidgetChrome
+          shell={shell}
+          accentColor={site.primaryColor || "#1f6b45"}
+          accentForeground={foregroundFor(site.primaryColor || "#1f6b45")}
+          locale={locale}
+          t={t}
+          active={route.view}
+          routeKey={widgetPanelSegments(route).join("/") || "home"}
+          query={widgetQuery}
+          hostOrigin={hostOrigin}
+          sections={sections}
+          hideAttribution={site.hideAttribution}
+          focused={route.view === "feedback" && route.compose === true}
+        >
+          {content}
+        </WidgetChrome>
       </div>
     </PublicI18nProvider>
   );

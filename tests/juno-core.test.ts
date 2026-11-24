@@ -144,5 +144,11 @@ describe("Juno behavior policy", () => {
   test("cleans model preambles and trailing citation markers", () => {
     expect(cleanAnswer("Answer: Open Settings. [1]")).toBe("Open Settings.");
     expect(cleanAnswer("  Keep me.  ")).toBe("Keep me.");
+    expect(cleanAnswer("Use <b>Settings</b>.<br>Then save.")).toBe(
+      "Use Settings.\nThen save.",
+    );
+    expect(cleanAnswer("Put it before `</body>`.")).toBe(
+      "Put it before `</body>`.",
+    );
   });
 });

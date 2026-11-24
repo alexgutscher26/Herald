@@ -207,7 +207,18 @@
   line-height: 1;
   letter-spacing: -0.01em;
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition: transform 150ms ease, box-shadow 150ms ease,
+    opacity 120ms ease, visibility 120ms ease;
+}
+
+/* The open panel is the primary surface; the launcher would otherwise sit
+ * underneath it and duplicate the close affordance. Keep the layout width
+ * while hidden so the absolutely positioned panel stays anchored. */
+:host([data-herald-open]) .herald-launcher {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.96);
 }
 
 .herald-launcher:hover {
@@ -255,17 +266,24 @@
   height: min(620px, calc(100dvh - 112px));
   overflow: hidden;
   border: 1px solid var(--herald-border);
-  border-radius: 14px;
+  border-radius: 22px;
   background: var(--herald-surface);
   box-shadow: 0 24px 70px -20px rgb(0 0 0 / 0.45);
   transform-origin: bottom right;
-  animation: herald-panel-in 140ms ease-out;
+  animation: herald-panel-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .herald-position-bottom-left .herald-panel {
   left: 0;
   right: auto;
   transform-origin: bottom left;
+}
+
+/* When open, the panel takes the place of the hidden launcher instead of
+ * floating above its now-empty slot. */
+:host([data-herald-open]) .herald-position-bottom-right .herald-panel,
+:host([data-herald-open]) .herald-position-bottom-left .herald-panel {
+  bottom: 20px;
 }
 
 .herald-position-top-right .herald-panel {
@@ -320,7 +338,7 @@
   align-self: stretch;
   padding: 18px;
   border: 1px solid var(--herald-border);
-  border-radius: 14px;
+  border-radius: 18px;
   background: var(--herald-surface);
   box-shadow: 0 24px 70px -20px rgb(0 0 0 / 0.45);
   font: inherit;
@@ -398,7 +416,7 @@
 @keyframes herald-panel-in {
   from {
     opacity: 0;
-    transform: translateY(6px) scale(0.985);
+    transform: translateY(8px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -435,6 +453,11 @@
 
   .herald-panel {
     height: min(640px, calc(100dvh - 92px));
+  }
+
+  :host([data-herald-open]) .herald-position-bottom-right .herald-panel,
+  :host([data-herald-open]) .herald-position-bottom-left .herald-panel {
+    bottom: 12px;
   }
 
   .herald-experiences {

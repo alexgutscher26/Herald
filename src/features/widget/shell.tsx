@@ -1,8 +1,17 @@
-import { Bell, Rocket } from "lucide-react";
+import {
+  Bell,
+  BookOpen,
+  House,
+  Megaphone,
+  MessageCircle,
+  MessagesSquare,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 import type { PublicLocaleCode, Translate } from "@/features/public/i18n";
+import { cn } from "@/lib/utils";
 
 import { WidgetCloseButton } from "./frame-bridge";
 import type { WidgetSection } from "./policy";
@@ -15,15 +24,23 @@ import {
 import type { WidgetShell } from "./service";
 
 /**
- * Chrome for the non-changelog panels.
+ * Chrome shared by every widget panel.
  *
- * The header and the section nav match the What's new panel, so moving from
- * the changelog to feedback or the roadmap keeps the same widget identity.
- * Changelog and notifications stay reachable as compact icon links instead of
- * widening the row until labels are clipped.
+ * The brand row and the bottom tab bar mirror the compact support widget
+ * layout: the product is always identifiable, the primary destinations stay
+ * one tap away, and the content between them is the only scrolling region.
+ * Changelog and notifications stay reachable without adding a crowded second
+ * row of text links.
  */
 
-export function WidgetSectionNav({
+type WidgetTab = {
+  key: WidgetPanelName;
+  label: string;
+  route: WidgetRoute;
+  icon: LucideIcon;
+};
+
+export function WidgetTabBar({
   shell,
   active,
   sections,
@@ -36,107 +53,100 @@ export function WidgetSectionNav({
   query: WidgetQuery;
   t: Translate;
 }) {
-  const items: { key: WidgetPanelName; label: string; route: WidgetRoute }[] = [
-    { key: "home", label: t("widget.whatsNew"), route: { view: "home" } },
+  const items: WidgetTab[] = [
+    {
+      key: "home",
+      label: t("widget.home"),
+      route: { view: "home" },
+      icon: House,
+    },
   ];
 
-  if (sections.includes("feedback") && shell.panels.feedback) {
+  if (sections.includes("messages") && shell.panels.messages) {
     items.push({
-      key: "feedback",
-      label: t("widget.feedback"),
-      route: { view: "feedback", boardSlug: null },
-    });
-  }
-  if (sections.includes("roadmap") && shell.panels.roadmap) {
-    items.push({
-      key: "roadmap",
-      label: t("roadmap.nav"),
-      route: { view: "roadmap" },
+      key: "messages",
+      label: t("widget.messages"),
+      route: { view: "messages" },
+      icon: MessagesSquare,
     });
   }
   if (sections.includes("help") && shell.panels.help) {
     items.push({
       key: "help",
-      label: "Help",
+      label: t("widget.help"),
       route: { view: "help" },
+      icon: BookOpen,
     });
   }
-  if (sections.includes("messages")) {
+  if (sections.includes("feedback") && shell.panels.feedback) {
     items.push({
-      key: "messages",
-      label: t("widget.messages"),
-      route: { view: "messages" },
+      key: "feedback",
+      label: t("widget.feedback"),
+      route: { view: "feedback", boardSlug: null },
+      icon: MessageCircle,
     });
   }
-
-  if (items.length <= 1) return null;
+  if (shell.panels.updates) {
+    items.push({
+      key: "updates",
+      label: t("widget.updatesTab"),
+      route: { view: "updates", slug: null },
+      icon: Megaphone,
+    });
+  }
 
   return (
     <nav
       aria-label={t("widget.nav")}
-      className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border/70 bg-card px-3 py-1.5 [scrollbar-width:none]"
+      data-widget-chrome="tabs"
+      className="shrink-0 border-t border-border/70 bg-card/70 px-1.5 pt-1"
     >
-      {items.map((item) => {
-        const current = item.key === (active === "updates" ? "home" : active);
-        return (
-          <Link
-            key={item.key}
-            href={widgetEmbedHref(
-              shell.workspace.slug,
-              shell.product.slug,
-              item.route,
-              query,
-            )}
-            aria-current={current ? "page" : undefined}
-            className={`inline-flex shrink-0 items-center rounded-md px-2 py-1 text-[10.5px] font-medium transition-colors ${
-              current
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-            }`}
-          >
-            {item.label}
-          </Link>
-        );
-      })}
+      <ul className="flex items-stretch">
+        {items.map((item) => {
+          const current = item.key === active;
+          const Icon = item.icon;
 
-      <span className="ml-auto flex shrink-0 items-center gap-1 pl-2">
-        {shell.panels.updates ? (
-          <Link
-            href={widgetEmbedHref(
-              shell.workspace.slug,
-              shell.product.slug,
-              { view: "updates", slug: null },
-              query,
-            )}
-            aria-label={t("updates.nav")}
-            aria-current={active === "updates" ? "page" : undefined}
-            className={`inline-flex size-6 items-center justify-center rounded-md transition-colors ${
-              active === "updates"
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-            }`}
-          >
-            <Rocket className="size-3.5" aria-hidden="true" />
-          </Link>
-        ) : null}
-        <Link
-          href={widgetEmbedHref(
-            shell.workspace.slug,
-            shell.product.slug,
-            { view: "notifications" },
-            query,
-          )}
-          aria-label={t("notifications.title")}
-          aria-current={active === "notifications" ? "page" : undefined}
-          className={`inline-flex size-6 items-center justify-center rounded-md transition-colors ${
-            active === "notifications"
-              ? "bg-primary/10 text-primary"
-              : "text-muted-foreground hover:bg-muted hover:text-foreground"
-          }`}
-        >
-          <Bell className="size-3.5" aria-hidden="true" />
-        </Link>
-      </span>
+          return (
+            <li key={item.key} className="min-w-0 flex-1">
+              <Link
+                href={widgetEmbedHref(
+                  shell.workspace.slug,
+                  shell.product.slug,
+                  item.route,
+                  query,
+                )}
+                aria-current={current ? "page" : undefined}
+                className="group flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl px-0.5 py-1.5 transition-transform duration-150 active:scale-[0.97]"
+              >
+                <span
+                  className={cn(
+                    "flex h-7 w-11 items-center justify-center rounded-full transition-[background-color,color,transform,box-shadow] duration-200 ease-out group-hover:-translate-y-0.5 group-active:scale-95",
+                    current
+                      ? "widget-tab-pop bg-foreground text-background shadow-sm"
+                      : "text-muted-foreground group-hover:bg-muted group-hover:text-foreground",
+                  )}
+                >
+                  <Icon
+                    className="size-4"
+                    strokeWidth={1.8}
+                    aria-hidden="true"
+                  />
+                </span>
+                <span
+                  className={cn(
+                    "w-full truncate text-center text-[10px] leading-none transition-colors duration-200",
+                    current
+                      ? "font-semibold text-foreground"
+                      : "font-medium text-muted-foreground",
+                  )}
+                >
+                  {item.label}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </nav>
   );
 }
@@ -144,61 +154,125 @@ export function WidgetSectionNav({
 export function WidgetChrome({
   shell,
   accentColor,
+  accentForeground = "#ffffff",
   locale,
   t,
   active,
+  routeKey,
   query,
   hostOrigin,
   sections,
+  hideAttribution = false,
+  focused = false,
   children,
 }: {
   shell: WidgetShell;
   accentColor: string;
+  accentForeground?: string;
   locale: PublicLocaleCode;
   t: Translate;
   active: WidgetPanelName;
+  /** Changes for every panel and detail route so its entrance can replay. */
+  routeKey?: string;
   query: WidgetQuery;
   hostOrigin: string | null;
   sections: WidgetSection[];
+  /** Paid-plan setting; the caller must pass the plan-gated value. */
+  hideAttribution?: boolean;
+  /** Full-panel surface for a single task, such as the feedback composer. */
+  focused?: boolean;
   children: ReactNode;
 }) {
+  const initial =
+    shell.product.name.trim().charAt(0).toUpperCase() || "H";
+
   return (
-    <div className="flex h-full min-h-0 flex-col bg-background text-foreground">
-      <header className="flex shrink-0 items-start justify-between gap-2 border-b border-border/70 bg-card px-4 py-3">
-        <div className="flex min-w-0 items-start gap-2">
-          <span
-            className="mt-1.5 size-2 shrink-0 rounded-full"
-            style={{ backgroundColor: accentColor }}
-            aria-hidden="true"
-          />
-          <div className="min-w-0">
-            <p className="truncate text-[14px] font-semibold leading-tight">
-              {t("widget.homeTitle", { product: shell.product.name })}
-            </p>
-            <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
-              {shell.product.description?.trim() || t("widget.subtitle")}
+    <div className="widget-scrollbars-hidden flex h-full min-h-0 flex-col bg-background text-foreground">
+      {focused ? null : (
+        <header
+          data-widget-chrome="header"
+          className="flex shrink-0 items-center justify-between gap-3 px-4 pb-1.5 pt-3"
+        >
+          <div className="flex min-w-0 items-center gap-2.5">
+            <span
+              aria-hidden="true"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] font-bold"
+              style={{ backgroundColor: accentColor, color: accentForeground }}
+            >
+              {initial}
+            </span>
+            <p className="truncate text-[15px] font-semibold tracking-tight">
+              {shell.product.name}
             </p>
           </div>
-        </div>
-        <WidgetCloseButton hostOrigin={hostOrigin} label={t("widget.close")} />
-      </header>
 
-      <WidgetSectionNav
-        shell={shell}
-        active={active}
-        sections={sections}
-        query={query}
-        t={t}
-      />
+          <div className="flex shrink-0 items-center gap-0.5">
+            {shell.panels.notifications ? (
+              <Link
+                href={widgetEmbedHref(
+                  shell.workspace.slug,
+                  shell.product.slug,
+                  { view: "notifications" },
+                  query,
+                )}
+                aria-label={
+                  shell.unread > 0
+                    ? t("notifications.bellWithUnread", { count: shell.unread })
+                    : t("notifications.title")
+                }
+                aria-current={active === "notifications" ? "page" : undefined}
+                className={cn(
+                  "group relative inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+                  active === "notifications" && "bg-muted text-foreground",
+                )}
+              >
+                <Bell
+                  className="size-4 transition-transform duration-300 ease-out group-hover:-rotate-12"
+                  aria-hidden="true"
+                />
+                {shell.unread > 0 ? (
+                  <span
+                    aria-hidden="true"
+                    className="widget-badge-pop absolute right-1.5 top-1.5 size-1.5 rounded-full bg-primary ring-2 ring-background"
+                  />
+                ) : null}
+              </Link>
+            ) : null}
+            <WidgetCloseButton
+              hostOrigin={hostOrigin}
+              label={t("widget.close")}
+            />
+          </div>
+        </header>
+      )}
 
       <main
+        key={routeKey ?? active}
         id="public-main"
         tabIndex={-1}
         lang={locale}
-        className="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4"
+        className="widget-panel-enter min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain px-4 py-2"
       >
         {children}
       </main>
+
+      {focused ? null : (
+        <WidgetTabBar
+          shell={shell}
+          active={active}
+          sections={sections}
+          query={query}
+          t={t}
+        />
+      )}
+
+      {/* `hideAttribution` is already gated by the workspace plan in
+       * getPublicSite(), so a downgrade restores the footer automatically. */}
+      {hideAttribution ? null : (
+        <p className="shrink-0 pb-1.5 text-center text-[9.5px] leading-tight text-muted-foreground/80">
+          {t("widget.poweredBy")}
+        </p>
+      )}
     </div>
   );
 }
@@ -213,7 +287,7 @@ export function WidgetEmpty({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-dashed bg-card p-5 text-center">
+    <div className="rounded-2xl border border-dashed bg-card p-5 text-center">
       <h2 className="text-sm font-semibold text-foreground">{title}</h2>
       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
         {body}

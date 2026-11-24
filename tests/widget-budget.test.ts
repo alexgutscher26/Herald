@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { gzipSync } from "node:zlib";
 
+import { WIDGET_ASSET_REVISION } from "@/features/widget/paths";
+
 import { WIDGET_BUDGETS } from "../scripts/bundle-budgets";
 
 /**
@@ -57,5 +59,11 @@ describe("widget first-open budget", () => {
     const preloads =
       source.match(/frame\.src = buildFrameUrl\(state\.panel\)/g) ?? [];
     expect(preloads.length).toBeGreaterThanOrEqual(2);
+  });
+
+  test("the loader requests the current immutable stylesheet revision", async () => {
+    const source = await loader();
+
+    expect(source).toContain(`/widget/v1.css?v=${WIDGET_ASSET_REVISION}`);
   });
 });

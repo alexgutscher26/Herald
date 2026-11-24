@@ -140,9 +140,12 @@ async function canvasFromBlob(blob: Blob): Promise<HTMLCanvasElement> {
 export function ScreenshotAnnotator({
   disabled,
   onAdd,
+  variant = "default",
 }: {
   disabled?: boolean;
   onAdd: (file: File) => void;
+  /** `icon` is the compact camera trigger used by the widget composer. */
+  variant?: "default" | "icon";
 }) {
   const { t } = usePublicI18n();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -319,40 +322,8 @@ export function ScreenshotAnnotator({
     }, "image/png");
   }
 
-  return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap items-center gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => void capture()}
-          disabled={disabled || capturing}
-        >
-          <Camera aria-hidden="true" />
-          {capturing ? t("screenshot.capturing") : t("screenshot.capture")}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => void pasteImage()}
-          disabled={disabled || reading}
-        >
-          <ClipboardPaste aria-hidden="true" />
-          {reading ? t("screenshot.reading") : t("screenshot.paste")}
-        </Button>
-      </div>
-      <p className="text-xs text-muted-foreground">
-        {t("submit.screenshotHint")}
-      </p>
-      {error ? (
-        <p role="alert" className="text-xs text-destructive">
-          {error}
-        </p>
-      ) : null}
-
-      <Dialog
+  const dialog = (
+    <Dialog
         open={open}
         onOpenChange={(next) => {
           if (!next) reset();
@@ -445,7 +416,73 @@ export function ScreenshotAnnotator({
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+    </Dialog>
+  );
+
+  if (variant === "icon") {
+    return (
+      <div className="relative flex items-center">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="size-9 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+          aria-label={
+            capturing ? t("screenshot.capturing") : t("screenshot.capture")
+          }
+          title={t("screenshot.capture")}
+          onClick={() => void capture()}
+          disabled={disabled || capturing}
+        >
+          <Camera className="size-[18px]" aria-hidden="true" />
+        </Button>
+        {error ? (
+          <p
+            role="alert"
+            className="absolute bottom-full left-0 mb-2 w-56 rounded-lg border bg-card px-2.5 py-1.5 text-[11px] leading-snug text-destructive shadow-lg"
+          >
+            {error}
+          </p>
+        ) : null}
+        {dialog}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => void capture()}
+          disabled={disabled || capturing}
+        >
+          <Camera aria-hidden="true" />
+          {capturing ? t("screenshot.capturing") : t("screenshot.capture")}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => void pasteImage()}
+          disabled={disabled || reading}
+        >
+          <ClipboardPaste aria-hidden="true" />
+          {reading ? t("screenshot.reading") : t("screenshot.paste")}
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground">
+        {t("submit.screenshotHint")}
+      </p>
+      {error ? (
+        <p role="alert" className="text-xs text-destructive">
+          {error}
+        </p>
+      ) : null}
+
+      {dialog}
     </div>
   );
 }

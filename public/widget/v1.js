@@ -52,7 +52,7 @@
     "/" +
     encodeURIComponent(project.product) +
     "/embed";
-  var stylesheet = origin + "/widget/v1.css?v=6";
+  var stylesheet = origin + "/widget/v1.css?v=8";
 
   // Installation is counted once per loader boot. Use a beacon so a closing
   // host page cannot cancel the request, and never include host or identity.

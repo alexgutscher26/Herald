@@ -126,7 +126,7 @@ covered by
 1. **Every page ships a stale demo widget snippet.** `src/app/layout.tsx` renders
    [`HeraldWidgetScript`](../src/features/widget/herald-widget-script.tsx) on
    every route, and that component hardcodes
-   `src="http://localhost:3000/widget/v1.js?v=5"`,
+   `src="http://localhost:3000/widget/v1.js?v=8"`,
    `data-project="test12/changelog"` and a fixed `data-key`. Consequences: a
    `localhost` URL in any deployed environment, a launcher that points at a
    tenant which may not exist (404 document for
