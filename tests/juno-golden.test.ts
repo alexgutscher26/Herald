@@ -9,7 +9,7 @@ import {
 } from "@/features/juno/golden";
 import { JUNO_PROMPT_VERSION } from "@/features/juno/prompt-version";
 
-describe("Juno CI golden set", () => {
+describe("Mira CI golden set", () => {
   test("every golden case passes with the fixed provider stub", () => {
     const result = runJunoGoldenSet();
     expect(result.failures).toEqual([]);

@@ -56,7 +56,7 @@ That sentence makes "cheaper" specific: *five products for what other tools char
 | Paid members | 3 | 10 | 25 |
 | Emails / month | 500 | 5,000 | 20,000 |
 | Custom domain, private boards, guest posting, branding | — | Included | Included |
-| API + MCP, Juno, SSO, advanced search | — | — | Included |
+| API + MCP, Mira, SSO, advanced search | — | — | Included |
 
 The specific claim this buys: **FeedBear POWER is $15 for one project; Herald Indie is $15 for five, on one login.** That is a cheaper that means something.
 

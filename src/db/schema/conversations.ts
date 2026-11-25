@@ -182,7 +182,7 @@ export const conversationMessages = pgTable(
     /** Provider message id for inbound email, so a retry is idempotent. */
     externalId: text("external_id"),
     body: text("body").notNull(),
-    /** Knowledge sources behind a Juno answer; null for every other author. */
+    /** Knowledge sources behind a Mira answer; null for every other author. */
     citations: jsonb("citations").$type<
       { sourceName: string; title: string; url: string | null }[]
     >(),

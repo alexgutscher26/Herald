@@ -365,7 +365,7 @@ export async function queuePostSuggestions(input: {
       .where(eq(junoSettings.productId, input.productId))
       .limit(1);
     // The helper is useful only when the workspace has opted into AI; a
-    // product with Juno off does not get background model calls. Duplicate
+    // product with Mira off does not get background model calls. Duplicate
     // matching can be switched off independently of tags.
     if (!settings[0]?.enabled) return;
 

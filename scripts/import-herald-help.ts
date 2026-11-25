@@ -4,7 +4,7 @@
  * This is the dogfooding path, not a second importer: every article is parsed
  * by the same `parseMarkdownImport` the dashboard upload uses and written by
  * `importHelpItems`, so publishing to Herald's help center exercises the
- * product's real import, revision and Juno knowledge-sync code.
+ * product's real import, revision and Mira knowledge-sync code.
  *
  * Sources live in `docs/help/*.md` with flat front matter:
  *

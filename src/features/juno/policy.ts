@@ -3,7 +3,7 @@ import type { ConversationStatus } from "@/db/schema/conversations";
 import type { JunoSettings } from "@/db/schema/knowledge";
 
 /**
- * Juno's behavior rules, kept pure so they can be unit-tested and reused by
+ * Mira's behavior rules, kept pure so they can be unit-tested and reused by
  * every channel. Billing and account questions never reach the model: they are
  * handed to a human before any generation happens.
  */
@@ -60,18 +60,18 @@ export const HANDOFF_MESSAGES: Record<JunoHandoffReason, string> = {
 };
 
 export const HANDOFF_NOTES: Record<JunoHandoffReason, string> = {
-  billing: "Juno handed off: billing or payment question.",
-  account: "Juno handed off: account or identity change.",
-  knowledge_gap: "Juno handed off: no source cleared the confidence floor.",
-  low_confidence: "Juno handed off: the best source scored below the floor.",
-  budget: "Juno handed off: the workspace daily AI budget is exhausted.",
-  quota: "Juno handed off: the workspace monthly reply allowance is exhausted.",
+  billing: "Mira handed off: billing or payment question.",
+  account: "Mira handed off: account or identity change.",
+  knowledge_gap: "Mira handed off: no source cleared the confidence floor.",
+  low_confidence: "Mira handed off: the best source scored below the floor.",
+  budget: "Mira handed off: the workspace daily AI budget is exhausted.",
+  quota: "Mira handed off: the workspace monthly reply allowance is exhausted.",
   plan:
-    "Juno handed off: the workspace plan does not include Juno or the configured model.",
-  unavailable: "Juno handed off: the model was unavailable.",
-  human_requested: "Juno handed off: the customer asked for a human.",
+    "Mira handed off: the workspace plan does not include Mira or the configured model.",
+  unavailable: "Mira handed off: the model was unavailable.",
+  human_requested: "Mira handed off: the customer asked for a human.",
   action_unavailable:
-    "Juno handed off: the requested action is not enabled or could not be completed.",
+    "Mira handed off: the requested action is not enabled or could not be completed.",
 };
 
 const HUMAN_REQUEST_PATTERN =
@@ -159,7 +159,7 @@ export function buildAnswerSystemPrompt(
   });
 
   return [
-    "You are Juno, the support assistant for this product.",
+    "You are Mira, the support assistant for this product.",
     "Answer ONLY from the numbered knowledge sources in the user message.",
     "Never invent product behavior, prices, policies or timelines.",
     "If the sources do not answer the question, say you are not sure instead of guessing.",

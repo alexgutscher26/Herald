@@ -43,7 +43,7 @@ export function AgentActionsView({
       id="agent-actions"
       icon={ShieldCheck}
       title="Agent actions"
-      description="A closed allowlist of things Juno may do beyond answering. Everything starts off, enabling records who reviewed it, and every attempt writes an audit row. Settings, billing, deletion and identity are never available here."
+      description="A closed allowlist of things Mira may do beyond answering. Everything starts off, enabling records who reviewed it, and every attempt writes an audit row. Settings, billing, deletion and identity are never available here."
       badge={
         <StatusBadge tone={enabled > 0 ? "success" : "neutral"}>
           {enabled > 0 ? `${enabled} enabled` : "All off"}

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import { budgetAlertThreshold } from "@/features/juno/budget-policy";
 
-describe("Juno budget alert threshold", () => {
+describe("Mira budget alert threshold", () => {
   test("fires at 80% of a positive limit, rounded up", () => {
     expect(budgetAlertThreshold(5)).toBe(4);
     expect(budgetAlertThreshold(100)).toBe(80);

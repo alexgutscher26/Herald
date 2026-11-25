@@ -44,7 +44,7 @@ const PRODUCT_ACTIVITY_METRICS: readonly ReportMetricDefinition[] = [
   metric("widget_installs", "Widget installs", "Widget installations recorded"),
   metric("conversations_started", "Conversations started", "New support threads"),
   metric("conversations_resolved", "Conversations resolved", "Threads resolved in the period"),
-  metric("juno_resolved", "Juno resolved", "Juno conversations resolved without handoff"),
+  metric("juno_resolved", "Mira resolved", "Mira conversations resolved without handoff"),
   metric("emails_sent", "Emails sent", "Notification emails delivered"),
   metric("emails_failed", "Emails failed", "Notification emails that failed"),
   metric("feedback_shipped", "Shipped events", "Requests moved to Shipped"),

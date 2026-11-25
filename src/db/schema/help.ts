@@ -38,7 +38,7 @@ export const helpArticleVisibilityEnum = pgEnum("help_article_visibility", [
  *
  * The collection is tenant- and product-scoped. `visibility` controls whether
  * the collection is exposed on the public portal; an internal collection is
- * still editable and can still be cited by internal Juno tooling, but its
+ * still editable and can still be cited by internal Mira tooling, but its
  * articles are never projected into a public knowledge source.
  */
 export const helpCollections = pgTable(
@@ -70,7 +70,7 @@ export const helpCollections = pgTable(
 
 /**
  * An article is the canonical content row. The portal reads it directly and a
- * published public article is what the collection-to-Juno projector reads, so
+ * published public article is what the collection-to-Mira projector reads, so
  * there is no second copy of the body to drift from the page.
  *
  * A revision is written on every save, while `status` is the publication

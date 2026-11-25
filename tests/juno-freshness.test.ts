@@ -40,7 +40,7 @@ describe("knowledge recrawl diff", () => {
   });
 });
 
-describe("Juno answer language", () => {
+describe("Mira answer language", () => {
   test("workspace mode uses the configured public locale", () => {
     expect(resolveAnswerLanguage({ language: "workspace", workspaceLocale: "es" })).toBe(
       "es",

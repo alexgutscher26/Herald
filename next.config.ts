@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       // Covers are uploaded to the storage module through their own route, so
       // they no longer need an inflated action body. File imports that still
-      // travel through an action (Juno documents, API doc specs) declare their
+      // travel through an action (Mira documents, API doc specs) declare their
       // own ceilings up to 10 MB; the transport limit matches those, not a
       // base64 image.
       bodySizeLimit: "10mb",

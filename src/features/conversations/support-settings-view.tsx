@@ -95,7 +95,7 @@ export function ConversationFeedbackSettingsView({
                 Track a first-response target
               </span>
               <span className="mt-0.5 block text-xs text-muted-foreground">
-                Resolved, spam and archived threads are excluded. A team or Juno reply pauses the
+                Resolved, spam and archived threads are excluded. A team or Mira reply pauses the
                 clock until the customer writes again.
               </span>
             </span>

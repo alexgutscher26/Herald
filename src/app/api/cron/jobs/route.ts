@@ -41,8 +41,8 @@ async function run(request: Request): Promise<NextResponse> {
     return cronJson({ ok: true, runs, failedJobs }, 200);
   }
 
-  // Queue the Juno auto-resolve sweep at most once per minute, and only when
-  // an active Juno thread exists. A queue hiccup must not stop other jobs.
+  // Queue the Mira auto-resolve sweep at most once per minute, and only when
+  // an active Mira thread exists. A queue hiccup must not stop other jobs.
   await scheduleJunoAutoResolve().catch(() => ({ scheduled: false }));
 
   // Recrawl only the sources whose own interval is due. A crawl is queued as a

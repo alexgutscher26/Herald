@@ -38,7 +38,7 @@ import { lexicalScore } from "./text";
 /**
  * Feedback cards.
  *
- * Juno may search public requests and offer to file, vote or follow, but it
+ * Mira may search public requests and offer to file, vote or follow, but it
  * never acts until the customer confirms the card. The offer is a row with
  * `pending` status; confirmation claims that row first, so a double click
  * cannot create two requests. Creations go through `createPublicRequest`, which

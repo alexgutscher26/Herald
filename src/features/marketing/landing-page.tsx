@@ -239,7 +239,7 @@ const FAQ = [
   {
     question: "Is there a help center, or do I need a separate knowledge base?",
     answer:
-      "Herald publishes help collections and articles on the same public portal as updates, feedback and the roadmap, with one search across all of them. Publishing an article updates the version Juno can cite; unpublishing removes it from future answers. Help is on every plan, and Juno AI replies are part of Professional.",
+      "Herald publishes help collections and articles on the same public portal as updates, feedback and the roadmap, with one search across all of them. Publishing an article updates the version Mira can cite; unpublishing removes it from future answers. Help is on every plan, and Mira AI replies are part of Professional.",
   },
   {
     question: "Do surveys and in-app tours need another tool?",
@@ -361,8 +361,8 @@ const CAPABILITIES = [
   },
   {
     icon: BookOpen,
-    title: "Help that feeds Juno",
-    body: "Publish collections and articles to the portal. Juno answers from the published version and links the article it used.",
+    title: "Help that feeds Mira",
+    body: "Publish collections and articles to the portal. Mira answers from the published version and links the article it used.",
   },
   {
     icon: Code2,
@@ -390,7 +390,7 @@ const ASK_CARDS = [
   {
     icon: BarChart3,
     title: "Analytics that stay honest",
-    body: "Sixteen product-activity metrics, saved reports and daily series, including portal views, CSAT and Juno resolutions.",
+    body: "Sixteen product-activity metrics, saved reports and daily series, including portal views, CSAT and Mira resolutions.",
   },
 ] as const;
 
@@ -842,7 +842,7 @@ export function LandingPage() {
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Button>
               <p className="text-[13px] text-[#6b6862]">
-                The public loop is on every plan. API access, Juno and SSO unlock on Professional.
+                The public loop is on every plan. API access, Mira and SSO unlock on Professional.
               </p>
             </div>
           </div>
@@ -885,12 +885,12 @@ export function LandingPage() {
                   </h3>
                   <p className="text-[14px] leading-[1.6] text-[#4e4a44]">
                     Collections and articles sit on the public portal, searchable beside updates
-                    and feedback. Juno answers from the published version and cites the article it
+                    and feedback. Mira answers from the published version and cites the article it
                     used, so unpublishing removes it from future answers.
                   </p>
                 </div>
                 <p className="text-[12px] text-[#6b6862]">
-                  Help is on every plan. Juno AI replies are part of Professional.
+                  Help is on every plan. Mira AI replies are part of Professional.
                 </p>
               </div>
 

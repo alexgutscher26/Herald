@@ -90,7 +90,7 @@ export const SUBPROCESSORS: readonly Subprocessor[] = [
   },
   {
     name: "The AI provider configured by the operator",
-    purpose: "Optional changelog drafting, Juno answers and feedback suggestions",
+    purpose: "Optional changelog drafting, Mira answers and feedback suggestions",
     dataCategories:
       "Prompts, selected feedback text and knowledge excerpts sent only when AI features are configured and used",
     location: "Depends on the provider and endpoint the operator configures",

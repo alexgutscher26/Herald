@@ -31,7 +31,7 @@ export function JunoRedactionAuditView({
       id="juno-redaction-audit"
       icon={ShieldCheck}
       title="Redaction audit"
-      description="Counts of personal data and credentials removed before Juno sees a customer message. This report never stores the matched text."
+      description="Counts of personal data and credentials removed before Mira sees a customer message. This report never stores the matched text."
       badge={<StatusBadge tone="neutral">Last {report.windowDays} days</StatusBadge>}
     >
       <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">

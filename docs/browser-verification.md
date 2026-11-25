@@ -35,7 +35,7 @@ nothing about the source**.
 | --------------------------------------- | -------------- | ----------------- |
 | 1. Widget unread badge                  | Pass           | Dashboard publish → `GET /api/public/notifications/unread` → `{"unread":1}` → launcher `getState().unread === 1` and `aria-label="What's new, 1 unread"` |
 | 2. Widget thread 404 (regression check) | Pass — fixed   | `POST /api/public/conversations` → 201, then `GET /api/public/conversations/d0066e3b-…?workspaceSlug=verify&productSlug=verify` → 200, `PATCH` → 200, thread renders its message |
-| 3. Juno feedback card and citations     | Blocked        | No AI provider configured, Juno off for the product, no knowledge source for it |
+| 3. Mira feedback card and citations     | Blocked        | No AI provider configured, Mira off for the product, no knowledge source for it |
 | 4. Rotated SSO secret + install check   | Pass           | Install check green before and after rotation; rotated secret signed an identity token that the app accepted |
 
 ### Flow 1 — widget unread badge
@@ -79,7 +79,7 @@ The thread rendered “Testing the thread path fix after the 404 regression.” 
 no “This conversation could not be loaded.” The id is in the path and both slugs
 stay in the query, which is the contract the `[conversationId]` route reads.
 
-### Flow 3 — Juno feedback card and citations
+### Flow 3 — Mira feedback card and citations
 
 Blocked, and not by the dashboard this time:
 
@@ -88,8 +88,8 @@ Blocked, and not by the dashboard this time:
   the `verify` product.
 - No knowledge source exists for that product, so there is nothing to cite.
 
-A feedback card only appears after Juno proposes an action, and a citation list
-only appears on a Juno answer, so neither surface can be produced here. The
+A feedback card only appears after Mira proposes an action, and a citation list
+only appears on a Mira answer, so neither surface can be produced here. The
 logic stays covered by
 [`tests/integration/juno-operations.test.ts`](../tests/integration/juno-operations.test.ts)
 and [`tests/juno-guardrails.test.ts`](../tests/juno-guardrails.test.ts). This
@@ -227,7 +227,7 @@ row below was produced by the UI in this run. Nothing was carried over: the
 | -------------------------------------------- | ------- | ----------------- |
 | 1. Widget unread badge                       | Pass    | Public changelog enabled in the UI, subscriber added in the UI, release published in the UI → in-app notification unread, public entry live, `{"unread":1}` then `0` after read |
 | 2. Widget thread 404 (regression check)      | Pass    | Conversation created from the panel, thread rendered both messages, reply posted and re-rendered |
-| 3. Juno feedback card and citations          | Pass    | Juno answered a widget question through the job queue and the thread showed the answer with a “Sources” citation |
+| 3. Mira feedback card and citations          | Pass    | Mira answered a widget question through the job queue and the thread showed the answer with a “Sources” citation |
 | 4. Rotated SSO secret and installation check | Pass    | Check green → SSO enabled → rotated with a 24-hour overlap → check green again → rotated secret accepted by `POST /api/widget/identify` |
 
 ### Flow 4 — rotated SSO secret and installation check
@@ -290,7 +290,7 @@ appended and rendered. Requests observed: `POST /api/public/conversations`,
 `GET /api/public/conversations/f9fe76da-…?workspaceSlug=cleanpass&productSlug=product`
 — the id in the path, the slugs in the query, never `productSlug=<uuid>`.
 
-### Flow 3 — Juno feedback card and citations
+### Flow 3 — Mira feedback card and citations
 
 This is the flow every earlier pass recorded as blocked on configuration. It
 was reachable here with a local model, without touching the source:
@@ -304,11 +304,11 @@ was reachable here with a local model, without touching the source:
    `AI_EMBEDDING_MODEL` stayed unset, so retrieval used the deterministic local
    hash embedding — no embeddings endpoint was needed.
 3. `juno_settings.enabled` was **false** for the product; the widget still said
-   “Team online” and conversations stayed in `queue`. Turning on “Let Juno pick
-   up new conversations” and pressing `Save Juno settings` set it true. A first
+   “Team online” and conversations stayed in `queue`. Turning on “Let Mira pick
+   up new conversations” and pressing `Save Mira settings` set it true. A first
    customer message sent before that produced no job at all, which is correct
    but silent.
-4. Settings → Juno → Add a source: a markdown file was attached to the file
+4. Settings → Mira → Add a source: a markdown file was attached to the file
    input and `Upload source` submitted. The source “Widget help” came back
    `Live · 1 pages · 1 chunks`.
 5. A new customer message (“How do I see the changelog inside the widget?”)
@@ -343,7 +343,7 @@ quality, because the text came from a stub.
    switch is disabled, and with `STRIPE_SECRET_KEY` unset there is no in-app way
    to buy `pro`. Anyone verifying SSO has to set `workspaces.plan`, as this pass
    did.
-4. **Juno pickup is off by default and says nothing.** New conversations sit in
+4. **Mira pickup is off by default and says nothing.** New conversations sit in
    `queue` with the panel showing “Team online” until an operator enables the
    switch. Worth a first-run prompt, not a bug in the flow.
 5. **The public portal renders Spanish for a fresh visitor** while the dashboard
@@ -368,7 +368,7 @@ quality, because the text came from a stub.
   run, so only successful verification was proven.
 - A second customer account, so cross-customer isolation of the unread count is
   proven only by the signed-out (`0`) request.
-- Mobile viewport, dark mode, screen-reader navigation, Juno handoff thresholds,
+- Mobile viewport, dark mode, screen-reader navigation, Mira handoff thresholds,
   and the auto-resolve timing.
 
 ### Cleanup

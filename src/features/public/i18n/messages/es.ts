@@ -219,7 +219,7 @@ export const es: Record<PublicMessageKey, string> = {
   "widget.removeImage": "Quitar imagen",
   "widget.imageUploadError": "Elige una imagen PNG, JPEG, WebP o GIF.",
   "widget.imageTooLarge": "Elige una imagen de hasta 5 MB.",
-  "widget.junoTyping": "Juno está escribiendo…",
+  "widget.junoTyping": "Mira está escribiendo…",
   "widget.helpTitle": "Ayuda y soporte",
   "widget.helpSearch": "Buscar ayuda",
   "widget.helpNoResults": "Ningún artículo de ayuda coincide con tu búsqueda.",

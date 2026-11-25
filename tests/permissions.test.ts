@@ -104,7 +104,7 @@ describe("permission matrix", () => {
     }
   });
 
-  test("the conversation inbox and Juno are operator surfaces, not editor ones", () => {
+  test("the conversation inbox and Mira are operator surfaces, not editor ones", () => {
     for (const permission of [
       "conversation:read",
       "conversation:write",

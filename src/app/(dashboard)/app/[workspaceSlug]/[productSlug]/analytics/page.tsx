@@ -402,7 +402,7 @@ export default async function AnalyticsPage({
               </span>
             </div>
             <div className="flex items-center justify-between gap-3">
-              <span className="text-muted-foreground">Juno resolved</span>
+              <span className="text-muted-foreground">Mira resolved</span>
               <span className="font-medium tabular-nums">
                 {formatNumber(overview.junoResolved)} / {formatNumber(overview.junoInvolved)}
               </span>

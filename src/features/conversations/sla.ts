@@ -13,7 +13,7 @@ import { queueSlaBreachNotifications } from "./notify";
 /**
  * Find waiting conversations whose first-response clock has run out.
  *
- * The customer's last message starts the clock. A team or Juno reply moves
+ * The customer's last message starts the clock. A team or Mira reply moves
  * `lastMessageAt` past it and pauses the clock until the customer writes again.
  * `slaBreachedAt` makes the sweep idempotent; a later customer message is newer
  * than that marker, so the thread becomes eligible for one new alert.

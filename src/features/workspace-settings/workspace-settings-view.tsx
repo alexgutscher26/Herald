@@ -264,7 +264,7 @@ const PLAN_FEATURE_ROWS: Array<{ feature: PlanFeature; label: string }> = [
   { feature: "publicFeedback", label: "Public feedback boards" },
   { feature: "widget", label: "What’s New widget" },
   { feature: "api", label: "REST API and tokens" },
-  { feature: "ai", label: "Juno AI replies" },
+  { feature: "ai", label: "Mira AI replies" },
   { feature: "winback", label: "Win-back campaigns" },
   { feature: "guestPosting", label: "Guest posting" },
   { feature: "privateBoards", label: "Private boards" },
@@ -1506,7 +1506,7 @@ export function WorkspaceSettingsView(props: WorkspaceSettingsViewProps) {
                 <p className="text-sm font-medium">Founding Lifetime — $499 once</p>
                 <p className="text-xs text-muted-foreground">
                   100 seats in total. Unlimited products, boards and integrations, 15 members,
-                  5,000 emails and 150 Juno replies a month, with no renewal. One seat per account.
+                  5,000 emails and 150 Mira replies a month, with no renewal. One seat per account.
                 </p>
               </div>
               <Button
@@ -2223,7 +2223,7 @@ export function WorkspaceSettingsView(props: WorkspaceSettingsViewProps) {
                 Conversations
               </Link>
               <Link className={SECTION_LINK} href={`/app/${workspaceSlug}/${product.slug}/settings#juno`}>
-                Juno
+                Mira
               </Link>
               <Link className={SECTION_LINK} href={`/app/${workspaceSlug}/${product.slug}/settings#identity`}>
                 SSO

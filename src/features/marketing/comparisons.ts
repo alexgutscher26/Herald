@@ -48,7 +48,7 @@ const HERALD = {
   boards: `${HERALD_BOARDS} per product.`,
   members: HERALD_MEMBERS,
   api: "REST API and MCP server on Professional.",
-  ai: "Juno AI replies on Professional.",
+  ai: "Mira AI replies on Professional.",
   roadmap: "Public feedback boards, roadmap and changelog on every plan.",
   customDomain: "Custom domain and private boards on Indie and Professional.",
   help: "Help center, surveys, tours and win-back on every plan.",
@@ -219,7 +219,7 @@ export const COMPARISON_VENDORS: readonly ComparisonVendor[] = [
       },
       {
         label: "AI",
-        them: "Live chat and Juno are in beta and not part of plan pricing",
+        them: "Live chat and Mira are in beta and not part of plan pricing",
         herald: HERALD.ai,
       },
       {

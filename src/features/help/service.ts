@@ -339,7 +339,7 @@ export async function saveHelpArticle(input: {
   if (!article) return { ok: false, error: "That article no longer exists." };
 
   try {
-    // A published article is already in Juno. Pause first so a failed rebuild
+    // A published article is already in Mira. Pause first so a failed rebuild
     // cannot leave the previous body answering questions after this edit.
     if (article.status === "published") {
       await pauseHelpCollectionSource({
@@ -386,7 +386,7 @@ export async function saveHelpArticle(input: {
       return {
         ok: true,
         id: article.id,
-        warning: `Saved, but Juno could not rebuild this collection: ${sync.error}`,
+        warning: `Saved, but Mira could not rebuild this collection: ${sync.error}`,
       };
     }
   }
@@ -436,7 +436,7 @@ export async function setHelpArticleStatus(input: {
     return {
       ok: true,
       id: article.id,
-      warning: `The page is ${input.published ? "published" : "unpublished"}, but Juno could not rebuild: ${sync.error}`,
+      warning: `The page is ${input.published ? "published" : "unpublished"}, but Mira could not rebuild: ${sync.error}`,
     };
   }
   return { ok: true, id: article.id };

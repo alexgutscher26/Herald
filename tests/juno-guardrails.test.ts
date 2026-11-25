@@ -20,7 +20,7 @@ import {
   sanitizeModelInput,
 } from "@/features/juno/guardrails";
 
-describe("Juno guardrails", () => {
+describe("Mira guardrails", () => {
   test("redacts email, phone, card, IBAN, SSN and provider secrets", () => {
     const input = [
       "Email ada@example.test or call +44 20 7946 0958.",
@@ -108,7 +108,7 @@ describe("Juno guardrails", () => {
     expect(JSON.stringify(counts)).not.toContain("ada@example.test");
   });
 
-  test("recognises actions Juno must never perform itself", () => {
+  test("recognises actions Mira must never perform itself", () => {
     expect(requestsProtectedAction("Please refund my last invoice")).toBe(true);
     expect(requestsProtectedAction("Change my plan to the free tier")).toBe(true);
     expect(requestsProtectedAction("How do I export a CSV?")).toBe(false);

@@ -339,7 +339,7 @@ export async function answerConversation(input: {
       conversation,
       reason: "plan",
       question: sanitizeModelInput(latest.body),
-      detail: `Juno is not included on the ${PLANS[plan].name} plan.`,
+      detail: `Mira is not included on the ${PLANS[plan].name} plan.`,
       now,
     });
   }
@@ -435,7 +435,7 @@ export async function answerConversation(input: {
   }
 
   // A request to change a plan, permission or credential is handed to a human
-  // rather than answered with a claim Juno cannot fulfil.
+  // rather than answered with a claim Mira cannot fulfil.
   if (requestsProtectedAction(question)) {
     return handoff({
       conversation,
@@ -642,7 +642,7 @@ export async function answerConversation(input: {
 }
 
 /**
- * Human takeover: once a team member replies, Juno stays out until somebody
+ * Human takeover: once a team member replies, Mira stays out until somebody
  * explicitly hands the thread back. A handoff state is left intact.
  */
 export async function recordHumanTakeover(

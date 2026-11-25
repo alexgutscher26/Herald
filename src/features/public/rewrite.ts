@@ -41,7 +41,7 @@ export async function submissionAssistantAvailable(
   const row = rows[0];
   if (!row?.enabled || !row.assistant) return false;
 
-  // The assistant is a Juno model call, so the workspace plan and the
+  // The assistant is a Mira model call, so the workspace plan and the
   // configured allowlist apply here too — not only to chat answers.
   return (await getJunoModelAccess({ productId, selectedModel: row.model })).allowed;
 }

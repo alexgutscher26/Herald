@@ -248,7 +248,7 @@ export async function appendTeamMessage(input: {
       })
       .where(scopedConversation(input.productId, conversation.id));
 
-    // A human reply is a takeover: Juno stays out of this thread until
+    // A human reply is a takeover: Mira stays out of this thread until
     // somebody explicitly hands it back, so a bot never talks over the team.
     if (body !== "" && !isNote) {
       await recordHumanTakeover(tx, {

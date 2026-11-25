@@ -7,6 +7,7 @@ import {
   MessagesSquare,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -155,6 +156,7 @@ export function WidgetChrome({
   shell,
   accentColor,
   accentForeground = "#ffffff",
+  logoUrl = null,
   locale,
   t,
   active,
@@ -169,6 +171,8 @@ export function WidgetChrome({
   shell: WidgetShell;
   accentColor: string;
   accentForeground?: string;
+  /** Plan-gated workspace logo; the product name already labels this row. */
+  logoUrl?: string | null;
   locale: PublicLocaleCode;
   t: Translate;
   active: WidgetPanelName;
@@ -194,13 +198,24 @@ export function WidgetChrome({
           className="flex shrink-0 items-center justify-between gap-3 px-4 pb-1.5 pt-3"
         >
           <div className="flex min-w-0 items-center gap-2.5">
-            <span
-              aria-hidden="true"
-              className="flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] font-bold"
-              style={{ backgroundColor: accentColor, color: accentForeground }}
-            >
-              {initial}
-            </span>
+            {logoUrl ? (
+              <Image
+                src={logoUrl}
+                alt=""
+                width={32}
+                height={32}
+                unoptimized
+                className="size-8 shrink-0 rounded object-contain"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] font-bold"
+                style={{ backgroundColor: accentColor, color: accentForeground }}
+              >
+                {initial}
+              </span>
+            )}
             <p className="truncate text-[15px] font-semibold tracking-tight">
               {shell.product.name}
             </p>

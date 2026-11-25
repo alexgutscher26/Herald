@@ -10,10 +10,10 @@ import { getDailyBudgetStatus, type DailyBudgetStatus } from "./budget";
 /**
  * The activity meter.
  *
- * Everything here is derived from the audit rows Juno already writes; there is
+ * Everything here is derived from the audit rows Mira already writes; there is
  * no separate counter that can drift. A handoff is an answer row with status
- * `handoff`, a resolution-without-team is a resolved Juno thread with no team
- * message after the last Juno reply, and cost comes from the daily usage rows.
+ * `handoff`, a resolution-without-team is a resolved Mira thread with no team
+ * message after the last Mira reply, and cost comes from the daily usage rows.
  */
 
 export type JunoHandoffBreakdown = { reason: string; count: number };

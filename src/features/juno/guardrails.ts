@@ -1,7 +1,7 @@
 /**
  * Guardrails that do not need a database.
  *
- * Juno cannot change settings, billing, accounts or customer data: its only
+ * Mira cannot change settings, billing, accounts or customer data: its only
  * registered action is a reviewed transcript email, and it cannot mutate those
  * resources by construction. The remaining risks are what reaches the model and
  * what is stored. These helpers redact common personal and secret shapes before
@@ -107,7 +107,7 @@ export function sanitizeModelInput(input: string): string {
     .slice(0, MAX_MODEL_INPUT_CHARS);
 }
 
-/** Whether the customer asked for an action Juno must never take itself. */
+/** Whether the customer asked for an action Mira must never take itself. */
 export function requestsProtectedAction(text: string): boolean {
   return /\b(cancel|downgrade|upgrade|refund|charge|delete (my )?account|change (my )?(plan|email|password)|reset (my )?password|make me (an )?admin|transfer ownership)\b/i.test(
     text,

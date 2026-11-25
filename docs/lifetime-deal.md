@@ -22,7 +22,7 @@ Read "LTD" as **lifetime deal**: one payment, no renewal.
 - Offer band and signed-out handoff: `src/features/marketing/lifetime-offer.tsx`,
   `/pricing`, `/sign-up?offer=lifetime`, onboarding → Billing.
 - Terms: `/legal/lifetime`.
-- Juno cap: `src/features/juno/answer.ts` counts answered conversations per UTC
+- Mira cap: `src/features/juno/answer.ts` counts answered conversations per UTC
   calendar month and hands off with reason `quota`.
 - Unit coverage: `tests/entitlements.test.ts`. Integration cases (they need a
   loopback Postgres; writing them does not make them pass):
@@ -39,7 +39,7 @@ Sell **one** offer, not a tier ladder:
 
 > **Founding Lifetime — $499 once, 100 workspaces.**
 >
-> Unlimited products, boards and integrations. 15 paid teammates. 5,000 emails and 150 Juno
+> Unlimited products, boards and integrations. 15 paid teammates. 5,000 emails and 150 Mira
 > replies a month. API, MCP, request briefs, advanced search, guest posting, private boards,
 > custom domain and branding. No SSO. No renewal, no seats to count, 30-day refund.
 
@@ -64,7 +64,7 @@ deal has to be obviously cheaper than a few years of that, and still not be a pe
 
 $499 is **12.8 months of Professional monthly** and **1.34× one year of Professional yearly**.
 That is aggressive for a lifetime, which is why the caps below are lower than Professional's:
-5,000 emails instead of 20,000, 150 Juno replies instead of no metered cap, 15 members instead
+5,000 emails instead of 20,000, 150 Mira replies instead of no metered cap, 15 members instead
 of 25, and no SSO. The buyer gets the expensive-to-build parts — unlimited products, the API,
 request briefs, advanced search — without us underwriting unlimited email and model usage
 forever.
@@ -95,7 +95,7 @@ shape that fits a customer who intends to stay.
 | Boards per product | 2 | 5 | unlimited | **unlimited** |
 | Paid members | 3 | 10 | 25 | **15** |
 | Emails / month | 500 | 5,000 | 20,000 | **5,000** |
-| Juno replies / month | — | — | no metered cap | **150** |
+| Mira replies / month | — | — | no metered cap | **150** |
 | Integrations | 1 | 1 | unlimited | **unlimited** |
 | API + MCP + request brief | — | — | yes | **yes** |
 | Advanced search | — | — | yes | **yes** |
@@ -113,7 +113,7 @@ connection is an integration and a support relationship. A one-time payment cann
 indefinite identity-provider commitment. Say so plainly at checkout rather than hiding it in a
 fair-use clause.
 
-**Why Juno is capped.** It is the only per-use model cost in the product. 150 replies is enough
+**Why Mira is capped.** It is the only per-use model cost in the product. 150 replies is enough
 to use the feature, not enough to resell it. The cap is cost-based: at an assumed $0.02 per
 reply it is $3/month. If the measured cost is higher, lower the cap or raise the price before
 launch — do not ship an uncapped lifetime AI allowance.
@@ -129,7 +129,7 @@ offer page; "all future features forever" is not promised.
    account; additional workspaces use normal plans. Not transferable or resellable.
 3. **100 workspaces.** Seat numbers are assigned at payment. When they are gone the offer
    closes; it is not extended and there is no waitlist.
-4. **The caps are the deal.** 15 paid members, 5,000 emails and 150 Juno replies per month.
+4. **The caps are the deal.** 15 paid members, 5,000 emails and 150 Mira replies per month.
    Unused allowance does not roll over. Hitting a cap pauses that feature until the next month;
    there is no automatic overage charge.
 5. **30-day refund, no questions.** After 30 days, no refund, except the shutdown promise below.
@@ -151,13 +151,13 @@ tax (Stripe Tax collects and remits tax separately).
 
 Per-account monthly cost assumptions, deliberately blunt:
 
-| Scenario | Infra | Email | Juno | Support | Total / month |
+| Scenario | Infra | Email | Mira | Support | Total / month |
 | --- | --- | --- | --- | --- | --- |
 | Lean (p50) | $0.50 | $0.25 | $0.75 | $1.00 | **$2.50** |
 | Base (p75) | $1.00 | $0.50 | $1.50 | $2.00 | **$5.00** |
 | Heavy (p95, at caps) | $1.50 | $2.00 | $3.00 | $2.50 | **$9.00** |
 
-Email assumes $0.40 per 1,000 sends; Juno assumes $0.02 per reply. Both must be measured before
+Email assumes $0.40 per 1,000 sends; Mira assumes $0.02 per reply. Both must be measured before
 launch.
 
 | Cohort outcome | 36-month COGS | Contribution | Break-even |
@@ -169,7 +169,7 @@ launch.
 At five years the heavy cohort costs about **$54,000**, slightly more than net revenue. That is
 the tail the 100-seat cap and the monthly caps exist to bound; it is not a reason to believe the
 deal loses money, because not every account sits at p95. It is a reason not to sell 1,000 seats
-or to remove the Juno cap.
+or to remove the Mira cap.
 
 **Accounting discipline.** Book the $499 as deferred revenue and recognise it over 36 months in
 management accounts. Put a **$20,000 reserve** aside from the proceeds — roughly 24 months of
@@ -256,7 +256,7 @@ transaction, and the unique checkout-session id is a second guard.
   Server-render the remaining count from `lifetime_seats`; never fake a timer. Copy:
   > **Founding lifetime.** Pay once. Keep the loop. 100 workspaces, $499 once. Unlimited
   > products and boards, the API and request briefs, advanced search, 15 teammates, 5,000
-  > emails and 150 Juno replies a month. No renewal. SSO not included. 30-day refund.
+  > emails and 150 Mira replies a month. No renewal. SSO not included. 30-day refund.
   >
   > **Claim a founding seat — 37 of 100 left.**
 - **Signed-out CTA:** `/sign-up?offer=lifetime`; after onboarding, land on Billing with the
@@ -294,7 +294,7 @@ Then a Stripe test-mode pass: Checkout, webhook, receipt, refund, and the sold-o
   acquisition and no AppSumo for the first run.
 - **Success:** 25 sales ($12,475) is the base case; 100 is the ceiling. Activation matters more
   than sales: first product and board created within 7 days.
-- **Measure:** landing-band view → checkout start → paid; refund rate; p95 emails and Juno
+- **Measure:** landing-band view → checkout start → paid; refund rate; p95 emails and Mira
   replies; support minutes per lifetime account; share of buyers who say they would otherwise
   have bought Professional monthly.
 - **Stop rules:** refunds above 8%, support above 30 minutes per account per month for two
@@ -305,7 +305,7 @@ Then a Stripe test-mode pass: Checkout, webhook, receipt, refund, and the sold-o
 
 ## 8. What would make this a bad deal
 
-- **Unlimited Juno.** One heavy account can erase several lifetime payments.
+- **Unlimited Mira.** One heavy account can erase several lifetime payments.
 - **More than 100 seats.** The tail cost scales linearly while the cash does not.
 - **A fake countdown.** It converts once and destroys the next launch.
 - **Including SSO.** It turns a product sale into an identity-integration support contract.
@@ -316,7 +316,7 @@ Then a Stripe test-mode pass: Checkout, webhook, receipt, refund, and the sold-o
 Before implementation:
 
 1. **$499 / 100 seats** — or a different price with the caps re-costed.
-2. **150 Juno replies and 5,000 emails** — confirm against measured model and email costs.
+2. **150 Mira replies and 5,000 emails** — confirm against measured model and email costs.
 3. **SSO excluded** — confirm no enterprise buyer needs it in this cohort.
 4. **One workspace per account, active subscribers ineligible** — confirm the policy.
 

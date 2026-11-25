@@ -32,13 +32,13 @@ replace the customer's own records-of-processing obligation.
 | Customer | Email, optional name, company link, traits, external id, session and notification preferences | Unique per workspace by normalised email. |
 | Customer content | Requests, votes, comments, insights, conversations, messages, attachments, survey responses | Some rows keep the author with `ON DELETE SET NULL` when a customer is erased. |
 | Evidence | `feedback_insights` (quote, source, timestamp), context links to help/changelog | Internal only; no public projection reads insights. |
-| Help and docs | Collections, articles, revisions, translations | Published public articles are also projected into a Juno knowledge source. |
+| Help and docs | Collections, articles, revisions, translations | Published public articles are also projected into a Mira knowledge source. |
 | Email | Delivery rows, status, provider error text, suppression list | Provider message ids are stored; message bodies are rendered from the row, not copied to the provider log by Herald. |
 | Integrations | Slack bindings, issue links, CRM ids, webhook endpoints and signing secrets | Tokens and secrets are stored server-side and never rendered. |
 | Billing | Stripe customer/subscription ids, plan, invoice status, trial dates | Card data stays at Stripe. |
 | Operations | Jobs and payloads, `job_runs`, alerts, backup verification, audit log | Job payloads can reference customer ids; `/app/admin` never selects them. |
 | Analytics | `request_metrics`, `dashboard_view_events`, `signup_funnel_events`, product events | See the privacy notes below. |
-| AI | `ai_usage_events` (tokens, estimated cost, model), Juno answers and citations, knowledge chunks and embeddings | Prompts and completions are not copied into usage events. |
+| AI | `ai_usage_events` (tokens, estimated cost, model), Mira answers and citations, knowledge chunks and embeddings | Prompts and completions are not copied into usage events. |
 | Logs | JSON application logs, error events | Scrubbed before they leave the process. |
 
 ### Analytics fields worth naming
@@ -141,7 +141,7 @@ Herald sends data to a processor only when that capability is configured:
 | Email | Resend or a compatible endpoint (`EMAIL_API_URL`) | Recipient address, rendered message, delivery events. |
 | Payments | Stripe | Customer email, plan, subscription and invoice state. |
 | Error tracking | Sentry-compatible endpoint (`SENTRY_DSN`) | Scrubbed error context and release tags. |
-| AI drafting / Juno | OpenAI-compatible endpoint (`AI_API_URL`) | The prompt needed for the request; usage tokens are stored locally. With no endpoint, Juno cannot generate. |
+| AI drafting / Mira | OpenAI-compatible endpoint (`AI_API_URL`) | The prompt needed for the request; usage tokens are stored locally. With no endpoint, Mira cannot generate. |
 | Embeddings | Same endpoint when `AI_EMBEDDING_MODEL` is set | Chunk text. Unset uses a local deterministic embedding. |
 | Image moderation | `OCR_API_URL` | The image being checked. Unset means checks are recorded as unavailable. |
 | Slack, issue trackers, CRM | The workspace's own connection | Only the records the operator links or syncs. |

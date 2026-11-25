@@ -10,7 +10,7 @@ import { budgetAlertThreshold } from "./budget-policy";
 /**
  * The shared daily AI budget.
  *
- * Every Juno path that spends money (answers, tagging, evaluation) asks this
+ * Every Mira path that spends money (answers, tagging, evaluation) asks this
  * module before calling a provider and records the estimated cost in the same
  * transaction as its result. A budget of zero disables paid generation
  * entirely; callers turn that into a handoff or a skipped job rather than a
@@ -58,7 +58,7 @@ export type DailyBudgetStatus = {
   alertedAt: Date | null;
 };
 
-/** The alert state for today, used by the Juno activity card. */
+/** The alert state for today, used by the Mira activity card. */
 export async function getDailyBudgetStatus(
   productId: string,
   now: Date,

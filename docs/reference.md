@@ -1056,7 +1056,7 @@ the account menu; writes are re-checked by the server action that performs them.
 | `.../releases/new`, `.../releases/[releaseId]/edit` | **Implemented.** Markdown editor with edit/preview tabs, slug generation, category, cover, tags, multiple authors, YouTube, linked feedback, linked cancellation reasons, distribution channels, autosave, publish-now or schedule with an explicit timezone, save draft, preview and a publish review dialog. |
 | `.../feedback` | **Implemented.** Inbox plus detail: search, status/category filters, private saved views, multi-select bulk status and hide/restore, `j`/`k`/`x`/`/`/`?` keyboard shortcuts, vote toggling, public comments, separate internal notes, status changes, release links, manual board tags, hide/restore one request, ban or unban the author, and merge with an undo that restores moved comments, votes and reactions. |
 | `.../conversations`, `.../conversations/[conversationId]` | **Implemented.** Operator inbox with Queue/Open/All/Snoozed/Resolved/Spam/Archived tabs, search over subject, customer and last message, assignment filters, bulk resolve/reopen/spam/archive, and a thread view with replies, internal notes, slash commands (`/resolve`, `/reopen`, `/snooze 2h`, `/note`), assignment, snooze, block sender and personal reminders. The inbox also lists the operator's unread alerts with **Mark all read**; the thread autosaves a personal draft, shows visitor context, linked requests and contribution counts, offers **Create request** to file the conversation on a board, and both refresh by 5 s polling. Widget and inbound messages are screened for spam before they reach Queue, and the thread shows the stored spam reason. Requires `conversation:read` / `conversation:write`, which owner and admin hold and editor does not. |
-| `.../conversations/answers` | **Implemented.** Team-only Juno answer inspection: retrieved passages and scores, confidence band with low-confidence filter, model, prompt version, cost, outcome, stored thumbs and an admin add-to-evaluation form. `juno:read` to view; `juno:manage` to add an evaluation case. |
+| `.../conversations/answers` | **Implemented.** Team-only Mira answer inspection: retrieved passages and scores, confidence band with low-confidence filter, model, prompt version, cost, outcome, stored thumbs and an admin add-to-evaluation form. `juno:read` to view; `juno:manage` to add an evaluation case. |
 | `.../feedback/duplicates` | **Implemented.** Uncertain duplicate triage: source and target side by side, match score and mode, merge through the existing merge transaction or dismiss without changing either request. `feedback:read` to view, `feedback:write` to decide. |
 | `.../moderation` | **Implemented.** Pending/approved/rejected queue for submissions and comments with counts, automated spam/abuse and sensitive-information reasons, image-scan status, and Approve, Publish, Keep, Keep hidden, Delete and retry. `moderation:read` to view, `moderation:manage` to decide. |
 | `.../boards` | **Implemented.** Create, edit, archive and restore boards, with visibility, guest posting, moderation rules, icon/colour, order and the public URL. Owners and admins only (`settings:manage`); the per-product board limit and the private-board/guest-posting features are re-checked by the server actions, not just the form. |
@@ -1066,10 +1066,10 @@ the account menu; writes are re-checked by the server action that performs them.
 | `.../widget` | **Implemented.** Copy-ready keyed snippet with saved position/theme, public key, exact allowed origins, optional attributes, `HeraldWidget` API, CSP guidance, a link to the live frame and an installation check for the loader, key gate, allowlist and SSO secret. The plan/flag gates and public-projection panels are shared with the embed route. |
 | `.../subscribers` | **Implemented.** Search and status/source filters, add, status changes, CSV import with row errors, a full CSV export that round-trips through the same parser, follower sync, unsubscribe records and the workspace suppression list. An import cannot reactivate an address that previously unsubscribed. `subscriber:read` to view, `subscriber:write` to change. |
 | `.../winback`, `.../winback/new`, `.../winback/campaigns/[campaignId]` | **Implemented.** Cancellation CSV import, estimated audience with excluded-because counts, linked release and cancellation reasons, draft → submit → separate approval, per-campaign test send, canary batch before the full audience, irreversible stop, suppression and late opt-out re-checks at queue time and before the provider call, per-recipient delivery/error/opt-out reporting, and confirmed vs inferred return attribution inside a 30-day window. `winback:read` to view, `winback:manage` to edit/test/send, `winback:approve` to decide or stop. |
-| `.../analytics` | **Implemented.** Public views, submit conversion, votes, widget open/install, status funnel, average time-to-ship, conversation volume/first response, Juno resolution and email delivery over a trailing 30-day window. Raw events are privacy-scoped; daily rollups are recomputed by the job runner. |
+| `.../analytics` | **Implemented.** Public views, submit conversion, votes, widget open/install, status funnel, average time-to-ship, conversation volume/first response, Mira resolution and email delivery over a trailing 30-day window. Raw events are privacy-scoped; daily rollups are recomputed by the job runner. |
 | `.../operations` | **Implemented.** Product-scoped pending/running/succeeded/failed job counts, recent job types and a failed-job attention list. Payloads and tenant identifiers are never selected. `settings:manage`. |
 | `.../integrations` | **Implemented.** Slack OAuth install and channel binding; one issue-tracker connection per provider with a webhook URL, editable status map, issue create/link, outbound status push and last-event time; one workspace-scoped HubSpot or Salesforce connection with manual sync, matched-company count and last error; Intercom/Zendesk capture connections; a GitHub App installation; and a link to the webhook console. Tokens and signing secrets are never rendered. |
-| `.../settings` | **Implemented.** Product branding (logo, name, accent colour, theme, locale and hide-attribution), customer identity/SSO with rotation grace, operators and support email, Juno behavior and duplicate mode, agent-action review/audit, and the public submission assistant opt-in. The workspace settings hub adds General, Team (paid-seat and free-viewer counts, a link to the generated **Who can do what** page, invitations with expiry/resend/revoke, and an owner-only domain capture with its DNS challenge), Billing, API tokens (status, last used and coarse last-seen), Enterprise, Privacy, a **Danger zone** (export, ownership transfer and deletion in one screen, with what each does to data and typed workspace-name confirmation for transfer and deletion), Data & Import links, custom-domain verification/health, and an owner-only audit log with actor/action/target/date/text filters, a CSV export that uses the same filters, and the configured retention window (365 days). Entries carry their detail, for example `editor → admin` for a member. |
+| `.../settings` | **Implemented.** Product branding (logo, name, accent colour, theme, locale and hide-attribution), customer identity/SSO with rotation grace, operators and support email, Mira behavior and duplicate mode, agent-action review/audit, and the public submission assistant opt-in. The workspace settings hub adds General, Team (paid-seat and free-viewer counts, a link to the generated **Who can do what** page, invitations with expiry/resend/revoke, and an owner-only domain capture with its DNS challenge), Billing, API tokens (status, last used and coarse last-seen), Enterprise, Privacy, a **Danger zone** (export, ownership transfer and deletion in one screen, with what each does to data and typed workspace-name confirmation for transfer and deletion), Data & Import links, custom-domain verification/health, and an owner-only audit log with actor/action/target/date/text filters, a CSV export that uses the same filters, and the configured retention window (365 days). Entries carry their detail, for example `editor → admin` for a member. |
 
 Every primary dashboard route is backed by live data. The shell never falls back
 to sample data: empty states explain what is missing, and an unavailable page
@@ -1103,9 +1103,9 @@ Publishing:
 Queued deliveries are sent by the `deliver_notification` job once email is
 configured; publishing itself never blocks on the provider.
 
-### Juno (AI operator)
+### Mira (AI operator)
 
-Settings → **Juno** turns on an operator that answers from the workspace’s own
+Settings → **Mira** turns on an operator that answers from the workspace’s own
 knowledge ([src/features/juno](../src/features/juno)). Upload Markdown, text, HTML,
 JSON, YAML or PDF up to 10 MB (a scanned PDF needs OCR first), or crawl a public
 URL. A crawl stays on the same
@@ -1118,7 +1118,7 @@ without deleting its history. Each source is **public** by default; marking it
 **internal only** excludes it from every widget, email and Slack answer, while a
 team-run evaluation can opt in to those sources. A crawled source can be
 checked on its own schedule; the rebuild diffs its pages against the live
-version and the Juno settings page raises a **source changed** alert with the
+version and the Mira settings page raises a **source changed** alert with the
 added, removed and edited counts.
 
 Ingestion parses, chunks and embeds into Postgres. With `AI_EMBEDDING_MODEL`
@@ -1129,15 +1129,15 @@ store their citations on the message (and the widget shows a Sources list),
 while an uncovered, low-confidence, billing or account question hands off to the
 human queue with a private note explaining why. The widget receives thread
 updates over a server-sent event stream, keeps its 3-second poll as a fallback,
-and shows a typing indicator while Juno is answering. Tone, reply length,
+and shows a typing indicator while Mira is answering. Tone, reply length,
 formality, emoji and language are settings; `language = workspace` answers in the
 public-site locale (falling back to the customer’s language) and never
 translates the customer’s message, history or sources. The model is limited to
 the deployment’s `AI_MODEL` and to the plan’s allowlist: Professional and
-Founding Lifetime may use it, Free and Indie have no Juno model. A downgrade
+Founding Lifetime may use it, Free and Indie have no Mira model. A downgrade
 hands off with a **plan** reason instead of leaving a paid model reachable.
 
-Guardrails are deliberate: Juno's only mutation surface is a closed, reviewed
+Guardrails are deliberate: Mira's only mutation surface is a closed, reviewed
 action allowlist, so it cannot change settings, billing, permissions or customer
 data; requests for such changes hand off before generation; customer text and
 sources are passed to the model as delimited untrusted data; and email addresses,
@@ -1147,7 +1147,7 @@ are neutralised, so a page cannot close the `<sources>` block and inject a fake
 system rule; the injection case is pinned in `tests/juno-guardrails.test.ts`.
 The daily budget is a hard stop that hands off rather than degrading silently,
 and crossing 80% records a once-a-day alert on the usage row that Settings →
-Juno activity surfaces. The Settings toggle is the kill switch: it stops new
+Mira activity surfaces. The Settings toggle is the kill switch: it stops new
 pickups but keeps every existing thread and its state.
 
 The only action currently registered is **email a conversation transcript**.
@@ -1158,7 +1158,7 @@ outbox and the `conversation_transcript` template. The allowlist has no path to
 settings, billing, deletion or identity.
 
 In a widget conversation, a request-shaped question can produce a **feedback
-card**. Juno searches public, approved requests and offers to file a new one or
+card**. Mira searches public, approved requests and offers to file a new one or
 add a vote/follow; nothing happens until the customer confirms, and anonymous
 visitors cannot vote or follow. Limits are 3 new requests per conversation, 25
 per workspace per UTC day and 10 votes/follows per conversation. A new request
@@ -1185,12 +1185,12 @@ confidence band, model, prompt version, cost and outcome, with an optional
 low-confidence filter. Thumbs are stored on the answer; an admin can add the
 exact redacted question to the evaluation set from the same row. A thumbs-down
 also opens one **knowledge-gap task** (deduplicated per answer) on Settings →
-Juno, linking the conversation and the redacted question; a manager marks it
-done after adding or fixing the source. The thread sidebar shows Juno’s handoff
+Mira, linking the conversation and the redacted question; a manager marks it
+done after adding or fixing the source. The thread sidebar shows Mira’s handoff
 reason and says the private note has the detail, without opening answer
 inspection.
 
-**Duplicate linking** has three levels on Settings → Juno: off, assisted and
+**Duplicate linking** has three levels on Settings → Mira: off, assisted and
 automatic. Assisted queues every candidate above the 0.2 suggestion floor;
 automatic merges only at 0.8 or above and queues uncertain matches for a person.
 The queue is `/app/{workspace}/{product}/feedback/duplicates`; merging uses the
@@ -1528,7 +1528,7 @@ subscription-only deployments). It uses `mode: "payment"`, reserves one of 100
 pre-seeded seats before creating Checkout, and only the webhook grants the
 `lifetime` plan. The panel is on the Billing settings card, the offer band is
 on `/pricing`, and the terms are at `/legal/lifetime`. A full refund revokes
-the plan and frees the seat; a partial refund does not. The lifetime Juno cap is
+the plan and frees the seat; a partial refund does not. The lifetime Mira cap is
 150 answered conversations per calendar month, enforced in
 `answerConversation` before any model call.
 

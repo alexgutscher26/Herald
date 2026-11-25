@@ -46,7 +46,7 @@ minimum-sample guard are covered by `tests/observability-config.test.ts`.
 | `queue_depth` | now | More than 50 pending jobs are more than 10 minutes overdue | 1 | `ALERT_QUEUE_DEPTH`, `ALERT_QUEUE_AGE_MINUTES` | Page. Check the scheduler and the database before the worker. |
 | `email_bounce_rate` | 24 h | More than 2% of sent + bounced + complained messages bounced or complained | 20 deliveries | `ALERT_EMAIL_BOUNCE_RATE_PCT`, `ALERT_MIN_DELIVERIES` | Ticket next business day. Use [deliverability.md](deliverability.md); suppress hard bounces immediately. |
 | `webhook_failure_rate` | 1 h | More than 5% of succeeded + failed deliveries failed | 20 attempts | `ALERT_WEBHOOK_FAILURE_RATE_PCT`, `ALERT_MIN_WEBHOOK_ATTEMPTS` | Ticket. Check the customer's endpoint and the delivery log; do not replay blindly. |
-| `ai_daily_spend` | 24 h | Estimated spend is over $25 | 1 | `ALERT_AI_DAILY_USD`, `AI_INPUT_USD_PER_MTOK`, `AI_OUTPUT_USD_PER_MTOK` | Ticket. Check Juno volume and model pricing; the figure is an estimate, not an invoice. |
+| `ai_daily_spend` | 24 h | Estimated spend is over $25 | 1 | `ALERT_AI_DAILY_USD`, `AI_INPUT_USD_PER_MTOK`, `AI_OUTPUT_USD_PER_MTOK` | Ticket. Check Mira volume and model pricing; the figure is an estimate, not an invoice. |
 | `backup_freshness` | latest check | A database, storage or manifest verification failed, or the oldest success is over 26 hours old | 1 | `ALERT_BACKUP_MAX_AGE_HOURS` | Page if a verification failed. Data-loss risk: run `verify_backups` by hand and inspect storage. |
 
 An empty window is healthy with an explicit "no observations" detail. A rate

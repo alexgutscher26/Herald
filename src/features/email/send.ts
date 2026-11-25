@@ -612,7 +612,7 @@ export async function sendNotificationDelivery(
           message.authorType === "customer"
             ? "Customer"
             : message.authorType === "juno"
-              ? "Juno"
+              ? "Mira"
               : "Support team",
         body: message.body,
         createdAt: message.createdAt.toISOString(),

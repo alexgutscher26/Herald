@@ -34,7 +34,7 @@ import { extractPdfText } from "./pdf";
 import { isPdfUpload, MAX_DOCUMENT_BYTES } from "./text";
 
 /**
- * Juno server actions.
+ * Mira server actions.
  *
  * Every form re-checks `juno:manage`; the page's `settings:manage` guard is not
  * the authorization boundary. Errors come back through the URL so the page
@@ -650,6 +650,6 @@ export async function handToJunoAction(input: {
     return { ok: true, data: result.data };
   } catch (error) {
     console.error("[juno] hand back failed", error);
-    return { ok: false, error: "Could not hand that conversation back to Juno." };
+    return { ok: false, error: "Could not hand that conversation back to Mira." };
   }
 }

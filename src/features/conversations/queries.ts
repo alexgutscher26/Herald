@@ -800,7 +800,7 @@ export async function getConversationThread(input: {
         message.authorType === "customer"
           ? (row.customerName ?? "Customer")
           : message.authorType === "juno"
-            ? "Juno"
+            ? "Mira"
             : message.authorType === "system"
               ? "Herald"
               : (authorName ?? "Team member"),

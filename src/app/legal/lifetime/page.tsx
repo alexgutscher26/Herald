@@ -21,14 +21,14 @@ const SECTIONS = [
   {
     title: "What is included",
     paragraphs: [
-      "A lifetime workspace includes unlimited products, boards and integrations, 15 team members, 5,000 emails a month and 150 Juno AI replies a month. It also includes the REST API, guest posting, private boards, custom branding, custom domains, advanced search and removal of the Herald attribution.",
+      "A lifetime workspace includes unlimited products, boards and integrations, 15 team members, 5,000 emails a month and 150 Mira AI replies a month. It also includes the REST API, guest posting, private boards, custom branding, custom domains, advanced search and removal of the Herald attribution.",
       "Single sign-on, SCIM provisioning and identity masking are not included. They depend on ongoing identity-provider integration and are sold only with an Enterprise agreement.",
     ],
   },
   {
     title: "Monthly allowances",
     paragraphs: [
-      "Emails and Juno replies are metered per calendar month and reset at the start of the next month. Unused allowances do not roll over. When the Juno allowance is exhausted, Juno hands the conversation to your team instead of generating another reply; the rest of the workspace keeps working.",
+      "Emails and Mira replies are metered per calendar month and reset at the start of the next month. Unused allowances do not roll over. When the Mira allowance is exhausted, Mira hands the conversation to your team instead of generating another reply; the rest of the workspace keeps working.",
       "The allowances exist because email delivery and model inference are recurring costs. They are not a promise of unlimited future capacity, and they are the same limits shown in the plan catalogue at the time of purchase.",
     ],
   },
@@ -59,7 +59,7 @@ export default function LifetimeTermsPage() {
   return (
     <LegalShell
       title="Founding Lifetime terms"
-      summary="One payment of $499 for one workspace, limited to 100 workspaces. A 30-day refund window, no renewal, and metered email and Juno allowances."
+      summary="One payment of $499 for one workspace, limited to 100 workspaces. A 30-day refund window, no renewal, and metered email and Mira allowances."
     >
       <div className="rounded-lg border bg-muted/30 p-4 text-sm leading-relaxed text-muted-foreground">
         <p>

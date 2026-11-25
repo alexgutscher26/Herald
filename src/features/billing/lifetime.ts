@@ -386,7 +386,7 @@ async function sendLifetimeEmail(input: {
       input.kind === "granted"
         ? `Your Founding Lifetime purchase is confirmed. Seat ${input.seatNumber} of 100. You paid $499 once; there is no renewal.
 
-Included: unlimited products, boards and integrations, 15 team members, 5,000 emails a month and 150 Juno replies a month. SSO, SCIM and identity masking are not included.
+Included: unlimited products, boards and integrations, 15 team members, 5,000 emails a month and 150 Mira replies a month. SSO, SCIM and identity masking are not included.
 
 You can request a full refund within 30 days. Terms: ${origin}/legal/lifetime`
         : `A payment reached us after the founding seat could no longer be held, so we did not grant a 101st seat. The payment is being refunded in full.

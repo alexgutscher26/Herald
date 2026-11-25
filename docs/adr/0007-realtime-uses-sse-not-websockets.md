@@ -29,7 +29,7 @@ The alternatives were:
   existing proxy.
 
 The event source also mattered. A writer could be the dashboard, the widget,
-inbound email, Slack or Juno. Hooking each writer in application code would
+inbound email, Slack or Mira. Hooking each writer in application code would
 miss one; Postgres triggers plus `pg_notify` cover every writer because every
 writer commits a row.
 

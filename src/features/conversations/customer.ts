@@ -74,9 +74,9 @@ export type CustomerMessage = {
   id: string;
   author: "customer" | "team";
   body: string;
-  /** True for a Juno answer, so the widget can label it without faking an agent. */
+  /** True for a Mira answer, so the widget can label it without faking an agent. */
   fromJuno?: boolean;
-  /** Where a Juno answer came from; null for every human message. */
+  /** Where a Mira answer came from; null for every human message. */
   citations?: { sourceName: string; title: string; url: string | null }[] | null;
   attachments?: CustomerAttachment[];
   createdAt: string;
@@ -298,11 +298,11 @@ export async function loadCustomerThread(input: {
       thread: CustomerThread;
       email: string | null;
       messages: CustomerMessage[];
-      /** True while Juno is enabled and the latest message is still the customer's. */
+      /** True while Mira is enabled and the latest message is still the customer's. */
       junoPending: boolean;
       /** Whether this thread can ask for a rating, and the rating already given. */
       csat: CustomerCsat;
-      /** Juno's pending offer; null until the customer confirms or declines. */
+      /** Mira's pending offer; null until the customer confirms or declines. */
       feedbackCard: JunoFeedbackCard | null;
     }
 > {
@@ -413,7 +413,7 @@ export async function loadCustomerThread(input: {
     .limit(1);
   const juno = junoRows[0];
   // An away reply is written by the system, not a teammate. It must not hide
-  // the fact that the customer's question is still waiting for Juno, or every
+  // the fact that the customer's question is still waiting for Mira, or every
   // first message sent while the team is away would lose its typing hint.
   const lastSubstantiveMessage = [...messages]
     .reverse()

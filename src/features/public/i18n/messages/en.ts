@@ -223,7 +223,7 @@ export const en = {
   "widget.removeImage": "Remove image",
   "widget.imageUploadError": "Choose a PNG, JPEG, WebP or GIF image.",
   "widget.imageTooLarge": "Choose an image up to 5 MB.",
-  "widget.junoTyping": "Juno is typing…",
+  "widget.junoTyping": "Mira is typing…",
   "widget.helpTitle": "Help & Support",
   "widget.helpSearch": "Search help",
   "widget.helpNoResults": "No help articles match your search.",

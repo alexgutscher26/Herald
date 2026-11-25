@@ -12,12 +12,12 @@ import { junoConversations, junoSettings } from "@/db/schema/knowledge";
 import { queueConversationCsatNotification } from "@/features/email/inbound";
 
 /**
- * Auto-resolve threads Juno answered and nobody touched afterwards.
+ * Auto-resolve threads Mira answered and nobody touched afterwards.
  *
  * Chat resolves after 30 minutes of silence and email after 72 hours by
  * default. A later customer reply, a team reply or a note keeps the thread out
  * of this sweep, and a resolved thread reopens normally when the customer
- * writes again (Juno then treats the new message as a fresh pickup).
+ * writes again (Mira then treats the new message as a fresh pickup).
  */
 
 const SWEEP_LIMIT = 50;
@@ -130,7 +130,7 @@ export async function sweepJunoAutoResolve(input: { now?: Date } = {}): Promise<
   return { checked: rows.length, resolved };
 }
 
-/** Count threads currently waiting on a human after a Juno handoff. */
+/** Count threads currently waiting on a human after a Mira handoff. */
 export async function countJunoHandoffs(productId: string): Promise<number> {
   const rows = await db
     .select({ value: sql<number>`count(*)::int` })

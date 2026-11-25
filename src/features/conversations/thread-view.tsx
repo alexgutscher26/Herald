@@ -216,7 +216,7 @@ export function ThreadView({
           productSlug,
           conversationId: thread.conversation.id,
         }),
-      "Handed back to Juno.",
+      "Handed back to Mira.",
     );
   }
 
@@ -649,7 +649,7 @@ export function ThreadView({
                           : message.authorType === "customer"
                             ? "Customer"
                             : message.authorType === "juno"
-                              ? "Juno"
+                              ? "Mira"
                               : "Team"}
                       </Badge>
                       <DualTimestamp iso={message.createdAt} timeZone={workspaceTimezone} />
@@ -1196,7 +1196,7 @@ export function ThreadView({
           <Card>
             <CardContent className="space-y-2 p-4 text-sm">
               <div className="flex items-center justify-between gap-2">
-                <p className="font-semibold text-foreground">Juno</p>
+                <p className="font-semibold text-foreground">Mira</p>
                 <Badge variant="outline">
                   {!thread.juno
                     ? "Not involved"
@@ -1216,7 +1216,7 @@ export function ThreadView({
                 </p>
               ) : null}
               <p className="text-xs text-muted-foreground">
-                A human reply pauses Juno. Handing the thread back lets it pick
+                A human reply pauses Mira. Handing the thread back lets it pick
                 up the next customer message.
               </p>
               <Button
@@ -1226,7 +1226,7 @@ export function ThreadView({
                 disabled={!canWrite || pending}
                 onClick={handBackToJuno}
               >
-                Hand to Juno
+                Hand to Mira
               </Button>
             </CardContent>
           </Card>

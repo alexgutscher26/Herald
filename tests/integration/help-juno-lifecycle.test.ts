@@ -24,7 +24,7 @@ import {
 } from "./harness";
 
 /**
- * Publishing a help article feeds Juno directly, and unpublishing removes it
+ * Publishing a help article feeds Mira directly, and unpublishing removes it
  * from answers. No crawl job is involved: the article mutation rebuilds the
  * collection's knowledge version in place and pauses it when nothing public
  * remains.
@@ -59,7 +59,7 @@ afterAll(async () => {
   await teardownTestDatabase();
 }, SETUP_TIMEOUT_MS);
 
-describe("help publishing to Juno", () => {
+describe("help publishing to Mira", () => {
   isolatedTest("a published article is cited, and unpublishing removes it", async () => {
     const workspace = await createWorkspace();
     const product = await createProduct(workspace.id);

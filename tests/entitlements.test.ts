@@ -81,7 +81,7 @@ describe("plan catalogue", () => {
     expect(hasFeature("pro", "ai")).toBe(true);
   });
 
-  test("Juno models are allowlisted per plan, not only per deployment", () => {
+  test("Mira models are allowlisted per plan, not only per deployment", () => {
     expect(junoModelAllowlist("free", "gpt-test")).toEqual([]);
     expect(junoModelAllowlist("starter", "gpt-test")).toEqual([]);
     expect(junoModelAllowlist("pro", "gpt-test")).toEqual(["gpt-test"]);

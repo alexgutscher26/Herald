@@ -9,7 +9,7 @@ import { enqueueJob } from "@/features/jobs/queue";
 import { logEvent, serializeError } from "@/lib/logger";
 
 /**
- * Queue one Juno pickup.
+ * Queue one Mira pickup.
  *
  * Enqueuing happens after the message transaction commits, never inside it, so
  * a rolled-back webhook cannot leave a job pointing at a message that does not

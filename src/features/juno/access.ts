@@ -13,7 +13,7 @@ import {
 import { getAiConfig } from "@/lib/env";
 
 /**
- * The one plan/model gate for every Juno AI path.
+ * The one plan/model gate for every Mira AI path.
  *
  * Settings and answers enforce the same rule where they already load the
  * workspace plan; evaluation, tag suggestions and the public submission

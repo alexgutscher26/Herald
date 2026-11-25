@@ -1,4 +1,5 @@
 import { ArrowRight, ChevronRight, Gift, LifeBuoy, Map, MailPlus } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { ReleaseCover } from "@/components/shared/release-cover";
@@ -63,6 +64,7 @@ const ACTION_ICONS = {
 
 export function WidgetHomeView({
   productInitial,
+  logoUrl = null,
   accentColor,
   accentForeground,
   greeting,
@@ -76,6 +78,8 @@ export function WidgetHomeView({
   updatesEnabled,
 }: {
   productInitial: string;
+  /** Plan-gated workspace logo; falls back to the product initial. */
+  logoUrl?: string | null;
   accentColor: string;
   accentForeground: string;
   greeting: string;
@@ -105,16 +109,27 @@ export function WidgetHomeView({
           className="group block rounded-[20px] border border-border/70 bg-card p-4 transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
         >
           <div className="flex items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="flex size-9 shrink-0 items-center justify-center rounded-full text-[12px] font-bold transition-transform duration-300 ease-out group-hover:scale-105"
-              style={{
-                backgroundColor: accentColor,
-                color: accentForeground,
-              }}
-            >
-              {productInitial}
-            </span>
+            {logoUrl ? (
+              <Image
+                src={logoUrl}
+                alt=""
+                width={36}
+                height={36}
+                unoptimized
+                className="size-9 shrink-0 rounded object-contain transition-transform duration-300 ease-out group-hover:scale-105"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="flex size-9 shrink-0 items-center justify-center rounded-full text-[12px] font-bold transition-transform duration-300 ease-out group-hover:scale-105"
+                style={{
+                  backgroundColor: accentColor,
+                  color: accentForeground,
+                }}
+              >
+                {productInitial}
+              </span>
+            )}
             <div className="min-w-0">
               <p className="text-[15px] font-semibold leading-tight">
                 {message.title}

@@ -1213,6 +1213,7 @@ export function WidgetWhatsNewPanel({
   page,
   accentColor,
   accentForeground = "#ffffff",
+  logoUrl = null,
   t,
   locale,
   translationEnabled,
@@ -1223,6 +1224,7 @@ export function WidgetWhatsNewPanel({
   page: PublicChangelogPage | null;
   accentColor: string;
   accentForeground?: string;
+  logoUrl?: string | null;
   t: Translate;
   locale: PublicLocaleCode;
   translationEnabled: boolean;
@@ -1300,6 +1302,7 @@ export function WidgetWhatsNewPanel({
   return (
     <WidgetHomeView
       productInitial={shell.product.name.trim().charAt(0).toUpperCase() || "H"}
+      logoUrl={logoUrl}
       accentColor={accentColor}
       accentForeground={accentForeground}
       greeting={t("widget.greeting")}

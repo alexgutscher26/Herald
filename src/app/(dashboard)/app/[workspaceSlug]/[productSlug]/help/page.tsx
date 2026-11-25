@@ -54,7 +54,7 @@ export default async function HelpAdminPage({
     <div className="space-y-6">
       <PageHeader
         title="Help center"
-        description="Articles are stored as data, published on the public portal, and projected into Juno as a versioned knowledge source."
+        description="Articles are stored as data, published on the public portal, and projected into Mira as a versioned knowledge source."
       />
 
       {status.saved ? (
@@ -77,7 +77,7 @@ export default async function HelpAdminPage({
         <Card>
           <CardHeader>
             <CardTitle>Collections</CardTitle>
-            <CardDescription>Public collections appear in the portal and feed Juno.</CardDescription>
+            <CardDescription>Public collections appear in the portal and feed Mira.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {collections.length === 0 ? (

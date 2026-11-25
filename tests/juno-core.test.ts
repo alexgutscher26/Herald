@@ -82,7 +82,7 @@ describe("retrieval ranking", () => {
   });
 });
 
-describe("Juno behavior policy", () => {
+describe("Mira behavior policy", () => {
   test("billing and account questions always hand off", () => {
     expect(classifySensitiveQuestion("Can I get a refund for the invoice?")).toBe("billing");
     expect(classifySensitiveQuestion("I need to change my password")).toBe("account");

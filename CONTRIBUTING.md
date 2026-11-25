@@ -91,7 +91,7 @@ bun run db:import-help     # parses docs/help and publishes the articles
 ```
 
 The import uses the product's own Markdown parser and `importHelpItems`, so it
-also rewrites article revisions and syncs the help collection into the Juno
+also rewrites article revisions and syncs the help collection into the Mira
 knowledge source. It publishes every draft article in a collection it touches;
 keep hand-written drafts out of these collections. `bun run test:unit` checks
 the front matter, unique slugs and the required article set without a database.

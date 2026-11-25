@@ -23,11 +23,11 @@ import { getAiConfig } from "@/lib/env";
 import { assertModelChangeAllowed } from "./evaluation";
 
 /**
- * Juno configuration.
+ * Mira configuration.
  *
  * The row is created on first read so a product has deterministic defaults.
  * The model is deployment configuration: a request may only keep the model
- * already configured in `AI_MODEL`, never point Juno at an arbitrary paid
+ * already configured in `AI_MODEL`, never point Mira at an arbitrary paid
  * model from the browser.
  */
 
@@ -54,7 +54,7 @@ export async function ensureJunoSettings(productId: string): Promise<JunoSetting
     .where(eq(junoSettings.productId, productId))
     .limit(1);
   const row = created[0];
-  if (!row) throw new Error("Could not create Juno settings.");
+  if (!row) throw new Error("Could not create Mira settings.");
   return row;
 }
 
@@ -128,12 +128,12 @@ export async function saveJunoSettings(
   if (input.enabled && !hasFeature(plan, "ai")) {
     return {
       ok: false,
-      error: `Juno is included on Professional and Founding Lifetime, not ${planDefinition(plan).name}.`,
+      error: `Mira is included on Professional and Founding Lifetime, not ${planDefinition(plan).name}.`,
     };
   }
 
   const model = input.model.trim();
-  // A downgraded workspace must still be able to turn Juno off even if its
+  // A downgraded workspace must still be able to turn Mira off even if its
   // stored model is no longer on the plan's allowlist. Only read the deployment
   // config when this save can actually select a model.
   if (input.enabled && model !== "") {
@@ -206,6 +206,6 @@ export async function saveJunoSettings(
     .returning();
 
   const row = updated[0];
-  if (!row) return { ok: false, error: "Could not save Juno settings." };
+  if (!row) return { ok: false, error: "Could not save Mira settings." };
   return { ok: true, settings: row };
 }

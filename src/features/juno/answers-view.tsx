@@ -170,7 +170,7 @@ export function JunoAnswersView({
         <EmptyState
           icon={ClipboardCheck}
           title="No answers match"
-          description="Try clearing the low-confidence filter or choosing another outcome. Answers appear here as soon as Juno handles a conversation."
+          description="Try clearing the low-confidence filter or choosing another outcome. Answers appear here as soon as Mira handles a conversation."
         />
       ) : (
         <ol className="space-y-3">

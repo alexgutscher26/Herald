@@ -35,7 +35,7 @@ import {
  * CSAT and structured intake against real Postgres.
  *
  * The trigger is the part worth proving: every resolution path (dashboard,
- * bulk, slash command, Juno) changes `conversations.status`, and the request
+ * bulk, slash command, Mira) changes `conversations.status`, and the request
  * must be stamped once no matter which path did it.
  */
 

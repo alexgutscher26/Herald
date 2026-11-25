@@ -58,7 +58,7 @@ export function LifetimeOffer(props: {
           </h2>
           <p className="mt-2 text-[14px] leading-relaxed text-[#4e4a44]">
             Unlimited products, boards and integrations, the API, MCP and request briefs, 15
-            teammates, 5,000 emails and 150 Juno replies a month. 30-day refund, no renewal. No SSO
+            teammates, 5,000 emails and 150 Mira replies a month. 30-day refund, no renewal. No SSO
             or identity masking. One workspace per account, and active subscribers are not eligible.
           </p>
           <p className="mt-3 text-[12px] text-[#6b6862]">

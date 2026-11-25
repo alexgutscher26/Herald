@@ -77,7 +77,7 @@ a local test server; leave it unset in production.
 
 | Variable | Effect when unset |
 | --- | --- |
-| `AI_API_URL` + `AI_MODEL` (+ `AI_API_KEY` if required) | AI drafting explains it is not configured and Juno cannot generate. |
+| `AI_API_URL` + `AI_MODEL` (+ `AI_API_KEY` if required) | AI drafting explains it is not configured and Mira cannot generate. |
 | `AI_EMBEDDING_MODEL` | Deterministic local `herald-hash-v1` embeddings; document text stays in the app. Changing it requires re-ingesting sources. |
 | `OCR_API_URL` (+ `OCR_API_KEY`) | Image moderation checks are recorded as unavailable; a board that requires scanning refuses unscanned images. |
 | `SENTRY_DSN` | Errors go to `ERROR_WEBHOOK_URL` instead. |

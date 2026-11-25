@@ -577,6 +577,7 @@ function PreviewHomeScreen({
     >
       <WidgetHomeView
         productInitial={productInitial}
+        logoUrl={preview.logoUrl}
         accentColor={preview.accentColor}
         accentForeground={foregroundFor(preview.accentColor)}
         greeting="Hi there"

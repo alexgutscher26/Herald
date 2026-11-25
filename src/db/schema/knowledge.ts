@@ -156,7 +156,7 @@ export type JunoRetrievedSource = KnowledgeCitation & {
 };
 
 /**
- * One thing Juno is allowed to read.
+ * One thing Mira is allowed to read.
  *
  * Sources are versioned packages: a recrawl or replacement builds a new
  * version while the current `activeVersionId` keeps serving, so retrieval never
@@ -296,11 +296,11 @@ export const knowledgeChunks = pgTable(
 );
 
 /**
- * Per-product Juno behavior.
+ * Per-product Mira behavior.
  *
  * `model` is a server-side allowlisted name or null for the deployment model;
  * it never comes from the browser unchecked. `confidenceFloor` is the minimum
- * retrieval score below which Juno hands off instead of answering.
+ * retrieval score below which Mira hands off instead of answering.
  */
 export const junoSettings = pgTable(
   "juno_settings",
@@ -348,7 +348,7 @@ export const junoSettings = pgTable(
   ],
 );
 
-/** Juno's state on one thread; the row exists only once Juno is involved. */
+/** Mira's state on one thread; the row exists only once Mira is involved. */
 export const junoConversations = pgTable(
   "juno_conversations",
   {
@@ -465,7 +465,7 @@ export const junoKnowledgeTasks = pgTable(
 );
 
 /**
- * The reviewed, per-product allowlist of actions Juno may perform.
+ * The reviewed, per-product allowlist of actions Mira may perform.
  *
  * A row exists only for an action the team explicitly reviewed. Enabling one
  * without recording who reviewed it is refused by the database, so a switch
@@ -583,7 +583,7 @@ export const junoRedactionEvents = pgTable(
 );
 
 /**
- * A feedback card Juno offered in a widget conversation.
+ * A feedback card Mira offered in a widget conversation.
  *
  * Nothing is written to a board until the customer confirms: `pending` is a
  * draft, `confirmed` means the vote/follow/create actually happened. The row

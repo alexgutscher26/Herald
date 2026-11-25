@@ -29,7 +29,7 @@ import type { KnowledgeSourceView } from "./sources";
 import { JunoDryRunPanel } from "./dry-run-view";
 
 /**
- * Juno settings.
+ * Mira settings.
  *
  * Plain forms, one server action per operation, just like the other settings
  * cards. Every action re-checks `juno:manage`; `canManage` only hides input.
@@ -85,11 +85,11 @@ export function JunoSettingsView({
     <SettingsSection
       id="juno"
       icon={Bot}
-      title="Juno"
-      description="Juno answers from the sources below and hands off when the answer is not covered, when someone asks for a human, or for billing and account questions. A human reply takes the thread back until someone presses “Hand to Juno”."
+      title="Mira"
+      description="Mira answers from the sources below and hands off when the answer is not covered, when someone asks for a human, or for billing and account questions. A human reply takes the thread back until someone presses “Hand to Mira”."
       badge={
         building ? (
-          <StatusBadge tone="info">Updating Juno…</StatusBadge>
+          <StatusBadge tone="info">Updating Mira…</StatusBadge>
         ) : changed ? (
           <StatusBadge tone="warning">Source changed</StatusBadge>
         ) : live > 0 ? (
@@ -107,7 +107,7 @@ export function JunoSettingsView({
                 Knowledge sources
               </h3>
               <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                Uploaded docs and public pages Juno is allowed to cite.
+                Uploaded docs and public pages Mira is allowed to cite.
               </p>
             </div>
             <span className="text-xs tabular-nums text-muted-foreground">
@@ -117,7 +117,7 @@ export function JunoSettingsView({
 
           {sources.length === 0 ? (
             <div className="rounded-lg border border-dashed border-border bg-muted/15 px-4 py-5 text-sm leading-6 text-muted-foreground">
-              Nothing yet. Upload a help doc or point Juno at a public docs path.
+              Nothing yet. Upload a help doc or point Mira at a public docs path.
             </div>
           ) : (
             <ul className="space-y-3">
@@ -400,7 +400,7 @@ export function JunoSettingsView({
             <label className="flex items-start justify-between gap-4 rounded-lg border border-border/80 bg-card p-3.5">
               <span>
                 <span className="block text-sm font-medium text-foreground">
-                  Let Juno pick up new conversations
+                  Let Mira pick up new conversations
                 </span>
                 <span className="mt-0.5 block text-xs leading-5 text-muted-foreground">
                   Turning this off stops new pickups; threads in progress keep their state.
@@ -553,7 +553,7 @@ export function JunoSettingsView({
                   disabled={!canManage}
                 />
                 <p className="text-xs leading-5 text-muted-foreground">
-                  Below this score Juno hands off instead of guessing.
+                  Below this score Mira hands off instead of guessing.
                 </p>
               </div>
 
@@ -615,11 +615,11 @@ export function JunoSettingsView({
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 bg-card px-4 py-3.5">
             {canManage ? (
               <Button type="submit" size="sm">
-                Save Juno settings
+                Save Mira settings
               </Button>
             ) : (
               <p className="text-xs text-muted-foreground">
-                Your role can read Juno settings but not change them.
+                Your role can read Mira settings but not change them.
               </p>
             )}
             <span className="text-xs text-muted-foreground">

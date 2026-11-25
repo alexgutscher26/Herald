@@ -10,7 +10,7 @@ WebSocket server would add a second deployable process and connection lifecycle
 for no product capability. Typing and presence use the same stream.
 
 The event source is Postgres triggers + `pg_notify` (`drizzle/0068_conversation_events.sql`),
-so every writer is covered: dashboard, widget, inbound email, Slack and Juno.
+so every writer is covered: dashboard, widget, inbound email, Slack and Mira.
 The dashboard keeps its 5-second refresh and the widget keeps its 3-second poll
 as fallbacks when the stream or `LISTEN` is unavailable.
 
@@ -22,7 +22,7 @@ There are two authorized consumers of the same fan-out:
   first-party customer session, product and thread ownership.
 
 The widget stream only forwards events for its own conversation id. It shows a
-“Juno is typing…” indicator while the latest message is the customer’s and Juno
+“Mira is typing…” indicator while the latest message is the customer’s and Mira
 is enabled; the persisted answer then arrives as a normal conversation event.
 This is message-level streaming, not token-level model output, because
 generation runs in the durable job queue.

@@ -65,7 +65,7 @@ const SETTINGS_SECTIONS = [
   { id: "identity", label: "Single sign-on" },
   { id: "support", label: "Support" },
   { id: "conversation-feedback", label: "Conversation feedback" },
-  { id: "juno", label: "Juno" },
+  { id: "juno", label: "Mira" },
   { id: "agent-actions", label: "Agent actions" },
   { id: "sender-identity", label: "Sender identity" },
   { id: "email-previews", label: "Email previews" },

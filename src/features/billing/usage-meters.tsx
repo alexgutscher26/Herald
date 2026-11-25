@@ -115,7 +115,7 @@ export function UsageMeters({
           </div>
           <div className="mt-2 h-1.5 rounded-full bg-muted" />
           <p className="mt-1.5 text-[11px] text-muted-foreground">
-            This month · no plan cap; Juno has a daily budget per product
+            This month · no plan cap; Mira has a daily budget per product
           </p>
         </div>
       </div>

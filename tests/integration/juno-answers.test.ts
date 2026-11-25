@@ -36,12 +36,12 @@ import {
 } from "./harness";
 
 /**
- * Juno answers against real Postgres.
+ * Mira answers against real Postgres.
  *
  * The model is injected, so these tests prove the wiring around it: retrieval
  * must clear the floor, billing/account questions never reach generation, the
  * daily budget is a hard stop, citations are stored on the message and exposed
- * to the team, a human reply pauses Juno until it is handed back, and the
+ * to the team, a human reply pauses Mira until it is handed back, and the
  * auto-resolve sweep respects the chat/email timers and team activity.
  */
 
@@ -83,7 +83,7 @@ async function setupProduct(
     budget?: number;
   } = {},
 ) {
-  // Juno is a paid AI capability; the plan allowlist is part of the answer gate.
+  // Mira is a paid AI capability; the plan allowlist is part of the answer gate.
   const workspace = await createWorkspace({ plan: "pro" });
   const product = await createProduct(workspace.id);
   const customer = await createCustomer(workspace.id, {
@@ -397,7 +397,7 @@ describe("answer pipeline", () => {
 });
 
 describe("human takeover", () => {
-  isolatedTest("a team reply pauses Juno until the thread is handed back", async () => {
+  isolatedTest("a team reply pauses Mira until the thread is handed back", async () => {
     const context = await setupProduct();
     await upload(
       context,
@@ -493,7 +493,7 @@ describe("auto-resolve timers", () => {
     expect(after?.status).toBe("resolved");
     expect((await stateFor(conversation.id))?.state).toBe("resolved");
 
-    // A new customer reply reopens the thread and Juno picks it up again.
+    // A new customer reply reopens the thread and Mira picks it up again.
     await createConversationMessage({
       conversation: { ...conversation, ...after! },
       authorType: "customer",
@@ -656,7 +656,7 @@ describe("provider outage", () => {
           .from(conversationMessages)
           .where(eq(conversationMessages.conversationId, conversation.id));
 
-        // Exactly one customer-visible Juno message: the handoff notice. The
+        // Exactly one customer-visible Mira message: the handoff notice. The
         // provider's text never became a message, so there is no orphan draft
         // for a teammate to find and accidentally send.
         const junoMessages = messages.filter((message) => message.authorType === "juno");

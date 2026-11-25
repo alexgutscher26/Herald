@@ -34,7 +34,7 @@ const RESOURCE_LABELS: Record<string, string> = {
   subscriber: "Subscribers",
   winback: "Win-back",
   conversation: "Conversations",
-  juno: "Juno",
+  juno: "Mira",
   widget: "Widget",
   analytics: "Analytics",
   integration: "Integrations",

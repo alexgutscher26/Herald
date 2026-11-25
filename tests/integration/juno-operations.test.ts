@@ -61,7 +61,7 @@ import {
 } from "./harness";
 
 /**
- * Juno operations against real Postgres.
+ * Mira operations against real Postgres.
  *
  * Covers the parts that are not the answer itself: a feedback card is only an
  * offer until the customer confirms it, guest rules and limits are enforced

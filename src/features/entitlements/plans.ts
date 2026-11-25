@@ -50,7 +50,7 @@ export const PLAN_LIMITS = [
 export type PlanLimit = (typeof PLAN_LIMITS)[number];
 
 /**
- * A plan's Juno model allowlist.
+ * A plan's Mira model allowlist.
  *
  * `deployment` resolves to the server's configured `AI_MODEL`; there is no
  * browser-supplied model name. Free and Indie have no AI model at all. Keeping
@@ -133,7 +133,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
   pro: {
     id: "pro",
     name: "Professional",
-    description: "Unlimited products, boards and integrations, advanced search, API, Juno, SSO and masking.",
+    description: "Unlimited products, boards and integrations, advanced search, API, Mira, SSO and masking.",
     features: {
       ...BASE_FEATURES,
       api: true,
@@ -163,7 +163,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
    * Founding Lifetime: one payment, no renewal.
    *
    * It is intentionally not a fourth pricing card (`PLAN_ORDER` excludes it).
-   * The metered Juno allowance is the cost boundary that makes a one-time
+   * The metered Mira allowance is the cost boundary that makes a one-time
    * payment safe; SSO and identity masking are excluded because they are
    * ongoing integration commitments, not one-off build cost.
    */
@@ -171,7 +171,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     id: "lifetime",
     name: "Founding Lifetime",
     description:
-      "Pay once: unlimited products, boards and integrations, the API, 15 teammates, 5,000 emails and 150 Juno replies a month.",
+      "Pay once: unlimited products, boards and integrations, the API, 15 teammates, 5,000 emails and 150 Mira replies a month.",
     features: {
       ...BASE_FEATURES,
       api: true,
@@ -362,7 +362,7 @@ export const PLAN_PRICING: Record<PlanId, PlanPricing> = {
 /** Labels for the tick/cross rows on a plan card. */
 export const PLAN_FEATURE_ROWS: readonly { label: string; feature: PlanFeature }[] = [
   { label: "API access", feature: "api" },
-  { label: "Juno AI replies", feature: "ai" },
+  { label: "Mira AI replies", feature: "ai" },
   { label: "Advanced search", feature: "advancedSearch" },
   { label: "SSO and identity masking", feature: "sso" },
   { label: "Guest posting and private boards", feature: "guestPosting" },
@@ -406,9 +406,9 @@ export const PLAN_GATE_MATRIX: readonly PlanGate[] = [
   },
   {
     feature: "ai",
-    label: "Juno AI replies",
+    label: "Mira AI replies",
     serverGate: "junoModelAllowlist()/isJunoModelAllowed() in features/entitlements/plans.ts",
-    alsoEnforcedAt: "Juno answer and draft actions",
+    alsoEnforcedAt: "Mira answer and draft actions",
   },
   {
     feature: "winback",

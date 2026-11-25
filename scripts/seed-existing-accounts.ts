@@ -7,7 +7,7 @@
  * - Roadmap (Planned, In Progress, Shipped columns connected to feedback and releases)
  * - Support Inbox & Conversations (customer questions, team replies, internal notes)
  * - Customers & Subscribers (active subscribers with email notification preferences)
- * - Help Center (collections, published articles, Juno knowledge sources)
+ * - Help Center (collections, published articles, Mira knowledge sources)
  * - Customer Engagement (NPS survey + responses, widget product tour + banner)
  * - API Documentation (OpenAPI 3.1 schema + published version for interactive playground)
  * - Analytics Daily rollups (14-day history for board views, votes, time-to-ship, etc.)
@@ -486,7 +486,7 @@ async function seedAccount(account: Account): Promise<SeedResult> {
       userId,
       name: "Herald demo help",
       slug: HELP_COLLECTION_SLUG,
-      description: "Demo articles for exercising the help center and Juno citations.",
+      description: "Demo articles for exercising the help center and Mira citations.",
       visibility: "public",
     });
     if (!collection.ok || !collection.id) {

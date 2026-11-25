@@ -168,7 +168,7 @@ const ROADMAP_ITEMS: readonly RoadmapItem[] = [
   },
   {
     title: "A help center published from the same Markdown the team edits",
-    body: "Herald's own help center is imported from `docs/help/*.md` by the same Markdown parser the dashboard upload uses. Eight articles cover the getting-started path, widget recipes for six frameworks, and a migration guide from each source tool. `bun run db:import-help` writes them through the product's own import, revision and Juno knowledge-sync code.",
+    body: "Herald's own help center is imported from `docs/help/*.md` by the same Markdown parser the dashboard upload uses. Eight articles cover the getting-started path, widget recipes for six frameworks, and a migration guide from each source tool. `bun run db:import-help` writes them through the product's own import, revision and Mira knowledge-sync code.",
     status: "shipped",
     category: "feature_request",
     daysAgo: 0,

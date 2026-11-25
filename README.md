@@ -138,7 +138,7 @@ Common optional groups:
 | --- | --- |
 | Scheduled jobs | `CRON_SECRET` — required before the cron endpoints will run |
 | Email | `RESEND_API_KEY`, `EMAIL_FROM` — set together; otherwise email stays disabled |
-| AI | `AI_API_URL`, `AI_API_KEY`, `AI_MODEL` — changelog drafts and Juno |
+| AI | `AI_API_URL`, `AI_API_KEY`, `AI_MODEL` — changelog drafts and Mira |
 | Storage | `STORAGE_DIR` — local driver; use a persistent volume in production |
 | Billing | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_STARTER`, `STRIPE_PRICE_PRO` |
 | Observability | `ERROR_WEBHOOK_URL`, `ALERT_WEBHOOK_URL`, `SENTRY_DSN` |

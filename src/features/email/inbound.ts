@@ -61,7 +61,7 @@ export type InboundEmailResult = {
     | "invalid_sender"
     | "sender_mismatch";
   conversationId?: string;
-  /** Set when a message was stored, so Juno's pickup is idempotent. */
+  /** Set when a message was stored, so Mira's pickup is idempotent. */
   messageId?: string | null;
 };
 

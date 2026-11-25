@@ -187,6 +187,7 @@ export default async function WidgetEmbedPage({
           page={updates}
           accentColor={site.primaryColor || "#1f6b45"}
           accentForeground={foregroundFor(site.primaryColor || "#1f6b45")}
+          logoUrl={site.logoUrl}
           t={t}
           locale={locale}
           translationEnabled={site.contentTranslationEnabled}
@@ -408,6 +409,7 @@ export default async function WidgetEmbedPage({
           shell={shell}
           accentColor={site.primaryColor || "#1f6b45"}
           accentForeground={foregroundFor(site.primaryColor || "#1f6b45")}
+          logoUrl={site.logoUrl}
           locale={locale}
           t={t}
           active={route.view}

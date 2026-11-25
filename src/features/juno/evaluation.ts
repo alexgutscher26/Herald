@@ -85,7 +85,7 @@ export async function runJunoEvaluation(input: {
     .limit(1);
   const settings: JunoSettings | undefined = settingRows[0];
   if (!settings) {
-    return { ok: false, error: "Configure Juno before running an evaluation." };
+    return { ok: false, error: "Configure Mira before running an evaluation." };
   }
 
   const cases = await db
@@ -118,10 +118,10 @@ export async function runJunoEvaluation(input: {
   }
   const plan = await getWorkspacePlan(workspaceId);
   if (!hasFeature(plan, "ai")) {
-    return { ok: false, error: "Juno is not included on this workspace's plan." };
+    return { ok: false, error: "Mira is not included on this workspace's plan." };
   }
   if (!isJunoModelAllowed(plan, getAiConfig()?.AI_MODEL ?? null, settings.model)) {
-    return { ok: false, error: "The configured Juno model is not allowed on this workspace's plan." };
+    return { ok: false, error: "The configured Mira model is not allowed on this workspace's plan." };
   }
   const brandingRows = await db
     .select({ locale: workspaceBranding.locale })
@@ -417,7 +417,7 @@ export async function listEvalStatus(productId: string): Promise<
   });
 }
 
-/** Total Juno spend since a UTC day, used by the activity meter. */
+/** Total Mira spend since a UTC day, used by the activity meter. */
 export async function sumJunoCost(input: {
   productId: string;
   since: Date;

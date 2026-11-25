@@ -22,7 +22,7 @@ const bodySchema = z.object({
 type Params = { conversationId: string };
 
 /**
- * Confirm or decline one Juno feedback card.
+ * Confirm or decline one Mira feedback card.
  *
  * The card id is never trusted on its own: the action must belong to the
  * conversation in the URL and to the customer in the first-party session.

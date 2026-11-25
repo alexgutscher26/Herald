@@ -23,7 +23,7 @@ export const JUNO_GOLDEN_SET_VERSION = JUNO_PROMPT_VERSION;
 
 /** SHA-256 of the assembled system prompt for the fixture settings below. */
 export const JUNO_GOLDEN_PROMPT_FINGERPRINT =
-  "981d1e9d07fe593abe817c20c851638aaa457bef48d23130983b6e45d734ae26";
+  "cfdf42c59e83cdcea8fbb42cc0d0e91ab34bc450b80164ac672ebe6f323cef19";
 
 const settings: JunoSettings = {
   productId: "00000000-0000-4000-8000-000000000000",

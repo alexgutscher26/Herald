@@ -5,11 +5,11 @@ import { StatusBadge } from "@/components/shared/status-badge";
 
 import type { JunoActivity } from "./activity";
 
-/** The 30-day Juno meter: volume, handoffs, resolutions and spend. */
+/** The 30-day Mira meter: volume, handoffs, resolutions and spend. */
 export function JunoActivityView({ activity }: { activity: JunoActivity }) {
   const stats = [
     {
-      label: "Handled by Juno",
+      label: "Handled by Mira",
       value: String(activity.answers),
       hint: `${activity.windowDays}-day answers, handoffs and skips`,
     },
@@ -21,7 +21,7 @@ export function JunoActivityView({ activity }: { activity: JunoActivity }) {
     {
       label: "Resolved without team",
       value: `${Math.round(activity.resolvedWithoutTeamShare * 100)}%`,
-      hint: `${activity.resolvedWithoutTeam} of ${activity.resolved} Juno-resolved threads`,
+      hint: `${activity.resolvedWithoutTeam} of ${activity.resolved} Mira-resolved threads`,
     },
     {
       label: "AI cost",
@@ -36,8 +36,8 @@ export function JunoActivityView({ activity }: { activity: JunoActivity }) {
   return (
     <SettingsSection
       icon={Activity}
-      title="Juno activity"
-      description="Derived from the answer log, not a separate counter. A thread counts as resolved without the team when no human replied after Juno."
+      title="Mira activity"
+      description="Derived from the answer log, not a separate counter. A thread counts as resolved without the team when no human replied after Mira."
       badge={<StatusBadge tone="neutral">Last {activity.windowDays} days</StatusBadge>}
     >
       <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -74,7 +74,7 @@ export function JunoActivityView({ activity }: { activity: JunoActivity }) {
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={activity.dailyBudget.percent}
-            aria-label="Daily Juno budget used"
+            aria-label="Daily Mira budget used"
           >
             <div
               className={
@@ -92,7 +92,7 @@ export function JunoActivityView({ activity }: { activity: JunoActivity }) {
         ) : null}
         {activity.dailyBudget.limitCents <= 0 ? (
           <p className="mt-2 text-xs leading-5 text-muted-foreground">
-            The daily budget is zero, so paid generation is off. Juno still hands
+            The daily budget is zero, so paid generation is off. Mira still hands
             off and logs the reason.
           </p>
         ) : activity.dailyBudget.spentCents >= activity.dailyBudget.limitCents ? (
@@ -100,7 +100,7 @@ export function JunoActivityView({ activity }: { activity: JunoActivity }) {
             role="alert"
             className="mt-2 rounded-md border border-destructive/40 bg-destructive/5 px-2.5 py-2 text-xs leading-5 text-destructive"
           >
-            The daily budget is exhausted. Juno now hands off instead of calling
+            The daily budget is exhausted. Mira now hands off instead of calling
             the model until the next UTC day.
           </p>
         ) : activity.dailyBudget.thresholdCents !== null &&
@@ -109,7 +109,7 @@ export function JunoActivityView({ activity }: { activity: JunoActivity }) {
             role="alert"
             className="mt-2 rounded-md border border-warning/40 bg-warning-muted/50 px-2.5 py-2 text-xs leading-5 text-foreground"
           >
-            {activity.dailyBudget.percent}% of today&apos;s budget is used. Juno
+            {activity.dailyBudget.percent}% of today&apos;s budget is used. Mira
             stops at 100%; this alert is recorded once per day.
             {activity.dailyBudget.alertedAt
               ? ` First fired ${new Date(
@@ -119,7 +119,7 @@ export function JunoActivityView({ activity }: { activity: JunoActivity }) {
           </p>
         ) : (
           <p className="mt-2 text-xs leading-5 text-muted-foreground">
-            An alert appears here at 80%; at 100% Juno hands off rather than
+            An alert appears here at 80%; at 100% Mira hands off rather than
             degrading silently.
           </p>
         )}

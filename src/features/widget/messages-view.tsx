@@ -159,7 +159,7 @@ export function WidgetMessagesView({
 
   const threadId = state.phase === "thread" ? state.id : null;
 
-  // Follow the newest message and Juno's typing bubble, but only while the
+  // Follow the newest message and Mira's typing bubble, but only while the
   // reader is already at the bottom: a poll must not yank somebody who scrolled
   // back through the history.
   useEffect(() => {
@@ -793,7 +793,7 @@ export function WidgetMessagesView({
             >
               {message.body ? (
                 message.fromJuno ? (
-                  // Juno writes Markdown. Render bold, lists and links instead
+                  // Mira writes Markdown. Render bold, lists and links instead
                   // of leaking ** and <tags> into a plain paragraph.
                   <Markdown
                     skipHtml
@@ -890,7 +890,7 @@ export function WidgetMessagesView({
                 aria-hidden="true"
                 className="text-[11px] font-medium text-muted-foreground"
               >
-                Juno
+                Mira
               </span>
               <span aria-hidden="true" className="flex items-center gap-1">
                 <span className="widget-typing-dot size-1.5 rounded-full bg-muted-foreground" />
@@ -941,7 +941,7 @@ export function WidgetMessagesView({
           <div className="space-y-2 border-t bg-muted/30 px-1 py-3">
             <p className="text-sm font-medium">{feedbackPrompt}</p>
             <p className="text-xs text-muted-foreground">
-              Juno only does this if you confirm.
+              Mira only does this if you confirm.
             </p>
             <div className="flex flex-wrap gap-2">
               <Button
