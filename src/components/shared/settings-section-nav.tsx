@@ -67,11 +67,14 @@ export function SettingsSectionNav({ sections }: { sections: SettingsSection[] }
   }, [sections]);
 
   return (
-    <nav aria-label="Settings sections" className="xl:sticky xl:top-20 xl:self-start">
+    <nav
+      aria-label="Settings sections"
+      className="min-w-0 max-w-full xl:sticky xl:top-20 xl:self-start"
+    >
       <p className="hidden px-3 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground xl:block">
         On this page
       </p>
-      <ul className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 xl:mx-0 xl:mt-2 xl:flex-col xl:overflow-visible xl:px-0 xl:pb-0">
+      <ul className="-mx-1 flex max-w-full gap-1 overflow-x-auto px-1 pb-1 xl:mx-0 xl:mt-2 xl:flex-col xl:overflow-visible xl:px-0 xl:pb-0">
         {sections.map((section) => {
           const current = active === section.id;
           return (
